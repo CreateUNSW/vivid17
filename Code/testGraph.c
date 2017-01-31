@@ -70,9 +70,8 @@ int main(int argc, char *argv[]) {
 
    insertESection();
 
-
    char *informantsString = "10\n"
-                            "0 5 29 1 41 6 60 7 50 8 40 n sydney\n"
+                            "0 5 29 1 41 6 60 7 50 8 40 -1"
                             "1 2 51 5 29 i adelaide\n"
                             "2 n melbourne\n"
                             "3 5 30 4 36 n perth\n"
@@ -117,9 +116,9 @@ int main(int argc, char *argv[]) {
 
 Graph readGraph(char *graphStr) {
 
-   int city = 0;
+   int id = 0;
    int dest = 0;
-   int weight = 0;
+   int weight = 1;
    int bytesRead = 0;
 
    //First line of file has the number of vertices
@@ -132,19 +131,15 @@ Graph readGraph(char *graphStr) {
 
    // scan through file and insert edges into graph
    int counter=0;
-   char informant;
-   char name[MAXLINE];
    while (counter < numV) {
-      sscanf(graphStr + bytesRead,"%d",&city);
-      bytesRead += (numDigits(city) + 1) * sizeof(char);
+      sscanf(graphStr + bytesRead,"%d",&id);
+      bytesRead += (numDigits(id) + 1) * sizeof(char);
       counter++;
 
-      while(sscanf(graphStr + bytesRead, "%d %d", &dest,&weight) == 2) {
-         bytesRead += (numDigits(dest) + numDigits(weight) + 2) * sizeof(char);
-         insertE(g, mkEdge(city, dest, weight));
+      while(sscanf(graphStr + bytesRead, "%d", &dest) == 1 && dest != -1) {
+         bytesRead += (numDigits(dest) + 1) * sizeof(char);
+         insertE(g, mkEdge(id, dest, weight));
       }
-      sscanf(graphStr + bytesRead,"%c %[^\n]", &informant, name);
-      bytesRead += (2 + strlen(name) + 1) * sizeof(char);
    }
    return g;
 }

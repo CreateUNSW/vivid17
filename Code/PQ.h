@@ -1,19 +1,23 @@
-// Randy Tjang, z5116840
-// COMP1927 Thursday 9AM, Stanis
-// 20/01/2017
-// Priority-Queue function headers for COMP1927 17x1 AE2.
+// A priority Queue ADT interface
 
 #ifndef PQ_H
 #define PQ_H
 
-#include "Graph.h"
+#include "Item.h"
 
-typedef struct _pq *PQ;
+typedef struct pqRep * PriQ;
 
-Queue newQueue(void);
-void destroyQueue(Queue q);
-void joinQueue(Queue q, Edge e);
-Edge leaveQueue(Queue q);
-int queueSize(Queue q);
+// Core operations 
+PriQ initPriQ(int size); 
+void insert(PriQ q, Item it); 
+Item delMin(PriQ q); 
+
+// Useful operations 
+int isEmpty(PriQ q); 
+void change(PriQ q, Key k, Item it);
+void delete(PriQ q, Key k); 
+PriQ join(PriQ q1, PriQ q2); 
+
+void decreaseWeight(PriQ q, int v, Key k);
 
 #endif

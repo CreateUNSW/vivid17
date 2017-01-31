@@ -1,28 +1,16 @@
-// Randy Tjang, z5116840
-// COMP1927 Thursday 9AM, Stanis
-// 20/01/2017
-// Priority-Queue function implementations for COMP1927 17x1 AE2.
+// A heap-array based implementation of a priority queue
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "PQ.h"
-#include "Graph.h"
+#include <assert.h>
 
-struct _pq {
-	// Stores how many of the heap spots have been used
-	int filled;
-	// Stores the current heap max size
-	int capacity;
-	// A heap array of edges
-	Edge *e;
-};
+#include "Item.h"
 
-
-
-// --------------------------------------------------
-// DELETE EVERYTHING BELOW THIS, AND REWRITE IT ABOVE
-// --------------------------------------------------
-
+typedef struct pqRep *PriQ; 
+struct pqRep { 
+    int nItems;     // count of items 
+    Item *items;   // heap-array of Items 
+    int size;     // size of array 
+} ;
 
 //Create a new empty priority queue
 PriQ initPriQ(int size) { 

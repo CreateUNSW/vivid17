@@ -8,6 +8,9 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#define MAX_CRYSTALS_NUM 5
+#define MAX_EDGE_PER_CRYSTAL 5
+
 // vertices denoted by integers 0..N-1 
 typedef int Vertex; 
 
@@ -77,6 +80,9 @@ int dfSearch(Graph g, Vertex start, Vertex *plan);
 int leastTurnsPath(Graph g, Vertex start, Vertex dest, Vertex *plan,
                    int currStamina, int maxStamina);
 
+void dijkstra(Graph g,Vertex s,int st[],int dist[]);
+int *calcDist(Graph g, int origin);
+
 //YOU DO NOT NEED ASSERT BASED TESTS FOR THESE FUNCTIONS
 void destroyGraph(Graph g); 
 void show(Graph g); 
@@ -88,5 +94,7 @@ void mallocCheck(void *new);
 //DO NOT SUBMIT UNIT TESTS FOR THESE FUNCTIONS - OF COURSE
 //YOU SHOULD TEST THEM ANYWAY BUT COMMENT OUT OR REMOVE TESTS FOR 
 //SUBMISSION OTHERWISE
+
+Graph readGraph(int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1]);
 
 #endif

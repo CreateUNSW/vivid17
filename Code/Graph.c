@@ -11,6 +11,8 @@
 #include "Graph.h"
 #include "Agent.h"
 #include "Queue.h"
+#include "PQ.h"
+#include "Item.h"
 
 #define OFF 0
 #define ON 1
@@ -489,6 +491,33 @@ int leastTurnsPath(Graph g, Vertex start, Vertex dest, Vertex *plan,
    return planProgress;
 }
 
+void dijkstra(Graph g,Vertex s,int st[],int dist[]){
+    int v,t;
+    PriQ pq = initPriQ(g->nV);
+    //insert each vertex into the pq
+    for(v=0;v< g->nV;v++){
+        st[v] = -1;
+        dist[v] = NO_EDGE; //represents infinity
+        Item i = newItem(dist[v],v);
+        insert(pq,i);
+    } 
+    dist[s] = 0.0; //set start veretex dist to 0 
+    decreaseWeight(pq,s,dist[s]); // update pq
+    while(!isEmpty(pq)){
+         v = value(delMin(pq));
+         if(dist[v] != NO_EDGE)
+             for(t = 0;t < g->nV;t++){
+            if(g->adj[v][t] != NO_EDGE){
+                if(dist[v] + g->adj[v][t] < dist[t]){                    
+                    dist[t] = dist[v] + g->adj[v][t];
+                         decreaseWeight(pq,t,dist[t]);
+                         st[t] = v;
+                }
+             }
+         }
+    }
+}
+
 //Display the graph
 void show(Graph g) { 
 
@@ -540,5 +569,46 @@ void mallocCheck(void *new) {
    if(new == NULL) {
       printError(MALLOC_ERR, DO_ABORT);
    }
+}
+
+
+
+Graph readGraph(int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1]) {
+
+   int crystalNum = MAX_CRYSTALS_NUM;
+
+   int i = 0;
+   int j = 0;
+
+   Graph g = newGraph(crystalNum);
+
+   for(i = 0; i < crystalNum; i++) {
+      j = 0;
+      while(edges[i][j] != -1) {
+         printf("%d %d\n", i, edges[i][j]);
+         insertE(g, mkEdge(i, edges[i][j], 1));
+         j++;
+      }
+   }
+
+   
+   return g;
+}
+
+int *calcDist(Graph g, int origin) {
+
+   int i = 0;
+
+   Vertex *dist = malloc(sizeof(Vertex) * MAX_CRYSTALS_NUM);
+   Vertex *st = malloc(sizeof(Vertex) * MAX_CRYSTALS_NUM);
+
+   for(i = 0; i < MAX_CRYSTALS_NUM; i++) {
+      dist[i] = INT_MAX;
+      st[i] = -1;
+   }
+   
+   dijkstra(g, origin, st, dist);
+
+   return dist;
 }
 
