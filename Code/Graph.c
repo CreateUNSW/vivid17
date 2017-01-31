@@ -585,7 +585,6 @@ Graph readGraph(int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1]) {
    for(i = 0; i < crystalNum; i++) {
       j = 0;
       while(edges[i][j] != -1) {
-         printf("%d %d\n", i, edges[i][j]);
          insertE(g, mkEdge(i, edges[i][j], 1));
          j++;
       }
