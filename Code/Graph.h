@@ -8,8 +8,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#define MAX_CRYSTALS_NUM 19
-#define MAX_EDGE_PER_CRYSTAL MAX_CRYSTALS_NUM
+#define MAX_CRYSTALS_NUM 5
+#define MAX_EDGE_PER_CRYSTAL 5
 
 // vertices denoted by integers 0..N-1 
 typedef int Vertex; 
