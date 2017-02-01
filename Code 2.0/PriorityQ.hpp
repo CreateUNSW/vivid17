@@ -23,7 +23,7 @@ class PriorityQ {
     
 public:
     
-    static const int INFINITE = 20000;
+    static const int MAX_VALUE;
     
     /**
      * adds an item
@@ -32,8 +32,8 @@ public:
      * TODO algo right now is O(n) make it O(logn) by using binary search
      */
     void insert(int key, int weight) {
-        if(weight > this->INFINITE) {
-            weight = this->INFINITE;
+        if(weight > this->MAX_VALUE) {
+            weight = this->MAX_VALUE;
         }
         vector<Item>::iterator it;
         for(it = _items.begin();
@@ -73,7 +73,7 @@ public:
      * @return true if it is empty (i.e there are no elements with value less than infinite)
      */
     bool isEmpty() {
-        return _items.empty() || _items.back().weight < this->INFINITE;
+        return _items.empty() || _items.back().weight >= this->MAX_VALUE;
     }
     
     /**
@@ -82,8 +82,8 @@ public:
      * @param weight new weight
      */
     void change(int key, int weight) {
-        if(weight > this->INFINITE) {
-            weight = this->INFINITE;
+        if(weight > this->MAX_VALUE) {
+            weight = this->MAX_VALUE;
         }
         vector<Item>::iterator it;
         for(it = _items.begin();
@@ -98,5 +98,7 @@ public:
         }
     }
 };
+
+const int PriorityQ::MAX_VALUE = 20000;
 
 #endif

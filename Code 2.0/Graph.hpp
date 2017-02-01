@@ -2,6 +2,8 @@
 #define GRAPH_H
 
 #include <vector>
+//TODO remove this before you put it in the arduino
+#include <iostream>
 #include "PriorityQ.hpp"
 using namespace std;
 
@@ -19,20 +21,12 @@ public:
      * it is assumed that each row ends with -1
      *
      * technicaly edges is a nV x something matrix
+     * TODO change edges to an array of pointers
      */
-    Graph(int **edges, int nV) {
+    Graph(int edges[][20], int nV) {
         _nV = nV;
         _nE = 0;
-        
-        // initializes the vector matrix
-        _matrix.resize(nV);
-        for (
-            vector< vector<bool>>::iterator it = _matrix.begin();
-            it != _matrix.end();
-            it++
-        ) {
-            it->resize(nV,false);
-        }
+        _matrix.resize(_nV, vector <bool> (_nV, false));
         
         for(int i=0;i<nV;i++) {
             int j=0;
@@ -40,6 +34,7 @@ public:
                 _matrix[i][edges[i][j]] = true;
                 _matrix[edges[i][j]][i] = true;
                 _nE++;
+                j++;
             }
         }
         
@@ -50,17 +45,23 @@ public:
      * @param  origin origin index of the crystal
      * @return        an vector of size nV (use like a normal array)
      */
-    vector<int> calcDist (int origin) {
-        vector <int> ret;
+    int* calcDist (int origin) {
+        vector <int> dist;
         vector <int> st;
-        
-        _dijsktra(origin, st, ret);
-        
+        int* ret = new int[_nV];
+        _dijsktra(origin, st, dist);
+        for(int i=0;i<dist.size();i++) {
+            ret[i] = dist[i];
+        }
         return ret;
     };
     
     bool hasEdge(int i, int j) {
         return this->_matrix[i][j];
+    }
+    
+    int nV() {
+        return _nV;
     }
     
     
@@ -75,7 +76,7 @@ private:
      */
     void _dijsktra(int origin, vector<int> &befores, vector<int> &dist) {
         PriorityQ pq;
-        dist.resize(_nV, PriorityQ::INFINITE);
+        dist.resize(_nV, PriorityQ::MAX_VALUE);
         befores.resize(_nV, -1);
         for(int i=0; i<_nV; i++) {
             pq.insert(i,dist[i]);
