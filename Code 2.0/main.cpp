@@ -98,6 +98,8 @@ int main(int argc, char ** argv) {
     
     // Recalculates distance
     d = g.calcDist(src);
+    // Clears the screen
+    system("clear");
     // Draws the mosaic
     draw(d);
 
@@ -120,7 +122,7 @@ int main(int argc, char ** argv) {
 
        delete[] d;
     }
-
+    printf("\n");
 }
 
 void p(int *dist, int i, char *panel, int space) {

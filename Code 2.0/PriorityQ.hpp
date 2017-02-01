@@ -77,7 +77,7 @@ public:
     }
     
     /**
-     * cahgnes the weight of the key
+     * changes the weight of the key
      * @param key    key
      * @param weight new weight
      */
