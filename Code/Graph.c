@@ -494,6 +494,7 @@ int leastTurnsPath(Graph g, Vertex start, Vertex dest, Vertex *plan,
 void dijkstra(Graph g,Vertex s,int st[],int dist[]){
     int v,t;
     PriQ pq = initPriQ(g->nV);
+    Item temp;
     //insert each vertex into the pq
     for(v=0;v< g->nV;v++){
         st[v] = -1;
@@ -504,7 +505,8 @@ void dijkstra(Graph g,Vertex s,int st[],int dist[]){
     dist[s] = 0.0; //set start veretex dist to 0 
     decreaseWeight(pq,s,dist[s]); // update pq
     while(!isEmpty(pq)){
-         v = value(delMin(pq));
+         temp = delMin(pq);
+         v = value(temp);
          if(dist[v] != NO_EDGE)
              for(t = 0;t < g->nV;t++){
             if(g->adj[v][t] != NO_EDGE){
@@ -515,7 +517,10 @@ void dijkstra(Graph g,Vertex s,int st[],int dist[]){
                 }
              }
          }
+         free(temp);
     }
+
+    destroyPriQ(pq);
 }
 
 //Display the graph
@@ -607,6 +612,8 @@ int *calcDist(Graph g, int origin) {
    }
    
    dijkstra(g, origin, st, dist);
+
+   free(st);
 
    return dist;
 }

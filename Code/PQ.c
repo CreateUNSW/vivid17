@@ -24,6 +24,15 @@ PriQ initPriQ(int size) {
     return q; 
 }
 
+void destroyPriQ(PriQ pq) {
+    int i = 0;
+    for(i = 0; i < pq->nItems; i++) {
+        free(pq->items[i]);
+    }
+    free(pq->items);
+    free(pq);
+}
+
 int isEmpty(PriQ pq){
     return (pq->nItems == 0);
 }

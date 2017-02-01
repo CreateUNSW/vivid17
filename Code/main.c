@@ -61,9 +61,15 @@ int main(int argc, char *argv[]) {
    // Draws the mosaic
    draw(d);
 
+   free(d);
+
    while(src != -1 && scanfFlag == 1) {
       printf("\nEnter origin: ");
       scanfFlag = scanf("%d", &src);
+
+      if(src < 0 || src > MAX_CRYSTALS_NUM) {
+         src = 0;
+      }
 
       // Recalculates distance
       d = calcDist(g, src);
@@ -97,6 +103,8 @@ int main(int argc, char *argv[]) {
       printf("\n");
       free(dist);
    }
+
+   destroyGraph(g);
 
    return EXIT_SUCCESS;
 }
