@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
    draw(d);
 
    while(src != -1 && scanfFlag == 1) {
-      printf("Enter origin: ");
+      printf("\nEnter origin: ");
       scanfFlag = scanf("%d", &src);
 
       // Recalculates distance
