@@ -8,8 +8,8 @@ all: main
 $(NAME).o: $(NAME).c
 	$(CC) $(CFLAGS) -c -o $(NAME).o $(NAME).c
 
-main: main.o Graph.o Agent.o Queue.o PQ.o Item.o
-	$(CC) -o main main.o Graph.o Agent.o Queue.o PQ.o Item.o
+main: main.o Graph.o Queue.o PQ.o Item.o
+	$(CC) -o main main.o Graph.o Queue.o PQ.o Item.o
 
 test: testGraph.o Graph.o Queue.o
 	$(CC) -o testGraph testGraph.o Graph.o Queue.o
