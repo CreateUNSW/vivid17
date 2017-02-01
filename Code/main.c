@@ -67,6 +67,10 @@ int main(int argc, char *argv[]) {
       printf("\nEnter origin: ");
       scanfFlag = scanf("%d", &src);
 
+      if(src < 0 || src > MAX_CRYSTALS_NUM) {
+         src = 0;
+      }
+
       // Recalculates distance
       d = calcDist(g, src);
       // Clears the screen
