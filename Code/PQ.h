@@ -18,6 +18,8 @@ void change(PriQ q, Key k, Item it);
 void delete(PriQ q, Key k); 
 PriQ join(PriQ q1, PriQ q2); 
 
+void destroyPriQ(PriQ pq);
+
 void decreaseWeight(PriQ q, int v, Key k);
 
 #endif

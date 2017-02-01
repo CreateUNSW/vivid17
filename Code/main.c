@@ -61,6 +61,8 @@ int main(int argc, char *argv[]) {
    // Draws the mosaic
    draw(d);
 
+   free(d);
+
    while(src != -1 && scanfFlag == 1) {
       printf("\nEnter origin: ");
       scanfFlag = scanf("%d", &src);
@@ -97,6 +99,8 @@ int main(int argc, char *argv[]) {
       printf("\n");
       free(dist);
    }
+
+   destroyGraph(g);
 
    return EXIT_SUCCESS;
 }
