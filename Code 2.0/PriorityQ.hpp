@@ -35,6 +35,39 @@ public:
         if(weight > this->MAX_VALUE) {
             weight = this->MAX_VALUE;
         }
+
+/*
+        // Binary search
+        vector<Item>::iterator mid;
+        vector<Item>::iterator lo;
+        vector<Item>::iterator hi;
+
+        lo = _items.begin();
+        hi = _items.end();
+
+        int dist = std::distance(lo, hi);
+
+        while(dist > 1) {
+            mid = _items.begin();
+            std::advance(mid, dist/2);
+
+            if(weight > mid->weight) {
+                // Searches right
+                lo = mid;
+            } else if(weight < mid->weight) {
+                // Searches left
+                hi = mid;
+            }
+            dist = std::distance(lo, hi);
+        }
+
+        if(lo->weight == weight) {
+            _items.insert(lo,Item(key,weight));
+        } else {
+            _items.insert(hi,Item(key,weight));
+        }
+*/
+        // Linear search:
         vector<Item>::iterator it;
         for(it = _items.begin();
             it != _items.end();
@@ -44,6 +77,7 @@ public:
                 break;
             }
         }
+
         _items.insert(it,Item(key,weight));
     };
     
