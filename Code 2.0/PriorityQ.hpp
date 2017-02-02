@@ -1,6 +1,7 @@
 #ifndef PRIORITY_Q_H
 #define PRIORITY_Q_H
 
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -36,7 +37,6 @@ public:
             weight = this->MAX_VALUE;
         }
 
-/*
         // Binary search
         vector<Item>::iterator mid;
         vector<Item>::iterator lo;
@@ -46,9 +46,9 @@ public:
         hi = _items.end();
 
         int dist = std::distance(lo, hi);
+        mid = _items.begin();
 
-        while(dist > 1) {
-            mid = _items.begin();
+        while(dist > 1 && lo != _items.end() && hi != _items.end()) {
             std::advance(mid, dist/2);
 
             if(weight > mid->weight) {
@@ -61,12 +61,19 @@ public:
             dist = std::distance(lo, hi);
         }
 
-        if(lo->weight == weight) {
-            _items.insert(lo,Item(key,weight));
+        if(dist > 0 && _items.begin() != _items.end()) {
+            // For when _items isn't empty
+            if(lo->weight == weight) {
+                _items.insert(lo,Item(key,weight));
+            } else {
+                _items.insert(hi,Item(key,weight));
+            }
         } else {
-            _items.insert(hi,Item(key,weight));
+            // If it is, inserts at the beginning
+            _items.insert(_items.begin(),Item(key,weight));            
         }
-*/
+
+/*
         // Linear search:
         vector<Item>::iterator it;
         for(it = _items.begin();
@@ -79,6 +86,8 @@ public:
         }
 
         _items.insert(it,Item(key,weight));
+
+*/
     };
     
     /**

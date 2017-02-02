@@ -44,7 +44,6 @@ int main(int argc, char *argv[]) {
    int scanfFlag = 1;
    int i = 0;
    int src = 0;
-   int *dist = NULL;
    int *d = NULL;
 
 /*
@@ -83,6 +82,7 @@ int main(int argc, char *argv[]) {
 
    printf("\n");
 
+
    printf("INDEX: ");
    for(i = 0; i < numV(g); i++) {
       printf("%2d ", i);
@@ -92,16 +92,16 @@ int main(int argc, char *argv[]) {
 
    for(src = 0; src < MAX_CRYSTALS_NUM; src++) {
       printf("OG %2d: ", src);
-      dist = calcDist(g, src);
+      d = calcDist(g, src);
       for(i = 0; i < numV(g); i++) {
-         if(dist[i] != INT_MAX) {
-            printf("%2d ", dist[i]);
+         if(d[i] != INT_MAX) {
+            printf("%2d ", d[i]);
          } else {
             printf(" - ");
          }
       }
       printf("\n");
-      free(dist);
+      free(d);
    }
 
    destroyGraph(g);

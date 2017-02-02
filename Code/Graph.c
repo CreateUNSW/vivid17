@@ -9,7 +9,6 @@
 #include <string.h>
 #include <limits.h>
 #include "Graph.h"
-#include "Agent.h"
 #include "Queue.h"
 #include "PQ.h"
 #include "Item.h"
