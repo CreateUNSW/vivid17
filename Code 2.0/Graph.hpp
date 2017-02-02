@@ -2,8 +2,6 @@
 #define GRAPH_H
 
 #include <vector>
-//TODO remove this before you put it in the arduino
-#include <iostream>
 #include "PriorityQ.hpp"
 using namespace std;
 
@@ -13,7 +11,7 @@ using namespace std;
 class Graph {
     int _nV, _nE;
     vector < vector <bool> > _matrix;
-    
+
 public:
     /**
      * edges is the matrix storing edge configurations each row contains the indices of the vertices that are adjascent to that index
@@ -27,7 +25,7 @@ public:
         _nV = nV;
         _nE = 0;
         _matrix.resize(_nV, vector <bool> (_nV, false));
-        
+
         for(int i=0;i<nV;i++) {
             int j=0;
             while(edges[i][j] != -1) {
@@ -37,9 +35,9 @@ public:
                 j++;
             }
         }
-        
+
     };
-    
+
     /**
      * calculates the distance from the origin of all vertices
      * @param  origin origin index of the crystal
@@ -55,16 +53,16 @@ public:
         }
         return ret;
     };
-    
+
     bool hasEdge(int i, int j) {
         return this->_matrix[i][j];
     }
-    
+
     int nV() {
         return _nV;
     }
-    
-    
+
+
 private:
     /**
      * an implementation of dijsktra's algo
@@ -96,7 +94,7 @@ private:
             }
         }
     };
-    
+
 };
 
 #endif
