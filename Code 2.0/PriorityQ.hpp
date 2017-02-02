@@ -37,43 +37,43 @@ public:
             weight = this->MAX_VALUE;
         }
 
-        // Binary search
-        vector<Item>::iterator mid;
-        vector<Item>::iterator lo;
-        vector<Item>::iterator hi;
+        // // Binary search
+        // vector<Item>::iterator mid;
+        // vector<Item>::iterator lo;
+        // vector<Item>::iterator hi;
+        // 
+        // lo = _items.begin();
+        // hi = _items.end();
+        // 
+        // int dist = std::distance(lo, hi);
+        // mid = _items.begin();
+        // 
+        // while(dist > 1 && lo != _items.end() && hi != _items.end()) {
+        //     std::advance(mid, dist/2);
+        // 
+        //     if(weight > mid->weight) {
+        //         // Searches right
+        //         lo = mid;
+        //     } else if(weight < mid->weight) {
+        //         // Searches left
+        //         hi = mid;
+        //     }
+        //     dist = std::distance(lo, hi);
+        // }
+        // 
+        // if(dist > 0 && _items.begin() != _items.end()) {
+        //     // For when _items isn't empty
+        //     if(lo->weight == weight) {
+        //         _items.insert(lo,Item(key,weight));
+        //     } else {
+        //         _items.insert(hi,Item(key,weight));
+        //     }
+        // } else {
+        //     // If it is, inserts at the beginning
+        //     _items.insert(_items.begin(),Item(key,weight));            
+        // }
 
-        lo = _items.begin();
-        hi = _items.end();
 
-        int dist = std::distance(lo, hi);
-        mid = _items.begin();
-
-        while(dist > 1 && lo != _items.end() && hi != _items.end()) {
-            std::advance(mid, dist/2);
-
-            if(weight > mid->weight) {
-                // Searches right
-                lo = mid;
-            } else if(weight < mid->weight) {
-                // Searches left
-                hi = mid;
-            }
-            dist = std::distance(lo, hi);
-        }
-
-        if(dist > 0 && _items.begin() != _items.end()) {
-            // For when _items isn't empty
-            if(lo->weight == weight) {
-                _items.insert(lo,Item(key,weight));
-            } else {
-                _items.insert(hi,Item(key,weight));
-            }
-        } else {
-            // If it is, inserts at the beginning
-            _items.insert(_items.begin(),Item(key,weight));            
-        }
-
-/*
         // Linear search:
         vector<Item>::iterator it;
         for(it = _items.begin();
@@ -84,10 +84,9 @@ public:
                 break;
             }
         }
-
+        
         _items.insert(it,Item(key,weight));
 
-*/
     };
     
     /**
