@@ -37,42 +37,55 @@ public:
             weight = this->MAX_VALUE;
         }
 
-        // // Binary search
-        // vector<Item>::iterator mid;
-        // vector<Item>::iterator lo;
-        // vector<Item>::iterator hi;
-        // 
-        // lo = _items.begin();
-        // hi = _items.end();
-        // 
-        // int dist = std::distance(lo, hi);
-        // mid = _items.begin();
-        // 
-        // while(dist > 1 && lo != _items.end() && hi != _items.end()) {
-        //     std::advance(mid, dist/2);
-        // 
-        //     if(weight > mid->weight) {
-        //         // Searches right
-        //         lo = mid;
-        //     } else if(weight < mid->weight) {
-        //         // Searches left
-        //         hi = mid;
-        //     }
-        //     dist = std::distance(lo, hi);
-        // }
-        // 
-        // if(dist > 0 && _items.begin() != _items.end()) {
-        //     // For when _items isn't empty
-        //     if(lo->weight == weight) {
-        //         _items.insert(lo,Item(key,weight));
-        //     } else {
-        //         _items.insert(hi,Item(key,weight));
-        //     }
-        // } else {
-        //     // If it is, inserts at the beginning
-        //     _items.insert(_items.begin(),Item(key,weight));            
-        // }
-
+/*
+        // Binary search
+        vector<Item>::iterator mid;
+        vector<Item>::iterator lo;
+        vector<Item>::iterator hi;
+        
+        lo = _items.begin();
+        hi = _items.end();
+        
+        int dist = std::distance(lo, hi);
+        mid = _items.begin();
+        
+        while(dist > 1 && lo != _items.end()) {
+            std::advance(mid, dist/2);
+            cout<<mid->key<<endl;
+        
+            if(weight > mid->weight) {
+                // Searches right
+                lo = mid;
+                mid = hi + std::distance(lo, hi)/2;
+            } else if(weight < mid->weight) {
+                // Searches left
+                hi = mid;
+                mid = lo + std::distance(lo, hi)/2;
+            }
+            dist = std::distance(lo, hi);
+        }
+        
+        // For when _items isn't empty
+        if(lo < _items.end() && lo->weight == weight) {
+            _items.insert(lo,Item(key,weight));
+        } else if(hi < _items.end() && hi->weight == weight) {
+            _items.insert(hi,Item(key,weight));
+        } else {
+            // Resorts to linear search
+            vector<Item>::iterator it;
+            for(it = _items.begin();
+                it != _items.end();
+                it++
+            ) {
+                if(it->weight < weight) {
+                    break;
+                }
+            }
+            
+            _items.insert(it,Item(key,weight));
+            cout<<"Binary search failed, falling back to linear search."<<endl;
+        }
+*/ 
 
         // Linear search:
         vector<Item>::iterator it;
