@@ -73,32 +73,56 @@ int main(int argc, char ** argv) {
 
     Graph g(edges,19);
     int scanfFlag = 1;
+    int i = 0;
     int src = 0;
+    int dest = 0;
     int *d = NULL;
+    int *l = NULL;
+    int mode = 0;
+
+    printf("Enter mode (1 for gradient, 2 for line drawing): ");
+    scanf("%d", &mode);
     
-    // Recalculates distance
-    d = g.calcDist(src);
-    // Draws the mosaic
-    draw(d);
+    if(mode == 1) {
+        // Recalculates distance
+        d = g.calcDist(src);
+        system("clear");
+        // Draws the mosaic
+        draw(d);
+        delete[] d;
+        
+        while(src != -1 && scanfFlag == 1) {
+           printf("\nEnter origin: ");
+           scanfFlag = scanf("%d", &src);
 
-    delete[] d;
-    
-    while(src != -1 && scanfFlag == 1) {
-       printf("\nEnter origin: ");
-       scanfFlag = scanf("%d", &src);
+           if(src < 0 || src > MAX_CRYSTALS_NUM) {
+              src = 0;
+           }
 
-       if(src < 0 || src > MAX_CRYSTALS_NUM) {
-          src = 0;
-       }
+           // Recalculates distance
+           d = g.calcDist(src);
+           // Clears the screen
+           system("clear");
+           // Draws the mosaic
+           draw(d);
 
-       // Recalculates distance
-       d = g.calcDist(src);
-       // Clears the screen
-       system("clear");
-       // Draws the mosaic
-       draw(d);
-
-       delete[] d;
+           delete[] d;
+        }
+    } else if(mode == 2) {
+        d = new int[MAX_CRYSTALS_NUM];
+        // Calculates path for the line
+        l = g.calcLine(src, dest);
+        // Calculates the d array
+        for(i = 0; i < MAX_CRYSTALS_NUM; i++) {
+            printf("%d\n", l[i]);
+            if(l[i] != 0) {
+                d[l[i]] = i;
+            } else {
+                d[l[i]] = 0;
+            }
+        }
+        // Draws the mosaic
+        draw(d);
     }
 
 }

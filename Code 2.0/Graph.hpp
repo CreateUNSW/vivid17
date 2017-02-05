@@ -54,6 +54,20 @@ public:
         return ret;
     };
 
+    int* calcLine (int origin, int destin) {
+        vector <int> dist;
+        vector <int> st;
+        int* ret = new int[_nV];
+        _dijsktra(origin, st, dist);
+        int j=0;
+        for(int i=st[destin];i!=-1&&j<st.size();i=st[i]) {
+            ret[j] = i;
+            j++;
+        }
+        return ret;
+    };
+
+
     bool hasEdge(int i, int j) {
         return this->_matrix[i][j];
     }
