@@ -32,7 +32,6 @@ public:
      * adds an item
      * @param key    key
      * @param weight weight of key
-     * TODO algo right now is O(n) make it O(logn) by using binary search
      */
     void insert(int key, int weight) {
         if(weight > this->MAX_VALUE) {
@@ -60,21 +59,6 @@ public:
         }
         
         _items.insert(hi, Item(key, weight));
-
-
-        // // Linear search:
-        // vector<Item>::iterator it;
-        // for(it = _items.begin();
-        //     it != _items.end();
-        //     it++
-        // ) {
-        //     if(it->weight < weight) {
-        //         break;
-        //     }
-        // }
-        
-        // _items.insert(it,Item(key,weight));
-
     };
     
     /**

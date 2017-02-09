@@ -1,6 +1,7 @@
 #ifndef MY_VECTOR_H
 #define MY_VECTOR_H
 
+// uncomment below to log things properly
 // #include <typeinfo>
 // #include <iostream>
 // #include <cxxabi.h>

@@ -4,7 +4,6 @@
 #include "my_vector.hpp"
 #include "PriorityQ.hpp"
 #include "config.h"
-using namespace std;
 
 /**
  * Unweighted and non directed graph
@@ -79,16 +78,16 @@ public:
         return _nV;
     }
     
-    void print() {
-        for(int i=0;i<_nV;i++) {
-            for(int j=0;i<_nV;j++)
-                if(_matrix[i][j])
-                    cout << 1;
-                else    
-                    cout << 0;
-            cout << endl;
-        }
-    }
+    // void print() {
+    //     for(int i=0;i<_nV;i++) {
+    //         for(int j=0;i<_nV;j++)
+    //             if(_matrix[i][j])
+    //                 cout << 1;
+    //             else    
+    //                 cout << 0;
+    //         cout << endl;
+    //     }
+    // }
 
 
 private:
