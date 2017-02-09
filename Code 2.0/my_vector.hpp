@@ -41,13 +41,13 @@ class vector {
     int _size;
     
     void _purge() {
-        _size = 0;
         _node<T> * ptr = _start;
         while( ptr != nullptr) {
             _node<T> * toDel = ptr;
             ptr = ptr -> next;
             delete toDel;
         }
+        _size = 0;
         _start = _finish = nullptr;
     }
     
@@ -135,7 +135,9 @@ public:
     
     vector(vector<T> &cpy) {
         _size = cpy.size();
-        _finish = new _node<T>(new T(), nullptr);
+        T* val = new T();
+        _finish = new _node<T>(*val, nullptr);
+        delete val;
         _node<T> * ptr = _finish;
         for(int i=0;i<_size;i++) {
             ptr = new _node<T>(cpy[i],ptr);

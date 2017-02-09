@@ -24,14 +24,14 @@ void draw(int *d);
 int main(int argc, char ** argv) {
     int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1}, {7, 4, 2, 18, 15, 3, 16, 6, 5, -1}, {8, 9, 7, 6, 4, 3, 1, -1}, {11, 13, 12, 4, 2, 18, 16, 15, 1, -1}, {10, 12, 11, 9, 3, 2, 1, -1}, {14, 16, 6, 1, -1}, {7, 2, 16, 5, 1, -1}, {9, 8, 6, 2, 1, -1}, {9, 7, 2, -1}, {11, 10, 8, 7, 4, 2, -1}, {11, 9, 4, -1}, {10, 9, 12, 4, 3, -1}, {11, 4, 18, 13, 3, -1}, {17, 18, 12, 3, -1}, {16, 5, -1}, {18, 16, 3, 1, -1}, {14, 18, 15, 3, 6, 5, 1, -1}, {18, 13, -1}, {17, 13, 12, 16, 15, 3, 1, -1}};
 
-    Graph g(edges,19);
+    Graph g(edges,MAX_CRYSTALS_NUM);
     int scanfFlag = 1;
     int i = 0;
     int src = 0;
     int dest = 0;
     int *d = NULL;
     int *l = NULL;
-    int mode = 1;
+    int mode = 3;
     
     // printf("Enter mode (1 for gradient, 2 for line drawing): ");
     // scanf("%d", &mode);
@@ -77,11 +77,12 @@ int main(int argc, char ** argv) {
         }
         // Draws the mosaic
         draw(d);
+        delete[] d;
     } else if(mode == 3) {
         for(int i=0;i<=MAX_CRYSTALS_NUM;i++) {
             d = g.calcDist(i);
             cout << i << " >> ";
-            for(int j = 0;j <= MAX_CRYSTALS_NUM;j++) {
+            for(int j = 0;j < MAX_CRYSTALS_NUM;j++) {
                 cout << d[j] << " ";
             }
             cout << endl;
