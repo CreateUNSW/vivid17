@@ -2,3 +2,4 @@
 .DS_Store
 run
 main
+*.op

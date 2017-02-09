@@ -5,9 +5,11 @@
 #include <time.h>
 #include <limits.h>
 #include <unistd.h>
-#include <vector>
+#include <iostream>
 using namespace std;
 #include "Graph.hpp"
+#include "my_vector.hpp"
+#include "config.h"
 
 #define NRM "\x1B[0m"
 #define C0 "\x1B[40m"
@@ -15,9 +17,6 @@ using namespace std;
 #define C2 "\x1B[47m"
 #define C3 "\x1B[107m"
 #define C4 "\x1B[7m"
-
-#define MAX_CRYSTALS_NUM 19
-#define MAX_EDGE_PER_CRYSTAL MAX_CRYSTALS_NUM
 
 void p(int *dist, int i, char *panel, int space);
 void draw(int *d);
@@ -76,12 +75,12 @@ int main(int argc, char ** argv) {
     int i = 0;
     int src = 0;
     int dest = 0;
-    int *d = NULL;
+    int *d = g.calcDist(1);
     int *l = NULL;
-    int mode = 0;
-
-    printf("Enter mode (1 for gradient, 2 for line drawing): ");
-    scanf("%d", &mode);
+    int mode = 1;
+    
+    // printf("Enter mode (1 for gradient, 2 for line drawing): ");
+    // scanf("%d", &mode);
     
     if(mode == 1) {
         // Recalculates distance
@@ -94,18 +93,18 @@ int main(int argc, char ** argv) {
         while(src != -1 && scanfFlag == 1) {
            printf("\nEnter origin: ");
            scanfFlag = scanf("%d", &src);
-
+    
            if(src < 0 || src > MAX_CRYSTALS_NUM) {
               src = 0;
            }
-
+    
            // Recalculates distance
            d = g.calcDist(src);
            // Clears the screen
            system("clear");
            // Draws the mosaic
            draw(d);
-
+    
            delete[] d;
         }
     } else if(mode == 2) {
@@ -123,7 +122,18 @@ int main(int argc, char ** argv) {
         }
         // Draws the mosaic
         draw(d);
+    } else if(mode == 3) {
+        for(int i=0;i<=MAX_CRYSTALS_NUM;i++) {
+            d = g.calcDist(i);
+            cout << i << " >> ";
+            for(int j = 0;j <= MAX_CRYSTALS_NUM;j++) {
+                cout << d[j] << " ";
+            }
+            cout << endl;
+            delete[] d;
+        }
     }
+    
 
 }
 

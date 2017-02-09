@@ -1,13 +1,15 @@
 #ifndef PRIORITY_Q_H
 #define PRIORITY_Q_H
 
-#include <iostream>
-#include <vector>
-using namespace std;
+#include "my_vector.hpp"
 
 struct Item {
     int key;
     int weight;
+    
+    Item() {
+        
+    }
     
     Item(int key, int weight) {
         this->key = key;
@@ -41,11 +43,11 @@ public:
         vector<Item>::iterator mid = _items.begin();
         vector<Item>::iterator lo = _items.begin();
         vector<Item>::iterator hi = _items.end();
-        int dist = std::distance(lo, hi);
+        int dist = distance<Item>(lo, hi);
         
         while(dist > 1) {
             mid = lo;
-            std::advance(mid, dist/2);
+            advance<Item>(mid, dist/2);
         
             if(weight <= mid->weight) {
                 // Searches right
@@ -54,7 +56,7 @@ public:
                 // Searches left
                 hi = mid;
             }
-            dist = std::distance(lo, hi);
+            dist = distance<Item>(lo, hi);
         }
         
         _items.insert(hi, Item(key, weight));
