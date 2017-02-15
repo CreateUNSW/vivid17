@@ -1,7 +1,8 @@
 #include "FastLED.h"
+#include "Graph.hpp"
 
-#define NUM_PINS 2
-#define DATA_PIN0 6
+#define NUM_PINS 1
+#define DATA_PIN0 3
 #define DATA_PIN1 7
 #define CLOCK_PIN 13
 
@@ -14,41 +15,33 @@
 CRGB C[LEDS_PER_PIN * NUM_PINS];
 int NumLeds[NUM_PINS * MAX_CRYST_PER_PIN] =
 {
-  10,6,2,3,6,
-  1,7,7,1,6,
-  //next pin
-  5,5,5,5,5,
-  5,5,5,5,5
+  1,2,3,1,2,
+  1,7,7,1,6
 };
 
+Graph * g; 
+
 void setup() {
-      FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, LEDS_PER_PIN);
-      FastLED.addLeds<LED_TYPE, DATA_PIN1, RGB> (C, LEDS_PER_PIN, LEDS_PER_PIN);
+      FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, 10);
+      int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1}, {7, 4, 2, 18, 15, 3, 16, 6, 5, -1}, {8, 9, 7, 6, 4, 3, 1, -1}, {11, 13, 12, 4, 2, 18, 16, 15, 1, -1}, {10, 12, 11, 9, 3, 2, 1, -1}, {14, 16, 6, 1, -1}, {7, 2, 16, 5, 1, -1}, {9, 8, 6, 2, 1, -1}, {9, 7, 2, -1}, {11, 10, 8, 7, 4, 2, -1}, {11, 9, 4, -1}, {10, 9, 12, 4, 3, -1}, {11, 4, 18, 13, 3, -1}, {17, 18, 12, 3, -1}, {16, 5, -1}, {18, 16, 3, 1, -1}, {14, 18, 15, 3, 6, 5, 1, -1}, {18, 13, -1}, {17, 13, 12, 16, 15, 3, 1, -1}};
+      g = new Graph(edges,MAX_CRYSTALS_NUM);
+      int *dist;
+//      FastLED.addLeds<LED_TYPE, DATA_PIN1, RGB> (C, LEDS_PER_PIN, LEDS_PER_PIN);
       // https://github.com/FastLED/FastLED/wiki/Multiple-Controller-Examples
       // FastLED.addLeds<LED_TYPE, DATA_PIN2, RGB> (C, 2*LEDS_PER_PIN, LEDS_PER_PIN);
 }
 
 void loop() {
+
+  dist = g.calcDist(2);
   CrystalColour(0,200,0,0);
-  CrystalColour(1,0,200,0);
-  CrystalColour(2,200,200,0);
-  CrystalColour(3,0,0,200);
-  CrystalColour(4,200,0,200);
-  CrystalColour(5,0,200,200);
-  CrystalColour(6,200,200,200);
-  CrystalColour(7,200,0,0);
-  CrystalColour(8,0,200,0);
-  CrystalColour(9,200,200,0);
-  CrystalColour(10,200,200,200);
-  CrystalColour(11,200,0,0);
-  CrystalColour(12,0,200,0);
-  CrystalColour(13,200,200,0);
-  CrystalColour(14,0,0,200);
-  CrystalColour(15,200,0,200);
-  CrystalColour(16,0,200,200);
-  CrystalColour(17,200,200,200);
-  CrystalColour(18,200,0,0);
-  CrystalColour(19,0,200,0);
+  CrystalColour(1,200,0,0);
+  CrystalColour(2,200,0,0);
+  CrystalColour(3,200,0,0);
+  CrystalColour(4,200,0,0);
+  CrystalColour(5,200,0,0);
+
+  
   FastLED.show();
 }
 
@@ -59,3 +52,4 @@ void CrystalColour(int index, int r, int g, int b) {
   }
   for (int k = 0; k < NumLeds[index]; k++) C[offset + k] = CRGB(r, g, b);
 }
+
