@@ -9,6 +9,7 @@
 #define LED_TYPE WS2812
 #define BRIGHTNESS 64
 
+#define MAX_CRYST_NUM 17
 #define MAX_CRYST_PER_PIN 10 // Total crystal designs
 #define LEDS_PER_PIN 27 // Maximum number of leds in a crystal
 
@@ -17,14 +18,12 @@ int NumLeds[NUM_PINS * MAX_CRYST_PER_PIN] =
 {
   0,2,7,1,3,6,5,2,1,4,1,2,2,2,9,4,4
 };
-//,1,2,2,2,9,4,4
+
 int lookup[MAX_CRYSTALS_NUM] = 
 {0,15,18,13,12,3,4,11,10,16,5,6,7,8,9,2,1};
-//,5,6,7,8,9,2,1
+
 Graph * g;
 int *dist;
-int blue = 0;
-int blueFlag = 0;
 
 void setup() {
   FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, LEDS_PER_PIN);
@@ -35,34 +34,16 @@ void setup() {
   // https://github.com/FastLED/FastLED/wiki/Multiple-Controller-Examples
   // FastLED.addLeds<LED_TYPE, DATA_PIN2, RGB> (C, 2*LEDS_PER_PIN, LEDS_PER_PIN);
   dist = g->calcDist(lookup[1]);
+  srand(123);
 }
 
 void loop() {
-
   int i;
-  int red=0, green=0; 
-  for(i = 1; i < 17; i++) {
-    red = dist[lookup[i]]*85;
-    green =  255-(dist[lookup[i]]*85);
-    CrystalColour(i, red, blue,green);
-//    Serial.print(lookup[i]);
-//    Serial.println(dist[lookup[i]]);
-      Serial.println(blue);
+  for(i = 1; i < MAX_CRYST_NUM; i++) {
+    int red = rand() % 255, blue = rand() % 255, green = rand() % 255;
+    CrystalColour(i, red, blue, green);
   }
-  delay(30);
-//  delete dist;
-
-  if(blue >= 40) {
-    blueFlag = 1;
-  } else if(blue == 0) {
-    blueFlag = 0;
-  }
-
-  if(blueFlag == 0) {
-    blue++;
-  } else {
-    blue--;
-  }
+  delay(1000);
   FastLED.show();
 }
 
