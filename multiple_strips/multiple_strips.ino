@@ -2,8 +2,8 @@
 #include "Graph.hpp"
 
 #define NUM_PINS 2
-#define DATA_PIN0 3
-#define DATA_PIN1 7
+#define DATA_PIN0 8
+#define DATA_PIN1 2
 #define CLOCK_PIN 13
 
 #define LED_TYPE WS2812
