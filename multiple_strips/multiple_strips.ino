@@ -8,7 +8,7 @@
 #define CLOCK_PIN 13
 
 #define LED_TYPE WS2812
-#define BRIGHTNESS 50
+#define BRIGHTNESS 255
 
 #define MAX_CRYST_PER_PIN 10 // Total crystal designs
 #define LEDS_PER_PIN 27 // Maximum number of leds in a crystal

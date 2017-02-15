@@ -8,7 +8,7 @@
 #define CLOCK_PIN 13
 
 #define LED_TYPE WS2812
-#define BRIGHTNESS 50
+#define BRIGHTNESS 255
 
 #define MAX_CRYST_PER_PIN 10 // Total crystal designs
 #define LEDS_PER_PIN 27 // Maximum number of leds in a crystal
@@ -41,21 +41,21 @@ void loop() {
 
   dist = g->calcLine(lookup[8], lookup[2]);
   int i;
-  for(i = 1; i < 7; i++) {
-    if(dist[i] == 1) {
-      CrystalColour(dist[i], 255,255,255);
+  for(i = 0; i < 7; i++) {
+    if(dist[i] > 0) {
+      CrystalColour(ltn(dist[i]), 255,255,255);
     }
   }
   dist = g->calcLine(lookup[2], lookup[9]);
-  for(i = 1; i < 7; i++) {
-    if(dist[i] == 1) {
-      CrystalColour(dist[i], 255,255,255);
+  for(i = 0; i < 7; i++) {
+    if(dist[i] > 0) {
+      CrystalColour(ltn(dist[i]), 255,255,255);
     }
   }
   dist = g->calcLine(lookup[9], lookup[13]);
-  for(i = 1; i < 7; i++) {
-    if(dist[i] == 1) {
-      CrystalColour(dist[i], 255,255,255);
+  for(i = 0; i < 7; i++) {
+    if(dist[i] > 0) {
+      CrystalColour(ltn(dist[i]), 255,255,255);
     }
   }
   delay(50);
@@ -71,5 +71,11 @@ void CrystalColour(int index, int r, int g, int b) {
     offset += NumLeds[i];
   }
   for (int k = 0; k < NumLeds[index]; k++) C[offset + k] = CRGB(r, g, b);
+}
+
+int ltn(int lookup_index) {
+  int index = 0;
+  while(lookup_index != lookup[index]) index++;
+  return index;
 }
 
