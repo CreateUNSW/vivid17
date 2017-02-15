@@ -1,15 +1,13 @@
 #ifndef PRIORITY_Q_H
 #define PRIORITY_Q_H
 
-#include "my_vector.hpp"
+#include <iostream>
+#include <vector>
+using namespace std;
 
 struct Item {
     int key;
     int weight;
-    
-    Item() {
-        
-    }
     
     Item(int key, int weight) {
         this->key = key;
@@ -32,6 +30,7 @@ public:
      * adds an item
      * @param key    key
      * @param weight weight of key
+     * TODO algo right now is O(n) make it O(logn) by using binary search
      */
     void insert(int key, int weight) {
         if(weight > this->MAX_VALUE) {
@@ -42,11 +41,11 @@ public:
         vector<Item>::iterator mid = _items.begin();
         vector<Item>::iterator lo = _items.begin();
         vector<Item>::iterator hi = _items.end();
-        int dist = distance<Item>(lo, hi);
+        int dist = std::distance(lo, hi);
         
         while(dist > 1) {
             mid = lo;
-            advance<Item>(mid, dist/2);
+            std::advance(mid, dist/2);
         
             if(weight <= mid->weight) {
                 // Searches right
@@ -55,10 +54,25 @@ public:
                 // Searches left
                 hi = mid;
             }
-            dist = distance<Item>(lo, hi);
+            dist = std::distance(lo, hi);
         }
         
         _items.insert(hi, Item(key, weight));
+
+
+        // // Linear search:
+        // vector<Item>::iterator it;
+        // for(it = _items.begin();
+        //     it != _items.end();
+        //     it++
+        // ) {
+        //     if(it->weight < weight) {
+        //         break;
+        //     }
+        // }
+        
+        // _items.insert(it,Item(key,weight));
+
     };
     
     /**

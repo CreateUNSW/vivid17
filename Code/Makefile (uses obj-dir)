@@ -1,0 +1,37 @@
+CC = gcc
+CFLAGS = -Wall -Werror -gdwarf-2
+DIR = object-files
+OBJS := $(addprefix $(DIR)/,foo.o bar.o baz.o)
+
+.PHONY:	clean clobber
+
+all: $(OBJS) assn2
+
+$(DIR)/main.o: main.c
+	$(CC) $(CFLAGS) -c -o $(DIR)/main.o main.c
+
+$(DIR)/Graph.o: Graph.c
+	$(CC) $(CFLAGS) -c -o $(DIR)/Graph.o Graph.c
+
+$(DIR)/Agent.o: Agent.c
+	$(CC) $(CFLAGS) -c -o $(DIR)/Agent.o Agent.c
+
+$(DIR)/testGraph.o: testGraph.c
+	$(CC) $(CFLAGS) -c -o $(DIR)/testGraph.o testGraph.c
+
+assn2: $(DIR)/main.o $(DIR)/Graph.o $(DIR)/Agent.o
+	$(CC) -o assn2 $(DIR)/main.o $(DIR)/Graph.o $(DIR)/Agent.o
+
+clean:
+	rm -f $(DIR)/*.o core
+
+clobber: clean
+	rm -f assn2
+
+test: $(DIR)/testGraph.o $(DIR)/Graph.o $(DIR)/Agent.o
+	$(CC) -o testGraph $(DIR)/testGraph.o $(DIR)/Graph.o $(DIR)/Agent.o
+
+$(OBJS): | $(DIR)
+
+$(DIR):
+	mkdir $(DIR)

@@ -1,9 +1,9 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "my_vector.hpp"
+#include <vector>
 #include "PriorityQ.hpp"
-#include "config.h"
+using namespace std;
 
 /**
  * Unweighted and non directed graph
@@ -21,13 +21,11 @@ public:
      * technicaly edges is a nV x something matrix
      * TODO change edges to an array of pointers
      */
-    Graph(int edges[][MAX_EDGE_PER_CRYSTAL + 1], int nV) : _matrix() {
-        vector<bool> *tmp = new vector<bool> (nV, false);
-        _matrix.resize(nV, *tmp);
-        delete tmp;
+    Graph(int edges[][20], int nV) {
         _nV = nV;
         _nE = 0;
-        
+        _matrix.resize(_nV, vector <bool> (_nV, false));
+
         for(int i=0;i<nV;i++) {
             int j=0;
             while(edges[i][j] != -1) {
@@ -71,23 +69,12 @@ public:
 
 
     bool hasEdge(int i, int j) {
-        return _matrix[i][j];
+        return this->_matrix[i][j];
     }
 
     int nV() {
         return _nV;
     }
-    
-    // void print() {
-    //     for(int i=0;i<_nV;i++) {
-    //         for(int j=0;i<_nV;j++)
-    //             if(_matrix[i][j])
-    //                 cout << 1;
-    //             else    
-    //                 cout << 0;
-    //         cout << endl;
-    //     }
-    // }
 
 
 private:

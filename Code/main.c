@@ -5,9 +5,7 @@
 #include <time.h>
 #include <limits.h>
 #include <unistd.h>
-#include <vector>
-using namespace std;
-#include "Graph.hpp"
+#include "Graph.h"
 
 #define NRM "\x1B[0m"
 #define C0 "\x1B[40m"
@@ -16,133 +14,117 @@ using namespace std;
 #define C3 "\x1B[107m"
 #define C4 "\x1B[7m"
 
-#define MAX_CRYSTALS_NUM 19
-#define MAX_EDGE_PER_CRYSTAL MAX_CRYSTALS_NUM
-
 void p(int *dist, int i, char *panel, int space);
 void draw(int *d);
 
-// int main(int argc, char *argv[]) {
-// 
-//    int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1},
-//                                                             {3, 4, 2, 7, 6, 5, 16, 15, 18, -1},
-//                                                             {4, 9, 8, 7, 6, 1, 3, -1},
-//                                                             {12, 11, 4, 2, 1, 16, 15, 18, 13, -1},
-//                                                             {11, 10, 9, 2, 1, 3, 12, -1},
-//                                                             {1, 6, 16, -1},
-//                                                             {1, 2, 7, 5, -1},
-//                                                             {2, 9, 8, 6, 1, -1},
-//                                                             {9, 7, 2, -1},
-//                                                             {10, 8, 7, 2, 4, 11, -1},
-//                                                             {9, 4, 11, -1},
-//                                                             {10, 9, 4, 3, 12, -1},
-//                                                             {11, 4, 3, 18, 13, -1},
-//                                                             {12, 3, 18, 17, -1},
-//                                                             {16, 5, -1},
-//                                                             {18, 3, 1, 16, -1},
-//                                                             {15, 18, 3, 1, 6, 5, 14, -1},
-//                                                             {13, 18, -1},
-//                                                             {17, 13, 12, 3, 1, 16, 15, -1}};
-// 
-//    int **edgesP = new int*[MAX_CRYSTALS_NUM];
-//    for(int i=0; i<MAX_CRYSTALS_NUM; i++) {
-//        edgesP[i] = new int[MAX_EDGE_PER_CRYSTAL + 1];
-//        int j=0;
-//        while(1) {
-//            edgesP[i][j] = edges[i][j];
-//            j++;
-//            if(edges[i][j] == -1) {
-//                edgesP[i][j] = edges[i][j];
-//                break;
-//            }
-//        }
-//    }
-//    std::cout << "start of thing\n";
-//    Graph g(edgesP, MAX_CRYSTALS_NUM);
-//    for(int i=0;i < MAX_CRYSTALS_NUM; i++) {
-//        delete[] edgesP[i];
-//    }
-//    delete[] edgesP;
-//    cout << "END\n";
-// 
-//    return EXIT_SUCCESS;
-// }
+int main(int argc, char *argv[]) {
 
-int main(int argc, char ** argv) {
-    int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1}, {7, 4, 2, 18, 15, 3, 16, 6, 5, -1}, {8, 9, 7, 6, 4, 3, 1, -1}, {11, 13, 12, 4, 2, 18, 16, 15, 1, -1}, {10, 12, 11, 9, 3, 2, 1, -1}, {14, 16, 6, 1, -1}, {7, 2, 16, 5, 1, -1}, {9, 8, 6, 2, 1, -1}, {9, 7, 2, -1}, {11, 10, 8, 7, 4, 2, -1}, {11, 9, 4, -1}, {10, 9, 12, 4, 3, -1}, {11, 4, 18, 13, 3, -1}, {17, 18, 12, 3, -1}, {16, 5, -1}, {18, 16, 3, 1, -1}, {14, 18, 15, 3, 6, 5, 1, -1}, {18, 13, -1}, {17, 13, 12, 16, 15, 3, 1, -1}};
+   int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1},
+                                                            {3, 4, 2, 7, 6, 5, 16, 15, 18, -1},
+                                                            {4, 9, 8, 7, 6, 1, 3, -1},
+                                                            {12, 11, 4, 2, 1, 16, 15, 18, 13, -1},
+                                                            {11, 10, 9, 2, 1, 3, 12, -1},
+                                                            {1, 6, 16, -1},
+                                                            {1, 2, 7, 5, -1},
+                                                            {2, 9, 8, 6, 1, -1},
+                                                            {9, 7, 2, -1},
+                                                            {10, 8, 7, 2, 4, 11, -1},
+                                                            {9, 4, 11, -1},
+                                                            {10, 9, 4, 3, 12, -1},
+                                                            {11, 4, 3, 18, 13, -1},
+                                                            {12, 3, 18, 17, -1},
+                                                            {16, 5, -1},
+                                                            {18, 3, 1, 16, -1},
+                                                            {15, 18, 3, 1, 6, 5, 14, -1},
+                                                            {13, 18, -1},
+                                                            {17, 13, 12, 3, 1, 16, 15, -1}};
 
-    Graph g(edges,19);
-    int scanfFlag = 1;
-    int i = 0;
-    int src = 0;
-    int dest = 0;
-    int *d = NULL;
-    int *l = NULL;
-    int mode = 0;
+   Graph g = readGraph(edges);
 
-    printf("Enter mode (1 for gradient, 2 for line drawing): ");
-    scanf("%d", &mode);
-    
-    if(mode == 1) {
-        // Recalculates distance
-        d = g.calcDist(src);
-        system("clear");
-        // Draws the mosaic
-        draw(d);
-        delete[] d;
-        
-        while(src != -1 && scanfFlag == 1) {
-           printf("\nEnter origin: ");
-           scanfFlag = scanf("%d", &src);
+   int scanfFlag = 1;
+   int i = 0;
+   int src = 0;
+   int *d = NULL;
 
-           if(src < 0 || src > MAX_CRYSTALS_NUM) {
-              src = 0;
-           }
+/*
+   //0123
+   printf("░▒▓█\n\n");
+*/
 
-           // Recalculates distance
-           d = g.calcDist(src);
-           // Clears the screen
-           system("clear");
-           // Draws the mosaic
-           draw(d);
+   src = 0;
 
-           delete[] d;
-        }
-    } else if(mode == 2) {
-        d = new int[MAX_CRYSTALS_NUM];
-        // Calculates path for the line
-        l = g.calcLine(src, dest);
-        // Calculates the d array
-        for(i = 0; i < MAX_CRYSTALS_NUM; i++) {
-            printf("%d\n", l[i]);
-            if(l[i] != 0) {
-                d[l[i]] = i;
-            } else {
-                d[l[i]] = 0;
-            }
-        }
-        // Draws the mosaic
-        draw(d);
-    }
+   // Recalculates distance
+   d = calcDist(g, src);
+   // Clears the screen
+   system("clear");
+   // Draws the mosaic
+   draw(d);
 
+   free(d);
+
+   while(src != -1 && scanfFlag == 1) {
+      printf("\nEnter origin: ");
+      scanfFlag = scanf("%d", &src);
+
+      if(src < 0 || src > MAX_CRYSTALS_NUM) {
+         src = 0;
+      }
+
+      // Recalculates distance
+      d = calcDist(g, src);
+      // Clears the screen
+      system("clear");
+      // Draws the mosaic
+      draw(d);
+
+      free(d);
+   }
+
+   printf("\n");
+
+
+   printf("INDEX: ");
+   for(i = 0; i < numV(g); i++) {
+      printf("%2d ", i);
+   }
+   printf("\n");
+
+
+   for(src = 0; src < MAX_CRYSTALS_NUM; src++) {
+      printf("OG %2d: ", src);
+      d = calcDist(g, src);
+      for(i = 0; i < numV(g); i++) {
+         if(d[i] != INT_MAX) {
+            printf("%2d ", d[i]);
+         } else {
+            printf(" - ");
+         }
+      }
+      printf("\n");
+      free(d);
+   }
+
+   destroyGraph(g);
+
+   return EXIT_SUCCESS;
 }
 
-void p(int *dist, int i, const char *panel, int space) {
+void p(int *dist, int i, char *panel, int space) {
 
    int len = strlen(panel) / 3;
    int j = 0;
 
    for(j = 0; j < len; j++) {
       if(dist[i] == 0) {
-         printf(C0 " " NRM);
+         printf(C0" "NRM);
       } else if(dist[i] == 1) {
-         printf(C1 " " NRM);
+         printf(C1" "NRM);
       } else if(dist[i] == 2) {
-         printf(C2 " " NRM);
+         printf(C2" "NRM);
       } else if(dist[i] == 3) {
-         printf(C3 " " NRM);
+         printf(C3" "NRM);
       } else if(dist[i] >= 4) {
-         printf(C4 " " NRM);
+         printf(C4" "NRM);
       }
    }
 
@@ -156,10 +138,6 @@ void p(int *dist, int i, const char *panel, int space) {
 
 void draw(int *d) {
 
-    // for(int i=0; i<MAX_CRYSTALS_NUM; i++) {
-    //     cout << d[i] << " ";
-    // }
-    // cout <<endl;
             p(d,10,"██████████",2);                    p(d,9,"███████████████",3);                     p(d,8,"██████████",0);
 printf("  "); p(d,10,"███████",2);                    p(d,9,"█████████████████",3);                     p(d,8,"███████",0);   
 p(d,11,"█",3);  p(d,10,"███",3);                     p(d,9,"███████████████████",3);                     p(d,8,"███",4);p(d,7,"█",0);
@@ -197,10 +175,10 @@ printf("  ");            p(d,18,"█████████████",3);   
             p(d,17,"██",2);p(d,18,"████████",2);       p(d,15,"██████████",2);           p(d,16,"██████████",2);p(d,14,"██",0);
             p(d,17,"███",2);p(d,18,"█████",2);       p(d,15,"██████████████",2);           p(d,16,"███████",2);p(d,14,"███",0);
 
-// 
+/*
 
    // FIX UP THIS PIXEL DRAWING (COPY RIGHT TO LEFT, AND MAP IT ONTO "DRAW")
-/*
+
    printf("██████████  ███████████████   ██████████\n"
           "  ███████  █████████████████   ███████  \n"
           "█   ███   ███████████████████   ███    █\n"

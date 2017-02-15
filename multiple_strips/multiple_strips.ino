@@ -1,7 +1,7 @@
 #include "FastLED.h"
 #include "Graph.hpp"
 
-#define NUM_PINS 1
+#define NUM_PINS 2
 #define DATA_PIN0 3
 #define DATA_PIN1 7
 #define CLOCK_PIN 13
@@ -10,38 +10,57 @@
 #define BRIGHTNESS 64
 
 #define MAX_CRYST_PER_PIN 10 // Total crystal designs
-#define LEDS_PER_PIN 50 // Maximum number of leds in a crystal
+#define LEDS_PER_PIN 27 // Maximum number of leds in a crystal
 
 CRGB C[LEDS_PER_PIN * NUM_PINS];
 int NumLeds[NUM_PINS * MAX_CRYST_PER_PIN] =
 {
-  1,2,3,1,2,
-  1,7,7,1,6
+  0,2,7,1,3,6,5,2,1,4,1,2,2,2,9,4,4
 };
-
-Graph * g; 
-
+//,1,2,2,2,9,4,4
+int lookup[MAX_CRYSTALS_NUM] = 
+{0,15,18,13,12,3,4,11,10,16,5,6,7,8,9,2,1};
+//,5,6,7,8,9,2,1
+Graph * g;
+int j = 15;
+int k = 0;
 void setup() {
-      FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, 10);
+      FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, LEDS_PER_PIN);
       int edges[MAX_CRYSTALS_NUM][MAX_EDGE_PER_CRYSTAL + 1] = {{-1}, {7, 4, 2, 18, 15, 3, 16, 6, 5, -1}, {8, 9, 7, 6, 4, 3, 1, -1}, {11, 13, 12, 4, 2, 18, 16, 15, 1, -1}, {10, 12, 11, 9, 3, 2, 1, -1}, {14, 16, 6, 1, -1}, {7, 2, 16, 5, 1, -1}, {9, 8, 6, 2, 1, -1}, {9, 7, 2, -1}, {11, 10, 8, 7, 4, 2, -1}, {11, 9, 4, -1}, {10, 9, 12, 4, 3, -1}, {11, 4, 18, 13, 3, -1}, {17, 18, 12, 3, -1}, {16, 5, -1}, {18, 16, 3, 1, -1}, {14, 18, 15, 3, 6, 5, 1, -1}, {18, 13, -1}, {17, 13, 12, 16, 15, 3, 1, -1}};
       g = new Graph(edges,MAX_CRYSTALS_NUM);
-      int *dist;
-//      FastLED.addLeds<LED_TYPE, DATA_PIN1, RGB> (C, LEDS_PER_PIN, LEDS_PER_PIN);
+      Serial.begin(9600);
+      FastLED.addLeds<LED_TYPE, DATA_PIN1, RGB> (C, LEDS_PER_PIN, 40);
       // https://github.com/FastLED/FastLED/wiki/Multiple-Controller-Examples
       // FastLED.addLeds<LED_TYPE, DATA_PIN2, RGB> (C, 2*LEDS_PER_PIN, LEDS_PER_PIN);
 }
 
 void loop() {
 
-  dist = g.calcDist(2);
-  CrystalColour(0,200,0,0);
-  CrystalColour(1,200,0,0);
-  CrystalColour(2,200,0,0);
-  CrystalColour(3,200,0,0);
-  CrystalColour(4,200,0,0);
-  CrystalColour(5,200,0,0);
-
+  if(j == 17) {
+    j = 1;
+  }
+  int *dist;
+  int i, red, green;
+  dist = g->calcDist(lookup[j]);
   
+  for(i = 1; i < 17; i++) {
+    
+    red = dist[lookup[i]]*85+k;
+    green =  255-(dist[lookup[i]]*85)+k;
+    if(red >255 || green > 250) {
+      red = green = 0;
+    }
+    CrystalColour(i, red, 0,green);
+    Serial.print(lookup[i]);
+    Serial.println(dist[lookup[i]]);
+  }
+  if(k != 250) {
+    k++;
+  } else {
+    k = 0;
+  }
+  delay(100);
+//  delete dist;
   FastLED.show();
 }
 

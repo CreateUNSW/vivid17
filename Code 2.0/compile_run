@@ -1,2 +1,2 @@
 #!/bin/sh
-g++ -g main.cpp -o run -w && ./run
+g++ main.cpp -o run -w && ./run
