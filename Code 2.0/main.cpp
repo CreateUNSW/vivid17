@@ -109,6 +109,10 @@ int main(int argc, char ** argv) {
            delete[] d;
         }
     } else if(mode == 2) {
+        printf("source is?\n");
+        scanf("%d", &src);
+        printf("destination is?\n");
+        scanf("%d", &dest);
         d = new int[MAX_CRYSTALS_NUM];
         // Calculates path for the line
         l = g.calcLine(src, dest);
@@ -116,7 +120,7 @@ int main(int argc, char ** argv) {
         for(i = 0; i < MAX_CRYSTALS_NUM; i++) {
             printf("%d\n", l[i]);
             if(l[i] != 0) {
-                d[l[i]] = i;
+                d[l[i]] = 1;
             } else {
                 d[l[i]] = 0;
             }
