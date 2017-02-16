@@ -13,14 +13,15 @@
 #define BRIGHTNESS 255
 #define GRADIENT_SPEED 50
 
-#define MAX_CRYST_NUM 20 // Total crystal designs
+#define MAX_CRYST_PER_PIN 10 // Total crystal designs
 #define LEDS_PER_PIN 27 // Maximum number of leds in a crystal
 
 CRGB C[LEDS_PER_PIN * NUM_PINS];
-int NumLeds[NUM_PINS * MAX_CRYST_NUM] =
+int NumLeds[NUM_PINS * MAX_CRYST_PER_PIN] =
 {
   0,2,7,1,3,6,5,2,1,4,1,2,2,2,9,4,4
 };
+
 
 int lookup[MAX_CRYSTALS_NUM] = 
 {
@@ -43,16 +44,16 @@ void setup() {
   dist = g->calcDist(lookup[1]); // distance array
 }
 
-void loop()
+void loop() {
   int i;
   double offSet = 0;
   
-  for(i = 1; i < MAX_CRYST_NUM; i++) {
+  for(i = 1; i < MAX_CRYSTALS_NUM; i++) {
     // algorithm for gradient pattern
     offSet = dist[lookup[i]]/2;
     CrystalColour(i, (sin(x / 10 + offSet * 3.14)        + 1) * 122,
-                     (sin(x / 10 + offSet * 3.14 + 3.14) + 1) * 122),
-                     0;
+                     (sin(x / 10 + offSet * 3.14 + 3.14) + 1) * 122,
+                     0);
   }
   
   delay(GRADIENT_SPEED);
