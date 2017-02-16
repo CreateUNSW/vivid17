@@ -2,8 +2,9 @@
 
 ## code base for lighting patterns used in Crystallise
 
-### [Vivid light test](https://github.com/will-weng/vivid17/tree/master/lighting_patterns/Vivid2017_Light_Test)
-### [protoype](https://github.com/will-weng/vivid17/tree/master/lighting_patterns/prototype)
+## [FastLED Wiki](https://github.com/FastLED/FastLED/wiki/Multiple-Controller-Examples)
+
+### [Vivid light test](https://github.com/will-weng/vivid17/tree/master/lighting_patterns/Vivid2017_Light_Test) ### [protoype](https://github.com/will-weng/vivid17/tree/master/lighting_patterns/prototype)
 
 Initial code testing for lighting up led strips
 
