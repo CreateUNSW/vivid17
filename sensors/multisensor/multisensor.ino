@@ -31,6 +31,10 @@ tmElements_t tm; // class variable for storing the time
 
 void setup() {
   analogWrite(A1, 255); // turns on an indicating LED on A1
+  pinMode(3,OUTPUT);
+  pinMode(13,OUTPUT);
+  digitalWrite(3,HIGH);
+  digitalWrite(13,HIGH);
   Serial.begin(9600);  
   while (!Serial);
   
