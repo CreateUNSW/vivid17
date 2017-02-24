@@ -26,10 +26,11 @@ DS1302RTC RTC(5, 6, 7);
 #define ECHO_PIN     15  // Arduino pin tied to echo pin on the ultrasonic sensor.
 #define MAX_DISTANCE 200 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
-
+time_t t;
 tmElements_t tm; // class variable for storing the time
 
 void setup() {
+  t = now();
   analogWrite(A1, 255); // turns on an indicating LED on A1
   pinMode(3,OUTPUT);
   pinMode(13,OUTPUT);
@@ -39,6 +40,11 @@ void setup() {
   while (!Serial);
   
   Serial.println("RTC module activated");
+  if(RTC.set(t) == 0) {
+    Serial.println("that worked");
+  } else {
+    Serial.println("that did not work");
+  }
   delay(500);
   if (RTC.haltRTC()) {
     Serial.println("The DS1302 is stopped.  Please run the SetTime");
@@ -76,13 +82,12 @@ void setup() {
   sensor.setTimeout(500);
   sensor.startContinuous();
   Serial.println("TOF activated");
-  Serial.flush();
 }
 
 void loop() {
   // sets which date to stop at
-  while (tm.Day < 15) {
-    Serial.print(RTC.get()); // gets UNIX time
+//  while (tm.Day < 15) {
+//    Serial.print(RTC.get()); // gets UNIX time
     myFile = SD.open("test.txt", FILE_WRITE); // open file
     // if read successful, prints time to file on SD card.
     if ((myFile)&&(! RTC.read(tm))) {
@@ -112,6 +117,8 @@ void loop() {
         analogWrite(A1, 0); // turns off LED
         return;
     } 
+    
+  Serial.println("stop");
     // prints ultrasonic
     unsigned int uS = sonar.ping(); // Send ping, get ping time in microseconds (uS).
     myFile.print("Ping: ");
@@ -133,10 +140,11 @@ void loop() {
     myFile.print("IR reading :");
     myFile.println(analogRead(A0));
     myFile.close();
-    delay(30000); // wait 30 seconds before next reading
-    Serial.flush(); // clean up serial 
-  }
+    Serial.println("waiting");
+    delay(20000); // wait 30 seconds before next reading
   analogWrite(A1, 0); // turns off LED
+  delay(10000);
+  analogWrite(A1, 200); // turns off LED
 }
 
 // prints minutes/hours to two digits
