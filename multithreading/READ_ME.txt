@@ -1,0 +1,1 @@
+Run "brew install csfml" as this is a required graphics library
