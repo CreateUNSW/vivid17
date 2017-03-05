@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <unistd.h>
 #include "c11threads.h"
 //#include <SFML/Graphics.h>
 
@@ -10,11 +11,12 @@
 int numThreads = 1;
 int *arrayToSearch;
 
+
 int threadFunction(void * data) {
    printf("%d-th thread up\n", *(int*)data);
 
-   for(int i = (TASK_SIZE/numThreads)*(*(int*)data); i < (TASK_SIZE/numThreads)*(*(int*)data + 1) - 1; i++) {
-      if(arrayToSearch[i] == 99999998) {
+   for(int i = (TASK_SIZE/numThreads)*(*(int*)data); i < (TASK_SIZE/numThreads)*(*(int*)data + 1); i++) {
+      if(arrayToSearch[i] == 99999999) {
          printf("\nTASKS FINISHED\n");
          return 0;
       }
@@ -43,8 +45,8 @@ int main(int argc, char *argv[]) {
    int i = 0;
    thrd_t threadId[numThreads];
 
-   printf("\nTRYING %d CORES\n"
-          "--------------\n", numThreads);
+   printf("\nUSING %d/%ld CORES\n"
+          "--------------\n", numThreads, sysconf(_SC_NPROCESSORS_ONLN));
 
    // init thread data
    for(i = 0; i < numThreads; ++i) {
