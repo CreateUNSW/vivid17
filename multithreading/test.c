@@ -29,8 +29,10 @@ int main(int argc, char *argv[]) {
    if(argc > 1 && atoi(argv[1]) > 0) {
       numThreads = atoi(argv[1]);
    } else {
-      if(atoi(argv[1]) < 1) {
-         printf("Number of threads must be > 0\n");
+      if(argc >= 1) {
+         if(argc > 1 && atoi(argv[1]) < 1) {
+            printf("Number of threads must be > 0\n");
+         }
          numThreads = 0;
       }
       while(numThreads < 1) {
