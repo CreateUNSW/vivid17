@@ -24,11 +24,17 @@ int threadFunction(void * data) {
 
 int main(int argc, char *argv[]) {
 
-   if(argc > 1) {
+   if(argc > 1 && atoi(argv[1]) > 0) {
       numThreads = atoi(argv[1]);
    } else {
-      printf("Enter number of threads: ");
-      scanf("%d", &numThreads);
+      if(atoi(argv[1]) < 1) {
+         printf("Number of threads must be > 0\n");
+         numThreads = 0;
+      }
+      while(numThreads < 1) {
+         printf("Enter number of threads: ");
+         scanf("%d", &numThreads);
+      }
    }
 
    // Keeps track of the threads used
