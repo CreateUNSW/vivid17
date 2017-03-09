@@ -10,6 +10,13 @@ int black_checker(BMP* bmp, int x, int y);
 //from the lowest pixel, colour that then keep going up until it hits the colour its trying to colour.
 void recolour_crystal(BMP* file, int x, int y, int r, int g, int b) {
 
+   // Prevents black pixel from being inputted
+   if(black_checker(file, x, y)) {
+      fprintf(stderr, "Black pixel inputted.\n");
+      return;
+   }
+      
+
 	int gucci = 1;
 	int x_temp = x;
 	int x_temp2 = x;
@@ -81,17 +88,20 @@ int black_checker(BMP* bmp, int x, int y) {
 
 
 
-/*
+
 int main(int argc, char* argv[]) {
 	char *p = "tester.bmp";
 printf("%s\n", p);
 
-	BMP* image = BMP_ReadFile("tester.bmp");
-
+	BMP* image = BMP_ReadFile("mosaic.bmp");
+   if(image == NULL) {
+      fprintf(stderr, "Unable to open file.\n");
+      return EXIT_FAILURE;
+   }
 
 	BMP* copy = malloc(sizeof(image));
 	copy = image;
-	recolour_crystal(copy);
+   recolour_crystal(copy, 100, 100, 50, 0, 150);
 printf("%s\n", p);
 
 	BMP_WriteFile(copy, p);
@@ -99,4 +109,4 @@ printf("%s\n", p);
 
 	return EXIT_SUCCESS;
 }
-*/
+
