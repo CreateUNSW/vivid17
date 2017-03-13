@@ -5,27 +5,47 @@
 void recolour_crystal(BMP* file, int x, int y, int r, int g, int b);
 int black_checker(BMP* bmp, int x, int y);
 
+
+struct pixels {
+	int x;
+	int y;
+} *Pixels;
+
+
+int main(int argc, char* argv[]) {
+	char *p = "tester.bmp";
+
+	BMP* image = BMP_ReadFile("tester.bmp");
+
+
+	BMP* copy = malloc(sizeof(image));
+	copy = image;
+	recolour_crystal(copy, 2883, 1650, 0, 0, 200);
+
+	BMP_WriteFile(copy, p);
+
+	return EXIT_SUCCESS;
+}
+
+
+
+
+
 //for just one crystal atm
 //from the highest pixel, colour that crystal, go right until black, note the pixel, go left until no more, go back, go right until no more, go back to middle, repeat
 //from the lowest pixel, colour that then keep going up until it hits the colour its trying to colour.
 void recolour_crystal(BMP* file, int x, int y, int r, int g, int b) {
 
-   // Prevents black pixel from being inputted
-   if(black_checker(file, x, y)) {
-      fprintf(stderr, "Black pixel inputted.\n");
-      return;
-   }
-      
-
 	int gucci = 1;
 	int x_temp = x;
 	int x_temp2 = x;
 	int y_temp = y;
-
 	//go down
 	while(gucci == 1) {
 		while(black_checker(file, x, y) != 1) {
 			BMP_SetPixelRGB(file, x, y,  r, g, b);
+//printf("x is %d\n", x);
+printf("y is %d\n", y);
 			x++;
 		}
 
@@ -49,7 +69,7 @@ void recolour_crystal(BMP* file, int x, int y, int r, int g, int b) {
 		else y++;
 	}
 
-	gucci = 1; x = x_temp2; x_temp = x_temp2;
+	gucci = 1; x = x_temp2; x_temp = x_temp2; y = y_temp;
 	//goes up
 	while(gucci == 1) {
 		while(black_checker(file, x, y) != 1) {
@@ -89,24 +109,4 @@ int black_checker(BMP* bmp, int x, int y) {
 
 
 
-int main(int argc, char* argv[]) {
-	char *p = "tester.bmp";
-printf("%s\n", p);
-
-	BMP* image = BMP_ReadFile("mosaic.bmp");
-   if(image == NULL) {
-      fprintf(stderr, "Unable to open file.\n");
-      return EXIT_FAILURE;
-   }
-
-	BMP* copy = malloc(sizeof(image));
-	copy = image;
-   recolour_crystal(copy, 100, 100, 50, 0, 150);
-printf("%s\n", p);
-
-	BMP_WriteFile(copy, p);
-printf("%s\n", p);
-
-	return EXIT_SUCCESS;
-}
 
