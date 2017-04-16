@@ -2,7 +2,6 @@
 echo "Compiling..."; 
 if g++ main.cpp -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib
 then
-	echo "Simulator starting..."; 
 	./run
 else
 	echo "If linker error encountered, try using the commands: \n
