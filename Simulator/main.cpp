@@ -5,6 +5,7 @@
 #include <string>
 #include "CImg/CImg.h"
 #include "Graph.hpp"
+#include <pthread.h>
 using namespace cimg_library;
 
 #define NUM_CRYSTALS 291
@@ -64,22 +65,43 @@ int main(int argc,char **argv) {
     // ----------------
     while(!disp.is_closed() && !disp.button() && !disp.is_keyQ() && !disp.is_keyESC()) {
 
+        if(disp.is_keyP()) disp.wait_all();
+
         // ===============================================================
         // Code to simulate goes here
         // ===============================================================
         // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
-        d = g.calcDist(t);
-        for(int i = 0; i < NUM_CRYSTALS; i++) {
-            float temp = (float) d[i] / 50 * NUM_CRYSTALS;
-            if(i == t) {
-                colourCrystal(img, i, 255, 255, 255, src);
-            } else {
-                colourCrystal(img, i, temp, temp, temp, src);
+        if(disp.mouse_x() != -1 && disp.mouse_y() != -1) {
+            int mouse = (float)disp.mouse_x() / (float)disp.window_width() * (float) NUM_CRYSTALS;
+
+            d = g.calcDist(mouse);
+            for(int i = 0; i < NUM_CRYSTALS; i++) {
+                float temp = (float) d[i] / 50 * NUM_CRYSTALS;
+                if(i == mouse) {
+                    colourCrystal(img, i, 255, 255, 255, src);
+                    int x = (float)lookup[mouse][0]/4000*IMG_WIDTH;
+                    int y = (float)lookup[mouse][1]/4000*IMG_WIDTH;
+                    img.draw_text(x-5,y-5,"%u",black,0,0.5f,13,(unsigned int)mouse);
+                } else {
+                    colourCrystal(img, i, temp, temp, temp, src);
+                }
+                // colourCrystal(img, t, rand()%256, rand()%256, rand()%256, src);
             }
-            // colourCrystal(img, t, rand()%256, rand()%256, rand()%256, src);
+            delete[] d;
+        } else {
+            d = g.calcDist(t);
+                for(int i = 0; i < NUM_CRYSTALS; i++) {
+                    float temp = (float) d[i] / 50 * NUM_CRYSTALS;
+                    if(i == t) {
+                        colourCrystal(img, i, 255, 255, 255, src);
+                    } else {
+                        colourCrystal(img, i, temp, temp, temp, src);
+                    }
+                    // colourCrystal(img, t, rand()%256, rand()%256, rand()%256, src);
+                }
+            delete[] d;
         }
-        delete[] d;
 
         // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
         // ===============================================================
@@ -120,6 +142,10 @@ void checkCoordinates(CImg<unsigned char> &img) {
                 }
             }
         }
+        int x = (float)lookup[i][0]/4000*IMG_WIDTH;
+        int y = (float)lookup[i][1]/4000*IMG_WIDTH;
+
+        img.draw_text(x-5,y-5,"%u",black,0,0.5f,13,(unsigned int)i);
     }
 }
 
