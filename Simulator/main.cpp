@@ -7,12 +7,30 @@ using namespace cimg_library;
 
 int main(int argc,char **argv) {
 
-    std::cout << "Hello World!\n";
+    std::cout << "Sumulator starting\n";
+
+    CImg<unsigned char> img("in.bmp");
+    CImg<unsigned char> test(400,400,1,3);  // Define a 400x400 color image with 8 bits per color component.
+    
+    for(int y = 0; y < 400; y++) {
+        for(int x = 0; x < 400; x++) {
+            test(x,y) = x * y;
+        }
+    }
+
+    test.display("Test");
 
 
-    CImg<unsigned char> image("in.bmp"), visu(500,400,1,3,0);
+    // CImgDisplay main_disp(img, "Simulator");
 
-    image.display("out.bmp");
+    // while(!main_disp.is_closed()) {
+    //     main_disp.wait();
+        
+    // }
+
+    //img.display("Simulator");
+
+    // image.display("out.bmp");
 
     // CImgDisplay main_disp(image,"Click a point"), draw_disp(visu,"Intensity profile");
     // main_disp.wait();
