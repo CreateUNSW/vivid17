@@ -22,9 +22,10 @@ int main(int argc, char* argv[]) {
 
     BMP* copy = malloc(sizeof(image));
     copy = image;
-    for(int i = 0; i < 291; i++) {
-        recolour_crystal(copy, lookup[i][0]/4000*IMG_WIDTH, lookup[i][1]/4000*IMG_WIDTH, 0, 0, 200);
-    }
+    checkCoordinates(copy);
+    // for(int i = 0; i < 291; i++) {
+    //     recolour_crystal(copy, lookup[i][0]/4000*IMG_WIDTH, lookup[i][1]/4000*IMG_WIDTH, 0, 0, 200);
+    // }
 
     BMP_WriteFile(copy, "out.bmp");
     BMP_Free(copy);
@@ -34,6 +35,7 @@ int main(int argc, char* argv[]) {
 
 void checkCoordinates(BMP* file) {
     for(int i = 0; i < 291; i++) {
+        printf("%d\n", i);
         for(int j = -10; j < 10; j++) {
             for(int k = -10; k < 10; k++) {
                 BMP_SetPixelRGB(file, lookup[i][0]/4000*IMG_WIDTH + j, lookup[i][1]/4000*IMG_WIDTH + k, 230, 230, 230);
