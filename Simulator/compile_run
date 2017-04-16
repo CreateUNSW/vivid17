@@ -1,0 +1,7 @@
+#!/bin/sh
+if g++ main.cpp -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib
+then
+	./run
+else
+	echo "Try using the command: sudo ln -s /opt/X11/include/X11 /usr/local/include/X11"; 
+fi
