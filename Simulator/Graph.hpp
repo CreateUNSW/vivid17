@@ -21,7 +21,7 @@ public:
      * technicaly edges is a nV x something matrix
      * TODO change edges to an array of pointers
      */
-    Graph(int edges[][20], int nV) {
+    Graph(int edges[][291], int nV) {
         _nV = nV;
         _nE = 0;
         _matrix.resize(_nV, vector <bool> (_nV, false));

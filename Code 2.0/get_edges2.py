@@ -24,17 +24,17 @@ with open(sys.argv[1],'r') as f:
 
 # crystals is a list of list of vertices
 edges = []
-for i in range(0,len(crystals)+1):
+for i in range(0,len(crystals)):
   edges.append([-1])
 
 visited = []
-for i in range(1,len(crystals)+1):
-  for j in range(1,len(crystals)+1):
+for i in range(0,len(crystals)):
+  for j in range(0,len(crystals)):
     if(i == j):
       continue
     numCommon = 0
-    for v1 in crystals[i-1]:
-      for v2 in crystals[j-1]:
+    for v1 in crystals[i]:
+      for v2 in crystals[j]:
         if(v1 == v2):
           numCommon += 1
 
