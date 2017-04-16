@@ -10,6 +10,10 @@ Graphing library in C
 
 Graphing library in C++, used for microcontroller
 
+### [Simulator](https://github.com/will-weng/vivid17/tree/master/Simulator)
+
+Mosaic simulator in C++, used to simulate Arduino code (with minimal modification) to see results without actual hardware present
+
 ### [Lighting pattern](https://github.com/will-weng/vivid17/tree/master/lighting_patterns)
 
 Running light patterns for arduino and led
