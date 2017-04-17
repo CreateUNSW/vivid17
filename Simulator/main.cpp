@@ -35,7 +35,7 @@ Graph g(edges, NUM_CRYSTALS);
 // ----------------
 // Initialising GUI
 // ----------------
-int t = 0, temp = 0, fps = 0;
+int t = 0, tP = 0, temp = 0, fps = 0;
 CImg<unsigned char> src("src.bmp");
 CImg<unsigned char> img(src);
 
@@ -65,7 +65,7 @@ void threadJob(int thid, int t, int *d) {
     // ===============================================================
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
-    // Sample gradient code
+    // // Sample gradient code
     // for(int i = start; i < end; i++) {
     //     float temp = (float) d[i] / 50 * NUM_CRYSTALS;
     //     if(i == t) {
@@ -99,7 +99,6 @@ int main(int argc,char **argv) {
     ORIGINAL_HEIGHT = IMG_HEIGHT * SCALE;
     src.resize(IMG_WIDTH, IMG_HEIGHT);
     img.resize(IMG_WIDTH, IMG_HEIGHT);
-
     // checkCoordinates(img);
 
     // ----------------------
@@ -114,22 +113,7 @@ int main(int argc,char **argv) {
     int *d = NULL;
     int lenPath = 0;
     int *l = NULL;
-
     while(!disp.is_closed() && !disp.button() && !disp.is_keyQ() && !disp.is_keyESC()) {
-
-        d = g.calcDist(t);
-        // ---------------------
-        // Starts thread workers
-        // ---------------------
-        for(int i = 0; i < NUM_THREADS; i++) {
-            thread[i] = std::thread(threadJob, i, t, d);
-        }
-        // Pauses main until threads all finish
-        for(int i = 0; i < NUM_THREADS; i++) {
-            thread[i].join();
-        }
-        delete[] d;
-        if (++t > (NUM_CRYSTALS - 1)) t = 0;
 
         // ===============================================================
         // Single-threaded code to simulate goes here.
@@ -140,7 +124,7 @@ int main(int argc,char **argv) {
         // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 
-        // Sample muzz light program
+        // Sample muzz light program, with image retention effect
         l = g.calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
         int tempR = rand()%256;            
         int tempG = rand()%256;
@@ -171,6 +155,21 @@ int main(int argc,char **argv) {
         // ===============================================================
         
 
+
+        // NOTE: tP is time parameter for parallel code
+        d = g.calcDist(tP);
+        // ---------------------
+        // Starts thread workers
+        // ---------------------
+        for(int i = 0; i < NUM_THREADS; i++) {
+            thread[i] = std::thread(threadJob, i, tP, d);
+        }
+        // Pauses main until threads all finish
+        for(int i = 0; i < NUM_THREADS; i++) {
+            thread[i].join();
+        }
+        delete[] d;
+        if (++tP > (NUM_CRYSTALS - 1)) tP = 0;
 
 
         // Dodgy play and pause mechanism
