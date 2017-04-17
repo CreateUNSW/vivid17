@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Compiling..."; 
-if g++ -std=c++11 main.cpp -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4
+if g++ -std=c++11 main.cpp -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4 -gdwarf
 then
 	./run
 else

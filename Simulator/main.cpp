@@ -44,6 +44,7 @@ CImg<unsigned char> img(src);
 // -------------------
 void checkCoordinates(CImg<unsigned char> &img);
 void setPixel(CImg<unsigned char> &img, int x, int y, int r, int g, int b);
+void getPixel(CImg<unsigned char> &img, int x, int y, int *r, int *g, int *b);
 void colourCrystal(CImg<unsigned char> &img, int crystalNum, int r, int g, int b, CImg<unsigned char> &src);
 int blackChecker(CImg<unsigned char> &src, int x, int y);
 
@@ -64,15 +65,16 @@ void threadJob(int thid, int t, int *d) {
     // ===============================================================
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
-    for(int i = start; i < end; i++) {
-        float temp = (float) d[i] / 50 * NUM_CRYSTALS;
-        if(i == t) {
-            colourCrystal(img, i, 255, 255, 255, src);
-        } else {
-            colourCrystal(img, i, temp, temp, temp, src);
-        }
-        // colourCrystal(img, t, rand()%256, rand()%256, rand()%256, src);
-    }
+    // Sample gradient code
+    // for(int i = start; i < end; i++) {
+    //     float temp = (float) d[i] / 50 * NUM_CRYSTALS;
+    //     if(i == t) {
+    //         colourCrystal(img, i, 255, 255, 255, src);
+    //     } else {
+    //         colourCrystal(img, i, temp, temp, temp, src);
+    //     }
+    //     // colourCrystal(img, i, rand()%256, rand()%256, rand()%256, src);
+    // }
 
     // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
     // ===============================================================
@@ -86,7 +88,7 @@ int main(int argc,char **argv) {
     // --------------------
     // Initialising threads
     // --------------------
-    std::thread thread[NUM_THREADS];
+    std::thread *thread = new std::thread[NUM_THREADS];
 
     // ----------------
     // Initialising GUI
@@ -110,12 +112,12 @@ int main(int argc,char **argv) {
     // Enters draw loop
     // ----------------
     int *d = NULL;
+    int lenPath = 0;
+    int *l = NULL;
+
     while(!disp.is_closed() && !disp.button() && !disp.is_keyQ() && !disp.is_keyESC()) {
 
-        if(disp.is_keyP()) disp.wait_all();
-        
         d = g.calcDist(t);
-
         // ---------------------
         // Starts thread workers
         // ---------------------
@@ -126,6 +128,8 @@ int main(int argc,char **argv) {
         for(int i = 0; i < NUM_THREADS; i++) {
             thread[i].join();
         }
+        delete[] d;
+        if (++t > (NUM_CRYSTALS - 1)) t = 0;
 
         // ===============================================================
         // Single-threaded code to simulate goes here.
@@ -136,14 +140,68 @@ int main(int argc,char **argv) {
         // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 
-        // INSERT
+        // Sample muzz light program
+        l = g.calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
+        int tempR = rand()%256;            
+        int tempG = rand()%256;
+        int tempB = rand()%256;
+        int darkR = 0;
+        int darkG = 0;
+        int darkB = 0;
+        for(int i = 0; i < NUM_CRYSTALS; i++) {
+            getPixel(img, (float)lookup[i][0]/4000*IMG_WIDTH, 
+                          (float)lookup[i][1]/4000*IMG_WIDTH, 
+                     &darkR, &darkG, &darkB);
+            colourCrystal(img, i, darkR/1.1,
+                                  darkG/1.1, 
+                                  darkB/1.1, src);   
+        }
+        if(t % 5 == 0) {
+            for(int i = 0; i < lenPath; i++) {
+                colourCrystal(img, l[i], tempR,
+                                         tempG, 
+                                         tempB, src);
+            }
+        }
+        t++;
+        delete[] l;
 
 
         // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
         // ===============================================================
-
         
-        delete[] d;
+
+
+
+        // Dodgy play and pause mechanism
+        if(disp.is_key1()) {
+            std::cout << "Paused for 1 second." << std::endl;
+            disp.wait(1000);
+        } else if(disp.is_key2()) {
+            std::cout << "Paused for 2 second." << std::endl;
+            disp.wait(2000);
+        } else if(disp.is_key3()) {
+            std::cout << "Paused for 3 second." << std::endl;
+            disp.wait(3000);
+        } else if(disp.is_key4()) {
+            std::cout << "Paused for 4 second." << std::endl;
+            disp.wait(4000);
+        } else if(disp.is_key5()) {
+            std::cout << "Paused for 5 second." << std::endl;
+            disp.wait(5000);
+        } else if(disp.is_key6()) {
+            std::cout << "Paused for 6 second." << std::endl;
+            disp.wait(6000);
+        } else if(disp.is_key7()) {
+            std::cout << "Paused for 7 second." << std::endl;
+            disp.wait(7000);
+        } else if(disp.is_key8()) {
+            std::cout << "Paused for 8 second." << std::endl;
+            disp.wait(8000);
+        } else if(disp.is_key9()) {
+            std::cout << "Paused for 9 second." << std::endl;
+            disp.wait(9000);
+        }
         
         // ---------------------------------------------------------------
         // Display current animation framerate, and refresh display window
@@ -151,7 +209,7 @@ int main(int argc,char **argv) {
         temp = fps;
         fps = disp.frames_per_second();
         if(temp != fps) {
-            std::cout << "FPS: " << fps << std::endl;
+            std::cout << "FPS: " << fps << "/" << FPS_TARGET << std::endl;
         }
         if(fps != 0 && fps < FPS_THRESHOLD && SCALE <= MAX_SCALE) {
             std::cout << "Downscaling to maintain fps" << SCALE << std::endl;
@@ -163,9 +221,11 @@ int main(int argc,char **argv) {
             std::cout << IMG_WIDTH << "x" << IMG_HEIGHT << std::endl;
         }
         //img.draw_text(5,5,"%u frames/s",white,0,0.5f,13,(unsigned int)disp.frames_per_second());
-        disp.display(img).resize(true).wait(1000 / FPS_TARGET);
-        if (++t > (NUM_CRYSTALS - 1)) t = 0;
+        disp.display(img).resize(false).wait(1000 / FPS_TARGET);
     }
+
+    // Frees thread handler
+    delete[] thread;
 
     return 0;
 }
