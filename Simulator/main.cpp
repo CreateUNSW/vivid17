@@ -52,8 +52,8 @@ int blackChecker(CImg<unsigned char> &src, int x, int y);
 // -------------
 void threadJob(int thid, int t, int *d) {
 
-    int start = NUM_CRYSTALS/NUM_THREADS*thid;
-    int end = NUM_CRYSTALS/NUM_THREADS*(thid+1)+1;
+    int start = (float)NUM_CRYSTALS/(float)NUM_THREADS*(float)thid;
+    int end = (float)NUM_CRYSTALS/(float)NUM_THREADS*(float)(thid+1)+1;
 
     // ===============================================================
     // Multithreaded code to simulate goes here.
