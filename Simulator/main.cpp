@@ -5,6 +5,7 @@
 #include <string>
 #include "CImg/CImg.h"
 #include "Graph.hpp"
+#include "RGBtoHSV.hpp"
 #include <thread>
 using namespace cimg_library;
 
@@ -65,7 +66,7 @@ void threadJob(int thid, int t, int *d) {
     // ===============================================================
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
-    // // Sample gradient code
+    // // Sample jumping gradient code
     // for(int i = start; i < end; i++) {
     //     float temp = (float) d[i] / 50 * NUM_CRYSTALS;
     //     if(i == t) {
@@ -75,6 +76,17 @@ void threadJob(int thid, int t, int *d) {
     //     }
     //     // colourCrystal(img, i, rand()%256, rand()%256, rand()%256, src);
     // }
+
+    // Sample shimmering centric gradient code
+    for(int i = start; i < end; i++) {
+        double hue = ((float)d[i]/50)*360 + t;
+        if(hue >= 360) hue = hue - 360;
+        rgb curr = hsv2rgb(hue, 
+                           (float)(rand()%21)/100+0.8,
+                           1-(float)d[i]/14);
+        // std::cout << "R:" << curr.r << "G:" << curr.g << "B:" << curr.b << std::endl;
+        colourCrystal(img, i, curr.r, curr.g, curr.b, src);
+    }
 
     // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
     // ===============================================================
@@ -113,6 +125,7 @@ int main(int argc,char **argv) {
     int *d = NULL;
     int lenPath = 0;
     int *l = NULL;
+    d = g.calcDist(259);
     while(!disp.is_closed() && !disp.button() && !disp.is_keyQ() && !disp.is_keyESC()) {
 
         // ===============================================================
@@ -124,31 +137,31 @@ int main(int argc,char **argv) {
         // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 
-        // Sample muzz light program, with image retention effect
-        l = g.calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
-        int tempR = rand()%256;            
-        int tempG = rand()%256;
-        int tempB = rand()%256;
-        int darkR = 0;
-        int darkG = 0;
-        int darkB = 0;
-        for(int i = 0; i < NUM_CRYSTALS; i++) {
-            getPixel(img, (float)lookup[i][0]/4000*IMG_WIDTH, 
-                          (float)lookup[i][1]/4000*IMG_WIDTH, 
-                     &darkR, &darkG, &darkB);
-            colourCrystal(img, i, darkR/1.1,
-                                  darkG/1.1, 
-                                  darkB/1.1, src);   
-        }
-        if(t % 5 == 0) {
-            for(int i = 0; i < lenPath; i++) {
-                colourCrystal(img, l[i], tempR,
-                                         tempG, 
-                                         tempB, src);
-            }
-        }
-        t++;
-        delete[] l;
+        // // Sample muzz light program, with image retention effect
+        // l = g.calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
+        // int tempR = rand()%256;            
+        // int tempG = rand()%256;
+        // int tempB = rand()%256;
+        // int darkR = 0;
+        // int darkG = 0;
+        // int darkB = 0;
+        // for(int i = 0; i < NUM_CRYSTALS; i++) {
+        //     getPixel(img, (float)lookup[i][0]/4000*IMG_WIDTH, 
+        //                   (float)lookup[i][1]/4000*IMG_WIDTH, 
+        //              &darkR, &darkG, &darkB);
+        //     colourCrystal(img, i, darkR/1.1,
+        //                           darkG/1.1, 
+        //                           darkB/1.1, src);   
+        // }
+        // if(t % 5 == 0) {
+        //     for(int i = 0; i < lenPath; i++) {
+        //         colourCrystal(img, l[i], tempR,
+        //                                  tempG, 
+        //                                  tempB, src);
+        //     }
+        // }
+        // t++;
+        // delete[] l;
 
 
         // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
@@ -157,7 +170,7 @@ int main(int argc,char **argv) {
 
 
         // NOTE: tP is time parameter for parallel code
-        d = g.calcDist(tP);
+        // d = g.calcDist(tP);
         // ---------------------
         // Starts thread workers
         // ---------------------
@@ -168,9 +181,9 @@ int main(int argc,char **argv) {
         for(int i = 0; i < NUM_THREADS; i++) {
             thread[i].join();
         }
-        delete[] d;
-        if (++tP > (NUM_CRYSTALS - 1)) tP = 0;
-
+        // delete[] d;
+        // if(++tP > (NUM_CRYSTALS - 1)) tP = 0;
+        if(++tP > 360 - 1) tP = 0;
 
         // Dodgy play and pause mechanism
         if(disp.is_key1()) {
