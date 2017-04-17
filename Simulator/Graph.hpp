@@ -59,13 +59,11 @@ public:
         vector <int> st;
         int* ret = new int[_nV];
         _dijsktra(origin, st, dist);
-        int j=1;
-        ret[0] = origin;
-        for(int i=st[destin];i!=-1&&j<st.size()&&i!=origin;i=st[i]) {
+        int j=0;
+        for(int i=st[destin];i!=-1&&j<st.size();i=st[i]) {
             ret[j] = i;
             j++;
         }
-        ret[j] = destin;
         return ret;
     };
 
