@@ -1,0 +1,3 @@
+#!/bin/sh
+gcc colour.c qdbmp_1.0.0/qdbmp.c -o run
+./run

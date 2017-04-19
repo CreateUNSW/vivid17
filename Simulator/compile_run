@@ -8,7 +8,7 @@ else
 	then
 		./run
 	else
-		echo "If linker error encountered, try using the commands: \n
+		echo "\nIf linker error encountered, try using the commands: \n
 		sudo ln -s /opt/X11/include/X11 /usr/local/include/X11 \n
 		sudo apt-get install libx11-dev"; 
 	fi
