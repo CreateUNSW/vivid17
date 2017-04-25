@@ -31,6 +31,26 @@ Copy Template.bmp and paste into your preferred image editor, and colour in the 
        Bn is how much blue should be in crystal n. 
 <p>
 These values range from 0 to 255.
+<p>
+<b>NOTE: .bmp files must be in 24-bit format, do not overwrite colour space information when saving your image from the provided Template.bmp<b>
+
+### [Wing reader](https://github.com/will-weng/vivid17/tree/master/Simulator/Wing%20reader)
+Copy Template.bmp and paste into your preferred image editor, and colour in the appropriate panels. When done, run:
+<p>
+ ./compile_run yourImage.bmp
+<p>
+ replacing yourImage.bmp with whatever you named the image containing your pattern. Some text will then be outputted to the command line, along with the same text into a file called yourImage.bmp (or whatever you named your image).
+<p>
+ This text is what the code for the controller uses to create the pattern (and the simulator). Verify that it all works by loading it into the simulator.
+<p>
+ Format of output text:
+ {{id1 of crystal in wing},{id2 of crystal in wing}, ... {idN of crystal in wing}};
+<p>
+There is also a reciprocate file (of crystals NOT in wing generated).
+<p>
+These output both to file, and to command line.
+<p>
+<b>NOTE: .bmp files must be in 24-bit format, do not overwrite colour space information when saving your image from the provided Template.bmp<b>
 
 ### [Lighting pattern](https://github.com/will-weng/vivid17/tree/master/lighting_patterns)
 

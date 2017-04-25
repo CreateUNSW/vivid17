@@ -13,3 +13,5 @@ Copy Template.bmp and paste into your preferred image editor, and colour in the 
        Bn is how much blue should be in crystal n. 
 
 These values range from 0 to 255.
+
+NOTE: .bmp files must be in 24-bit format, do not overwrite colour space information when saving your image from the provided Template.bmp

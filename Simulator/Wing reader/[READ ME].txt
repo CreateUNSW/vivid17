@@ -1,0 +1,15 @@
+Copy Template.bmp and paste into your preferred image editor, and colour in the appropriate panels. When done, run:
+
+ ./compile_run yourImage.bmp
+
+ replacing yourImage.bmp with whatever you named the image containing your pattern. Some text will then be outputted to the command line, along with the same text into a file called yourImage.bmp (or whatever you named your image).
+
+ This text is what the code for the controller uses to create the pattern (and the simulator). Verify that it all works by loading it into the simulator.
+
+ Format of output text:
+ {{id1 of crystal in wing},{id2 of crystal in wing}, ... {idN of crystal in wing}};
+
+There is also a reciprocate file (of crystals NOT in wing generated).
+These output both to file, and to command line.
+
+NOTE: .bmp files must be in 24-bit format, do not overwrite colour space information when saving your image from the provided Template.bmp

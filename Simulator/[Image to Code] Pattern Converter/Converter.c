@@ -30,7 +30,12 @@ int main(int argc, char* argv[]) {
 
     strcpy(ret, ".txt");
 
-    BMP* image = BMP_ReadFile(argv[1]);
+    BMP* image = NULL;
+    image = BMP_ReadFile(argv[1]);
+    if(image == NULL) {
+        printf("Input file not found.\n");
+        return EXIT_FAILURE;
+    }
     FILE *f = fopen(outputName, "w");
 
     int x, y;
@@ -54,6 +59,7 @@ int main(int argc, char* argv[]) {
     fprintf(f, "}};\n");
 
     BMP_Free(image);
+    fclose(f);
 
     return EXIT_SUCCESS;
 }
