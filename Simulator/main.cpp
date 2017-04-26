@@ -239,6 +239,8 @@ int main(int argc,char **argv) {
     // Frees thread handler
     delete[] thread;
 
+    delete[] d;
+
     return 0;
 }
 
