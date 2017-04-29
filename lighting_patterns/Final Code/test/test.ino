@@ -1,3 +1,18 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+int _isatty (){
+    return 0;
+}
+
+int _fstat (){
+    return 1;
+}
+#ifdef __cplusplus
+}
+#endif
+#include "malloc.h"
+
 #include "FastLED.h"
 #include "config.h"
 #include "Graph.hpp"
@@ -56,19 +71,22 @@ void setup() {
 //   FastLED.addLeds<LED_TYPE, DATA_PIN2, RGB> (leds, 2*LEDS_PER_PIN, LEDS_PER_PIN);
 
   g = new Graph();
-  dist = g->calcDist(0);
-  
   srand(0);
   FastLED.setBrightness(BRIGHTNESS);
 }
 
 void loop() {
   
-  Serial.print(freeRAM());
-  Serial.println("/65536 bytes free");
+// Measures execution time
+//--------------------------------
+  unsigned long duration = micros();
+  float total = 0;
+//--------------------------------
 
-  Serial.print(digitalRead(0));
-  Serial.println(digitalRead(17));
+//  Serial.print(digitalRead(0));
+//  Serial.println(digitalRead(17));
+
+  dist = g->calcDist(0);
   
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(i%2) {
@@ -99,13 +117,29 @@ void loop() {
   FastLED.delay(10);
   FastLED.show();
 
+  delete[] dist;
+
+
+// Measures execution time
+//--------------------------------
+  duration = micros() - duration;
+  total += duration;
+  Serial.print("Time per loop: ");
+  Serial.print(total);
+  Serial.println(" microseconds");
+//--------------------------------
+
+// Measures RAM usage
+//--------------------------------
+  Serial.print("Ram usage: ");
+  Serial.print(65536 - freeRAM());
+  Serial.println("/65536 bytes");
+//--------------------------------
   
 //  for(i = 0; i < NUM_CRYSTALS; i++) {
 //    int red = rand() % 255, blue = rand() % 255, green = rand() % 255;
 //    colourCrystal(i, red, blue, green);
 //  }
-
-//  delay(1000);
 }
 
 void crystalRGB(int index, int r, int g, int b) {
