@@ -1,0 +1,515 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"e",
+				"e"
+			],
+			[
+				"w",
+				"w"
+			],
+			[
+				"v",
+				"v"
+			],
+			[
+				"turn",
+				"Turn"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"g",
+				"graph"
+			],
+			[
+				"graph",
+				"graph"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"print",
+				"printTreeNode"
+			],
+			[
+				"map",
+				"map"
+			],
+			[
+				"tree",
+				"tree"
+			],
+			[
+				"marginEdit",
+				"marginEdit"
+			],
+			[
+				"selected",
+				"selectedPos"
+			],
+			[
+				"NO_",
+				"NO_HIGHLIGHT"
+			],
+			[
+				"if",
+				"if\tIf Condition"
+			],
+			[
+				"highl",
+				"highlight"
+			],
+			[
+				"UP",
+				"up"
+			],
+			[
+				"inline-bl",
+				"inline-block"
+			],
+			[
+				"padding",
+				"padding-top"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"DICE",
+				"DICE_SIDES"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.cpp",
+			"settings":
+			{
+				"buffer_size": 1004,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "// my first program in C++"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 187.0,
+		"last_filter": "boxy",
+		"selected_items":
+		[
+			[
+				"boxy",
+				"Boxy Theme: Activation"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 431.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"install package Material Theme",
+			"install package",
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"install package"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/Simulator"
+	],
+	"file_history":
+	[
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/multithreading/READ_ME.txt",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/multithreading/Makefile.make",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/Code/Makefile",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/multithreading/c11threads.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/Code/Graph.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Vivid 2017/Github rep/Code 2.0/main.cpp",
+		"/Users/randytjang/Downloads/bed-wood/BED_wood.vismat",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Past Papers/15s2/q7.txt",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/agentsTiny.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/citiesTiny.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/auto_clean.sh",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/auto_test.sh",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/auto_leak_check.sh",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/leakRun.txt",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/check_if_map_valid.sh",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/run.txt",
+		"/Users/randytjang/Downloads/graph_input.txt",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/tests/testCities4",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/bigTestCity",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/bigTestAgents",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/agentsLong.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/citiesDR3.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Makefile",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/PQ.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Queue.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Queue.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/PQ.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Item.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Item.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/citiesEndless.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/citiesInformants.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Makefile (uses obj-dir)",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE1/textBuffer.sublime-project",
+		"/Users/randytjang/Downloads/citiesLarge.data",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/testGraph.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/main.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Stack.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Stack.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Queue.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Queue.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/graphClient.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Graph.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Graph_AdjList.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/AE2/Agent.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab6/Item.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab3/Full/testBST",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/gui.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab3/Full/testBST old.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab3/testBST old.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/testLists.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/lists.h",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/lists.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/Practice Exam/q1/BSTree.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/gui.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/navigateLists.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP/COMP1927/Practice/lab1/animated/animated.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/App/create-user.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/App/index.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/test.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Polymer/firstProject/bower.json",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/App/package.json",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Polymer/template/index.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Polymer/firstProject/index.html",
+		"/Users/randytjang/Downloads/index (1).html",
+		"/Users/randytjang/Downloads/index.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Polymer/firstProject/bower_components/iron-form-element-behavior/index.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Polymer/firstProject/bower_components/paper-fab/index.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/App/app.js",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/test2.html",
+		"/Users/randytjang/Downloads/tesseract.js-master/examples/file-input/demo.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/examples/browser/file.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/upload.js",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/[Extracurriculars]/Alcohol/Ocrad.js - Optical Character Recognition in Javascript.html",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP1917/Assignments/AE2/Pokedex.sublime-project",
+		"/Users/randytjang/Downloads/program.out.cg.svg",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP1917/Assignments/AE1/practice12.c",
+		"/Users/randytjang/Desktop/Dropbox/School Stuff/Used/COMP1917/Assignments/AE1/practice13.c"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"}",
+			"NUM_THREADS",
+			"threadsToUse",
+			"NUM_THREADS",
+			"1000",
+			"main",
+			"testInsert",
+			"insertBigTest",
+			"incE",
+			"incV",
+			"adj",
+			"es[",
+			"malloc(sizeof(Vertex)",
+			"es[",
+			"adjacentVertices(g,",
+			"Edge",
+			"Vertex",
+			"adj = m",
+			"adj[",
+			"adj)",
+			"adj",
+			"adjE",
+			"adjacentVert",
+			"void",
+			"stats",
+			"start",
+			"DFS_ONLY",
+			"DEBUGGING",
+			"startLocation",
+			"weightE",
+			"is invalid",
+			"dfS",
+			"weightE",
+			"is invalid.",
+			"isAdjacent",
+			"is invalid.",
+			"dfS",
+			"dfSearch",
+			"weightE",
+			"startLocation",
+			"weightE",
+			"adjacent",
+			"updateDetectiveInfo",
+			"(numV(g) - 1) * 2",
+			"(numV(g) - 1 * 2",
+			"v",
+			"next",
+			"curr",
+			"altCurr",
+			"dist",
+			"checkValidAgentAndC",
+			"City passed",
+			"passed in",
+			"0",
+			"j",
+			"i",
+			"w",
+			"dist",
+			"updatedWeight",
+			"e",
+			"weight",
+			"Edge",
+			"PQ.o",
+			"Queue",
+			"updateDet",
+			"least-tu",
+			"leastTurns",
+			"a[",
+			"fixUp",
+			"showPQ",
+			"q->capacity",
+			"NO_EDGE",
+			"e.v",
+			"q->e",
+			"q->e[",
+			"q->e",
+			"k",
+			"i",
+			"j",
+			"a[",
+			"a",
+			"a[",
+			"NO_ABORT",
+			"pq",
+			"dfs",
+			"QUEUE_H",
+			"main",
+			"Agent",
+			"dfsR",
+			"step",
+			"informant",
+			"agent->plan",
+			"currentPlan",
+			"numE(g) * 2",
+			"static",
+			"malloc",
+			"/",
+			"$(DIR)",
+			"OBJS",
+			"}",
+			"}e",
+			"){",
+			"stamina",
+			",",
+			"node",
+			"{\n",
+			"abort()",
+			"map",
+			"currLoc4",
+			"currLocat",
+			"currLoc",
+			"agents[THIEF]",
+			"startLocation",
+			"thiefLoc",
+			"'v' invalid",
+			"v",
+			"fscanf",
+			"gString",
+			"                           ",
+			"insertSection",
+			"d",
+			"void",
+			"                              ",
+			"0}",
+			"                              ",
+			",\n",
+			"   ",
+			"0"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1004,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								353,
+								353
+							]
+						],
+						"settings":
+						{
+							"auto_name": "// my first program in C++",
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Simulator.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
