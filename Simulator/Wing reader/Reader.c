@@ -62,14 +62,14 @@ int main(int argc, char* argv[]) {
         y = lookup[i][1]/4000*IMG_WIDTH;
         BMP_GetPixelRGB(image, x , y, &r, &g, &b);
         if(r > RED_THRESHOLD && g > GREEN_THRESHOLD && b > BLUE_THRESHOLD) {
-            printf("{%d}", i);
-            fprintf(f, "{%d}", i);
+            printf("%d", i);
+            fprintf(f, "%d", i);
             if(i != 290) {
                 printf(",");
                 fprintf(f, ",");
             }
         } else {
-            fprintf(f_mask, "{%d}", i);
+            fprintf(f_mask, "%d", i);
             if(i != 290) {
                 fprintf(f_mask, ",");
             }

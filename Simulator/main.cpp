@@ -125,7 +125,8 @@ int main(int argc,char **argv) {
     int *d = NULL;
     int lenPath = 0;
     int *l = NULL;
-    d = g.calcDist(259);
+    d = g.calcDist(0);
+    
     while(!disp.is_closed() && !disp.button() && !disp.is_keyQ() && !disp.is_keyESC()) {
 
         // ===============================================================
