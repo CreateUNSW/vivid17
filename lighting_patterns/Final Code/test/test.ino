@@ -110,9 +110,6 @@ void loop() {
   float total = 0;
 //--------------------------------
 
-//  Serial.print(digitalRead(0));
-//  Serial.println(digitalRead(17));
-
 
   dist = g->calcDist(stresser);
   stresser++;
@@ -163,10 +160,18 @@ void loop() {
 
 // Measures RAM usage
 //--------------------------------
+  int ramUsage = 65536 - freeRAM() + mallinfo().uordblks;
   Serial.print("Ram usage: ");
-  Serial.print(65536 - freeRAM() + mallinfo().uordblks);
+  Serial.print((float)ramUsage/65536 * 100);
+  Serial.print("% | ");
+  Serial.print(ramUsage);
   Serial.println("/65536 bytes");
 //--------------------------------
+
+  Serial.print("Sensor status: ");
+  Serial.print(digitalRead(0));
+  Serial.println(digitalRead(17));
+
   
 //  for(i = 0; i < NUM_CRYSTALS; i++) {
 //    int red = rand() % 255, blue = rand() % 255, green = rand() % 255;
