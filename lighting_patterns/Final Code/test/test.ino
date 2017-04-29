@@ -63,6 +63,9 @@ void setup() {
 }
 
 void loop() {
+  
+  Serial.print(freeRAM());
+  Serial.println("/65536 bytes free");
 
   Serial.print(digitalRead(0));
   Serial.println(digitalRead(17));
@@ -111,4 +114,20 @@ void crystalRGB(int index, int r, int g, int b) {
 
 void crystalHSV(int index, int h, int s, int v) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i].setHSV(h, s, v);
+}
+
+uint32_t freeRAM(){ // for Teensy 3.0
+    uint32_t stackTop;
+    uint32_t heapTop;
+
+    // current position of the stack.
+    stackTop = (uint32_t) &stackTop;
+
+    // current position of heap.
+    void* hTop = malloc(1);
+    heapTop = (uint32_t) hTop;
+    free(hTop);
+
+    // The difference is the free, available ram.
+    return stackTop - heapTop;
 }
