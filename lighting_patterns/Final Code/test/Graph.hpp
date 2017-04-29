@@ -118,14 +118,17 @@ private:
         }
         dist[origin] = 0;
         pq.change(origin, 0);
+        int neighbour = 0;
         while(!pq.isEmpty()) {
             int vertex = pq.delMin();
-            for(int i=0;i<_nV;i++) {
-                if(hasEdge(i,vertex)) {
-                    if(dist[vertex] + 1 < dist[i]) {
-                        dist[i] = dist[vertex] + 1;
-                        befores[i] = vertex;
-                        pq.change(i,dist[i]);
+            for(int i=0;i<6;i++) {
+                neighbour = _edges[vertex][i];
+                if(neighbour == -1) break;
+                if(hasEdge(neighbour,vertex)) {
+                    if(dist[vertex] + 1 < dist[neighbour]) {
+                        dist[neighbour] = dist[vertex] + 1;
+                        befores[neighbour] = vertex;
+                        pq.change(neighbour,dist[neighbour]);
                     }
                 }
             }
