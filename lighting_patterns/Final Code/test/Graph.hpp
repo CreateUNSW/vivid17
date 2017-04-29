@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "my_vector.hpp"
+#include <vector>
 #include "PriorityQ.hpp"
 #include "config.h"
 
@@ -21,7 +21,7 @@ public:
      * technicaly edges is a nV x something matrix
      * TODO change edges to an array of pointers
      */
-    Graph(int16_t edges[291][291 + 1], int nV) : _matrix() {
+    Graph(int16_t edges[291][5], int nV) : _matrix() {
         vector<bool> *tmp = new vector<bool> (nV, false);
         _matrix.resize(nV, *tmp);
         delete tmp;
