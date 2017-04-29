@@ -132,7 +132,7 @@ void loop() {
 // Measures RAM usage
 //--------------------------------
   Serial.print("Ram usage: ");
-  Serial.print(65536 - freeRAM());
+  Serial.print(65536 - freeRAM() + mallinfo().uordblks);
   Serial.println("/65536 bytes");
 //--------------------------------
   
