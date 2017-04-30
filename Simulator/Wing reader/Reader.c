@@ -49,6 +49,11 @@ int main(int argc, char* argv[]) {
     strcpy(ret, "Mask.txt");
     FILE *f_mask = fopen(outputName, "w");
 
+    // Truth table file
+    ret = strstr(outputName, "Mask.txt");
+    strcpy(ret, "Truth.txt");
+    FILE *f_truth = fopen(outputName, "w");
+
 
     int x, y;
     UCHAR r, g, b;
@@ -56,6 +61,7 @@ int main(int argc, char* argv[]) {
     printf("{");
     fprintf(f, "{");
     fprintf(f_mask, "{");
+    fprintf(f_truth, "{");
     for(int i = 0; i < 291; i++) {
 
         x = lookup[i][0]/4000*IMG_WIDTH;
@@ -64,25 +70,31 @@ int main(int argc, char* argv[]) {
         if(r > RED_THRESHOLD && g > GREEN_THRESHOLD && b > BLUE_THRESHOLD) {
             printf("%d", i);
             fprintf(f, "%d", i);
+            fprintf(f_truth, "1");
             if(i != 290) {
                 printf(",");
                 fprintf(f, ",");
+                fprintf(f_truth, ",");
             }
         } else {
             fprintf(f_mask, "%d", i);
+            fprintf(f_truth, "0");
             if(i != 290) {
                 fprintf(f_mask, ",");
+                fprintf(f_truth, ",");
             }
         }
     }
     printf("};\n");
     fprintf(f, "};\n");
     fprintf(f_mask, "};\n");
+    fprintf(f_truth, "};");
 
     BMP_Free(image);
 
     fclose(f);
     fclose(f_mask);
+    fclose(f_truth);
 
     return EXIT_SUCCESS;
 }
