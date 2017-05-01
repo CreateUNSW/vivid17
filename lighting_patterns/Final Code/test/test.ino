@@ -168,12 +168,12 @@ void loop() {
 
 // Measures RAM usage
 //--------------------------------
-  int ramUsage = 65536 - freeRAM() + mallinfo().uordblks;
+  int ramUsage = 196608 - freeRAM() + mallinfo().uordblks;
   Serial.print("Ram usage: ");
-  Serial.print((float)ramUsage/65536 * 100);
+  Serial.print((float)ramUsage/196608 * 100);
   Serial.print("% | ");
   Serial.print(ramUsage);
-  Serial.println("/65536 bytes");
+  Serial.println("/196608 bytes");
 //--------------------------------
 
   Serial.print("Sensor status: ");
