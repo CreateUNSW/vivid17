@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "PriorityQ.hpp"
-#include "config.h"
 
 /**
  * Unweighted and non directed graph
