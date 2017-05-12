@@ -1,0 +1,14 @@
+echo "Compiling...";
+if g++ -std=c++11 will.cpp -o will_run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4
+then
+	./will_run
+else
+    echo "\nIf linker error encountered on Ubuntu (Linux), try using the commands: \n
+	sudo ln -s /opt/X11/include/X11 /usr/local/include/X11 \n
+	sudo apt-get install libx11-dev
+    \nIf linker error encountered on Mac, try the following steps: \n
+    check you have the latest version of XQuartz \n
+    sudo ln -s /opt/X11/include/X11 /usr/local/include/X11 \n
+    restart computer \n
+    run in XQuartz terminal\n";
+fi
