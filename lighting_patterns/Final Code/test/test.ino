@@ -128,7 +128,7 @@ void loop() {
 //=================================================
 // PATTERN CODE GOES HERE
 
-  shimmerCenter(wing5, 99);
+  shimmerCenter(wing5, 259);
   //randomDynamic();
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
