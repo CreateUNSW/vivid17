@@ -45,7 +45,6 @@ int _fstat (){
 #define BRIGHTNESS 100
 //--------------------------------------------------
 
-
 // Crystals/LEDs config
 //--------------------------------------------------
 #define NUM_CRYSTALS 291
@@ -112,6 +111,11 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LEFT_YELLOW, RGB> (leds, LY_INDEX, 179+2);
   FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, LG_INDEX, 176);
   g = new Graph();
+  
+  for(int i = 0; i < NUM_CRYSTALS; i++) {
+    crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50);     
+  }
+  FastLED.show();
 }
 
 void loop() {
@@ -125,7 +129,7 @@ void loop() {
 // PATTERN CODE GOES HERE
 
   shimmerCenter(wing5, 99);
-  
+  //randomDynamic();
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -156,7 +160,7 @@ void loop() {
   Serial.println(digitalRead(17));
 }
 
-// shimmer patter
+// shimmer pattern
 void shimmerCenter(bool *wing, int center) {
 // remove next line when sensors are implemented, timer is used to fading pattern
 // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
@@ -164,21 +168,29 @@ void shimmerCenter(bool *wing, int center) {
   
   dist = g->calcDist(center);
   for(int i = 0; i < NUM_CRYSTALS; i++) {
-    if(wing[i] == 0) {
+    //if(wing[i] == 0) {
       double hue = ((float)dist[i]/50)*255 + t;
       if(hue >= 255) hue = hue - 255;
       crystalHSV(i, hue, ((float)(rand()%21)/100+0.8)*255, (255-((float)dist[i]/14)*((float)timer))*0.5);
       // IF YOU CAN'T GET SENSORS TO WORK, just use this test code
       // crystalHSV(i, hue, (float)(rand()%21)/100+0.8, 1-(float)dist[i]/14);
-    } else {
+   // } else {
       // Turns off other crystals
-      crystalHSV(i, 0, 0, 0);
-    }
+    //  crystalHSV(i, 0, 0, 0);
+  //  }
   }
   delete[] dist;
 }
 
-
+//
+void randomDynamic() {
+  for(int i = 0; i < NUM_CRYSTALS; i++) {
+    if(i == rand() % NUM_CRYSTALS) {
+      crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50);
+    }
+  }
+}
+ 
 void crystalRGB(int index, int r, int g, int b) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, g, b);
 }
