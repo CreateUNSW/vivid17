@@ -93,7 +93,6 @@ void setup() {
 
 
 void loop() {
-  
   // Sample shimmering centric gradient code
   shimmerCenter();
   t++;
@@ -106,10 +105,8 @@ void shimmerCenter() {
       double hue = ((float)dist[i]/50)*255 + t;
       if(hue >= 255) hue = hue - 255;
       crystalHSV(i, hue, (float)(rand()%21)/100+0.8, ((float)dist[i]/14)*((float)timer));
-      
       // IF YOU CAN'T GET SENSORS TO WORK, just use this test code
       // crystalHSV(i, hue, (float)(rand()%21)/100+0.8, 1-(float)dist[i]/14);
-
     } else {
       // Turns off other crystals
       crystalHSV(i, 0, 0, 0);
