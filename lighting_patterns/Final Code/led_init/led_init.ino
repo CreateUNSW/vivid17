@@ -102,14 +102,40 @@ uint8_t hueDelta = 1;
 void setup() {
   srand(0);
   Serial.begin(9600);
-  FastLED.addLeds<LED_TYPE, RIGHT_GREEN, RGB>(leds, RG_INDEX, 172);
-  FastLED.addLeds<LED_TYPE, RIGHT_YELLOW, RGB>(leds, RY_INDEX, 180);
-  FastLED.addLeds<LED_TYPE, RIGHT_PINK, RGB> (leds, RP_INDEX, 158);
-  FastLED.addLeds<LED_TYPE, RIGHT_BLUE, RGB> (leds, RB_INDEX, 245);
-  FastLED.addLeds<LED_TYPE, LEFT_BLUE, RGB> (leds, LB_INDEX, 274);
-  FastLED.addLeds<LED_TYPE, LEFT_PINK, RGB> (leds, LP_INDEX, 164);
-  FastLED.addLeds<LED_TYPE, LEFT_YELLOW, RGB> (leds, LY_INDEX, 179+2);
-  FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, LG_INDEX, 176);
+  int i = 0;
+  for(i = 0; i < RY_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, RIGHT_GREEN, RGB>(leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = RY_INDEX; i < RP_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, RIGHT_YELLOW, RGB>(leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = RP_INDEX; i < RB_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, RIGHT_PINK, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = RB_INDEX; i < LB_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, RIGHT_BLUE, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = LB_INDEX; i < LP_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, LEFT_BLUE, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = LP_INDEX; i < LY_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, LEFT_PINK, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = LY_INDEX; i < LG_INDEX; i++) {
+    FastLED.addLeds<LED_TYPE, LEFT_YELLOW, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  for(i = LG_INDEX; i < MAX_LED_NUM; i++) {
+    FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, i, 1);
+    if(//fail statement) continue;
+  }
+  
   g = new Graph();
   
   for(int i = 0; i < NUM_CRYSTALS; i++) {
