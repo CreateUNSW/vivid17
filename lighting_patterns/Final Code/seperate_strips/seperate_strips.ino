@@ -91,28 +91,66 @@ void setup() {
   dist = g->calcDist(259);
 }
 
-
 void loop() {
-  // Sample shimmering centric gradient code
-  shimmerCenter();
-  t++;
-  FastLED.show();
-}
+  
+// Measures execution time
+//--------------------------------
+  unsigned long duration = micros();
+  float total = 0;
+////--------------------------------
+//  for (int i = 0; i < RY_INDEX; i++) leds[i] = CRGB(255, 0, 0);
+//  for (int i = RY_INDEX; i < RP_INDEX; i++) leds[i] = CRGB(0, 255, 0);
+//  for (int i = RP_INDEX; i < RB_INDEX; i++) leds[i] = CRGB(0, 0, 255);
+//  for (int i = RB_INDEX; i < LB_INDEX; i++) leds[i] = CRGB(255, 0, 0);
+//  for (int i = LB_INDEX; i < LP_INDEX; i++) leds[i] = CRGB(0, 255, 0);
+//  for (int i = LP_INDEX; i < LY_INDEX; i++) leds[i] = CRGB(0, 0, 255);
+//  for (int i = LY_INDEX; i < LG_INDEX; i++) leds[i] = CRGB(255, 0, 0);
+//  for (int i = LG_INDEX; i < MAX_LED_NUM; i++) leds[i] = CRGB(0, 255, 0);
 
-void shimmerCenter() {
+//  int i;
+//  for(i = 0; i < NUM_CRYSTALS; i++) {
+//    if(wing1[i] == 0)
+//      crystalHSV(i, 0, 255, 50);
+//     else
+//      crystalHSV(i, 100, 255, 50);
+//  }
+
+//    int i;
+//    for(i = 0; i < NUM_CRYSTALS; i++) {
+//    int red = rand() % 255, blue = rand() % 100, green = rand() % 255;
+//    crystalHSV(i, red, blue+155, 50);
+//  }
+
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing1[i] == 0) {
       double hue = ((float)dist[i]/50)*255 + t;
       if(hue >= 255) hue = hue - 255;
-      crystalHSV(i, hue, (float)(rand()%21)/100+0.8, ((float)dist[i]/14)*((float)timer));
+      crystalHSV(i, hue, (float)(rand()%21)/100+0.8, (1-(float)dist[i]/14)*((float)timer));
+      
       // IF YOU CAN'T GET SENSORS TO WORK, just use this test code
       // crystalHSV(i, hue, (float)(rand()%21)/100+0.8, 1-(float)dist[i]/14);
+
     } else {
       // Turns off other crystals
       crystalHSV(i, 0, 0, 0);
     }
   }
+  
+//
+//  for (int i = 0; i < RY_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = RY_INDEX; i < RP_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = RP_INDEX; i < RB_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = RB_INDEX; i < LB_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = LB_INDEX; i < LP_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = LP_INDEX; i < LY_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = LY_INDEX; i < LG_INDEX; i++) leds[i] = CRGB(0, 0, 0);
+//  for (int i = LG_INDEX; i < MAX_LED_NUM; i++) leds[i] = CRGB(0, 0, 0);
+  //delay(10000);
+  
+  FastLED.setBrightness(BRIGHTNESS);
+  FastLED.show();
 }
+
 
 void crystalRGB(int index, int r, int g, int b) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, g, b);
@@ -120,4 +158,20 @@ void crystalRGB(int index, int r, int g, int b) {
 
 void crystalHSV(int index, int h, int s, int v) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i].setHSV(h, s, v);
+}
+
+uint32_t freeRAM(){ // for Teensy 3.0
+    uint32_t stackTop;
+    uint32_t heapTop;
+
+    // current position of the stack.
+    stackTop = (uint32_t) &stackTop;
+
+    // current position of heap.
+    void* hTop = malloc(1);
+    heapTop = (uint32_t) hTop;
+    free(hTop);
+
+    // The difference is the free, available ram.
+    return stackTop - heapTop;
 }
