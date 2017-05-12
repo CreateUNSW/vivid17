@@ -2,6 +2,10 @@
 
 ## Total Code base for Create Vivid 2017 "Crystallise"
 
+## [FINAL_CODE](https://github.com/will-weng/vivid17/tree/master/lighting_patterns/Final%20Code/final)
+
+Absolute final code for the crystallise installation
+
 ### [Simulator](https://github.com/will-weng/vivid17/tree/master/Simulator)
 
 Mosaic simulator in C++, used to simulate Arduino code (with minimal modification) to see results without actual hardware present. 
