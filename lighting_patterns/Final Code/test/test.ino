@@ -89,7 +89,7 @@ Graph * g;
 int *dist;
 
 // Time variables
-int t = 0;
+uint8_t t = 0;
 int stresser = 0;
 uint8_t timerL = 0;
 uint8_t timerR = 0;
@@ -124,7 +124,7 @@ void loop() {
 //=================================================
 // PATTERN CODE GOES HERE
 
-  shimmerCenter(&wing1, 259);
+  shimmerCenter(wing5, 99);
   
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
@@ -156,15 +156,18 @@ void loop() {
   Serial.println(digitalRead(17));
 }
 
-// shimmer pattern
-void shimmerCenter(int *wing, int center) {
-  dist = g->calcDist(center);
+// shimmer patter
+void shimmerCenter(bool *wing, int center) {
+// remove next line when sensors are implemented, timer is used to fading pattern
+// if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
+  int timer = 255;
   
+  dist = g->calcDist(center);
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing[i] == 0) {
       double hue = ((float)dist[i]/50)*255 + t;
       if(hue >= 255) hue = hue - 255;
-      crystalHSV(i, hue, ((float)(rand()%21)/100+0.8)*255, ((float)dist[i]/14)*((float)timer));
+      crystalHSV(i, hue, ((float)(rand()%21)/100+0.8)*255, (255-((float)dist[i]/14)*((float)timer))*0.5);
       // IF YOU CAN'T GET SENSORS TO WORK, just use this test code
       // crystalHSV(i, hue, (float)(rand()%21)/100+0.8, 1-(float)dist[i]/14);
     } else {
@@ -172,8 +175,7 @@ void shimmerCenter(int *wing, int center) {
       crystalHSV(i, 0, 0, 0);
     }
   }
-  
-  delete dist[];
+  delete[] dist;
 }
 
 
