@@ -39,7 +39,7 @@ int _fstat (){
 
 #define CLOCK_PIN 13
 
-#define SENSOR0 0
+#define NUM_SENSORS 5
 
 #define LED_TYPE UCS1903
 #define BRIGHTNESS 100
@@ -99,6 +99,9 @@ uint8_t timeDelta = 3;
 uint8_t hue = 0;
 uint8_t hueDelta = 1;
 
+// sensor variables
+uint8_t sensorPins[NUM_SENSORS] = {17, 18, 19, 22, 23};
+
 void setup() {
   srand(0);
   Serial.begin(9600);
@@ -116,6 +119,10 @@ void setup() {
     crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50);     
   }
   FastLED.show();
+
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    pinMode(sensorPins[i], INPUT);
+  }
 }
 
 void loop() {
@@ -154,10 +161,16 @@ void loop() {
   Serial.print(ramUsage);
   Serial.println("/196608 bytes");
 //--------------------------------
-
-  Serial.print("Sensor status: ");
-  Serial.print(digitalRead(0));
-  Serial.println(digitalRead(17));
+  
+// Reads and prints sensor output 
+//--------------------------------
+  Serial.print("Sensor values: ");
+  for (int i = 0; i < NUM_SENSORS; i++) {
+    Serial.print(digitalRead(sensorPins[i]));
+  }
+  Serial.println();
+//--------------------------------
+  
 }
 
 // shimmer pattern
