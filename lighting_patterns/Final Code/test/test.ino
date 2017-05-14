@@ -163,7 +163,10 @@ void shimmerCenter(bool *wing, int centre) {
   int timer = 255;
 
   bool recalcDist = false;
-  if(centre != oldCentre) recalcDist = true;
+  if(centre != oldCentre) {
+    recalcDist = true;
+    oldCentre = centre;
+  }
 
   // Constants
   double minSaturation = 0.8;
