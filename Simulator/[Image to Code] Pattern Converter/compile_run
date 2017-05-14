@@ -1,3 +1,3 @@
 #!/bin/sh
-gcc Converter.c qdbmp_1.0.0/qdbmp.c -o run
+gcc -std=c99 Converter.c qdbmp_1.0.0/qdbmp.c -o run
 ./run $1
