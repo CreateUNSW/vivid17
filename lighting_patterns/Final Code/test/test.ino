@@ -12,7 +12,7 @@ int _fstat (){
 #endif
 #include "malloc.h"
 
-#include "FastLED.h"
+#include <FastLED.h>
 #include "Graph.hpp"
 
 
@@ -67,7 +67,7 @@ bool wing4[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 bool wing5[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 Graph * g;
-int *dist;
+int *dist = NULL;
 
 // Time variables
 uint8_t t = 0;
@@ -168,18 +168,10 @@ void loop() {
   
 }
 
-//void applyWing(bool *wing, void *wingFunction, void *backgroundFunction) {
-//  if(wing[i]) {
-//    functionPointer;
-//  } else {
-//    backgroundPointer;
-//  }
-//}
-
 // Shimmer pattern
 // @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
 // @arg centre: crystal ID for gradient centre
-void shimmerCenter(int centre, int crystal) {
+void shimmerCenter(bool *wing, int centre) {
   // remove next line when sensors are implemented, timer is used to fading pattern
   // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
   int timer = 255;
@@ -187,7 +179,7 @@ void shimmerCenter(int centre, int crystal) {
   // recalculate distance array if center changes
   if(centre != oldCentre) {
     oldCentre = centre;
-    delete[] dist;
+    if(dist != NULL) delete[] dist;
     dist = g->calcDist(centre);
   }
 
@@ -195,11 +187,18 @@ void shimmerCenter(int centre, int crystal) {
   double minSaturation = 0.8;
   int maxDist = 14; // Acts as stretching factor to rainbow
   double globalBrightness = 0.5;
-  
+
   // Pattern algorithm
-  double hue = ((float)dist[crystal]/50)*255 + t;
-  if(hue >= 255) hue = hue - 255;
-  crystalHSV(crystal, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[crystal]/maxDist)*((float)timer))*globalBrightness);
+  for(int i = 0; i < NUM_CRYSTALS; i++) {
+    if(wing == NULL || wing[i]) {
+      double hue = ((float)dist[i]/50)*255 + t;
+      if(hue >= 255) hue = hue - 255;
+      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
+    } else {
+      // Turns off other crystals
+      crystalHSV(i, 0, 0, 0);
+    }
+  }
 }
 
 void randomDynamic() {
@@ -247,42 +246,3 @@ uint32_t freeRAM(){ // for Teensy 3.5
     // The difference is the free, available ram.
     return stackTop - heapTop;
 }
-
-
-
-//==================================================================================================================================================
-
-//// Shimmer pattern
-//// @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
-//// @arg centre: crystal ID for gradient centre
-//void shimmerCenter(bool *wing, int centre) {
-//  // remove next line when sensors are implemented, timer is used to fading pattern
-//  // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
-//  int timer = 255;
-//
-//  bool recalcDist = false;
-//  if(centre != oldCentre) {
-//    recalcDist = true;
-//    oldCentre = centre;
-//  }
-//
-//  // Constants
-//  double minSaturation = 0.8;
-//  int maxDist = 14; // Acts as stretching factor to rainbow
-//  double globalBrightness = 0.5;
-//
-//
-//   Pattern algorithm
-//  if(recalcDist) dist = g->calcDist(centre);
-//  for(int i = 0; i < NUM_CRYSTALS; i++) {
-//    if(wing == NULL || wing[i]) {
-//      double hue = ((float)dist[i]/50)*255 + t;
-//      if(hue >= 255) hue = hue - 255;
-//      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
-//    } else {
-//      // Turns off other crystals
-//      crystalHSV(i, 0, 0, 0);
-//    }
-//  }
-//  if(recalcDist) delete[] dist;
-//}
