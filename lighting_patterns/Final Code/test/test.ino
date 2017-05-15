@@ -82,6 +82,9 @@ uint8_t sensorPins[NUM_SENSORS] = {17, 18, 19, 22, 23};
 
 // Pattern global variables
 int oldCentre = -1;
+std::vector <int> dynRndArray;
+int dynRndTime = 0;
+
 
 void setup() {
   srand(0);
@@ -120,12 +123,12 @@ void loop() {
 
   //===== wing patterns =====
 
-  if(digitalRead(sensorPins[i]) {
+//  if(digitalRead(sensorPins[i]) {
     
-  }
-  shimmerCenter(wing5, 259);1
+  //}
+//  shimmerCenter(wing5, 259);1
 
-  applyWing(wing1, *shimmerCenter);
+  //applyWing(wing1, *shimmerCenter);
 
  
  
@@ -165,13 +168,13 @@ void loop() {
   
 }
 
-applyWing(bool *wing, void *wingFunction, void *backgroundFunction) {
-  if(wing[i]) {
-    functionPointer;
-  } else {
-    backgroundPointer;
-  }
-}
+//void applyWing(bool *wing, void *wingFunction, void *backgroundFunction) {
+//  if(wing[i]) {
+//    functionPointer;
+//  } else {
+//    backgroundPointer;
+//  }
+//}
 
 // Shimmer pattern
 // @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
@@ -201,13 +204,23 @@ void shimmerCenter(int centre, int crystal) {
 
 void randomDynamic() {
 
-  // select n crystals randomly, add to arraylist
+  //every random period of time between 3-10 seconds
+    //add a crystal to the array
+  if(millis() == dynRndTime*1000) {
+    dynRndTime = rand() % 7 + 3;
+    for(int i = rand() % 10; i > 0; i--) {
+      dynRndArray.insert(dynRndArray,rand()%291);
+    }
+    for(int i = dynRndArray.size()/3; i > 0; i--) {
+      dynRndArray.erase(
+    }
+  }
+
+  // all the crystal in the arryalist increment hue by random ammount between 1-20
   
   // for every crystal in the arraylist, select a random one to begin to change but only do 1 cycle, then reselect another randomly
-  
-    if(i % 10 == rand() % 10) {
-      crystalHSV(i, leds[],  rand() % 100 + 155, rand() % 50 + 200);
-    }
+  for(std::vector<int>::size_type i = 0; i != v.size(); i++) {
+     crystalHSV(i, leds[i].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
   }
 }
  
