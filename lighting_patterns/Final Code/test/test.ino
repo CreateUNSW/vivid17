@@ -121,12 +121,13 @@ void loop() {
 // PATTERN CODE GOES HERE
 
   
-//  randomDynamic();
+  randomDynamic();
 
   bool *currWing = NULL;
   bool wingOn = true;
 
   // Note sensors are active low
+if(!digitalRead(sensorPins[0])) {
   if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
     currWing = wing5;
   } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
@@ -141,10 +142,8 @@ void loop() {
     currWing = NULL;
     wingOn = false;
   }
-
-  
-
   shimmerCenter(currWing, 259);
+}
  
 
 //=================================================
