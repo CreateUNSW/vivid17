@@ -124,13 +124,28 @@ void loop() {
   
 //  randomDynamic();
 
+  bool *currWing = NULL;
+  bool wingOn = true;
 
-//  if(digitalRead(sensorPins[i]) {
-//    
-//  }
+  // Note sensors are active low
+  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing5;
+  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing4;
+  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing3;
+  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing2;
+  } else if(!digitalRead(sensorPins[0])) {
+    currWing = wing1;
+  } else {
+    currWing = NULL;
+    wingOn = false;
+  }
 
+  
 
-  shimmerCenter(NULL, 259);
+  shimmerCenter(currWing, 259);
  
  
 //=================================================
