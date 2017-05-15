@@ -219,7 +219,7 @@ void randomDynamic() {
   
   // for every crystal in the arraylist, select a random one to begin to change but only do 1 cycle, then reselect another randomly
   for (unsigned i=0; i<dynRndArray.size(); i++) {
-     crystalHSV(dynRndArray.at(i), leds[dynRndArray.at(i)].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
+//     crystalHSV(dynRndArray.at(i), leds[dynRndArray.at(i)].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
   }
 }
 
