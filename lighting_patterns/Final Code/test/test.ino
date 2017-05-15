@@ -100,7 +100,7 @@ void setup() {
   g = new Graph();
   
   for(int i = 0; i < NUM_CRYSTALS; i++) {
-    crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50);     
+    crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50); 
   }
   FastLED.show();
 
@@ -208,20 +208,21 @@ void randomDynamic() {
   if(millis() == dynRndTime*1000) {
     dynRndTime = rand() % 7 + 3;
     for(int i = rand() % 10; i > 0; i--) {
-      dynRndArray.insert(dynRndArray,rand()%291);
+      dynRndArray.insert(dynRndArray.begin(), rand() % 291);
     }
     for(int i = dynRndArray.size()/3; i > 0; i--) {
-      dynRndArray.erase(
+      dynRndArray.erase(dynRndArray.begin() + (rand() % dynRndArray.size()));
     }
   }
 
   // all the crystal in the arryalist increment hue by random ammount between 1-20
   
   // for every crystal in the arraylist, select a random one to begin to change but only do 1 cycle, then reselect another randomly
-  for(std::vector<int>::size_type i = 0; i != v.size(); i++) {
-     crystalHSV(i, leds[i].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
+  for (unsigned i=0; i<dynRndArray.size(); i++) {
+     crystalHSV(dynRndArray.at(i), leds[dynRndArray.at(i)].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
   }
 }
+
  
 void crystalRGB(int index, int r, int g, int b) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, g, b);
