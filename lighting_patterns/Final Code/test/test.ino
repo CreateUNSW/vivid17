@@ -12,7 +12,7 @@ int _fstat (){
 #endif
 #include "malloc.h"
 
-#include <FastLED.h>
+#include "FastLED.h"
 #include "Graph.hpp"
 #include "RGBtoHSV.hpp"
 
@@ -117,20 +117,21 @@ void loop() {
   unsigned long duration = micros();
   float total = 0;
 //--------------------------------
+
+
 //=================================================
 // PATTERN CODE GOES HERE
-  //===== wall patterns =====
-  randomDynamic();
 
-  //===== wing patterns =====
+  
+//  randomDynamic();
+
 
 //  if(digitalRead(sensorPins[i]) {
-    
-  //}
-//  shimmerCenter(wing5, 259);1
+//    
+//  }
 
-  //applyWing(wing1, *shimmerCenter);
 
+  shimmerCenter(wing5, 259);
  
  
 //=================================================
