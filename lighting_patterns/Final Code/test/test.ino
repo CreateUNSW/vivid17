@@ -130,7 +130,7 @@ void loop() {
 //  }
 
 
-  shimmerCenter(wing5, 259);
+  shimmerCenter(NULL, 259);
  
  
 //=================================================
@@ -186,7 +186,7 @@ void shimmerCenter(bool *wing, int centre) {
 
   // Constants
   double minSaturation = 0.8;
-  int maxDist = 14; // Acts as stretching factor to rainbow
+  int maxDist = 15; // Acts as stretching factor to rainbow
   double globalBrightness = 0.5;
 
   // Pattern algorithm
