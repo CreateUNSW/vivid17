@@ -14,6 +14,7 @@ int _fstat (){
 
 #include <FastLED.h>
 #include "Graph.hpp"
+#include "RGBtoHSV.hpp"
 
 
 // IO/Hardware config
@@ -219,11 +220,7 @@ void randomDynamic() {
   
   // for every crystal in the arraylist, select a random one to begin to change but only do 1 cycle, then reselect another randomly
   for (unsigned i=0; i<dynRndArray.size(); i++) {
-<<<<<<< HEAD
      crystalHSV(dynRndArray.at(i), leds[dynRndArray.at(i)].hue += rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
-=======
-//     crystalHSV(dynRndArray.at(i), leds[dynRndArray.at(i)].hue+= rand() % 20,  rand() % 100 + 155, rand() % 50 + 200);
->>>>>>> 3c533a226ec2d70dee1ffe51447dc9a5cc0d136c
   }
 }
 
@@ -235,6 +232,8 @@ void crystalRGB(int index, int r, int g, int b) {
 void crystalHSV(int index, int h, int s, int v) {
   for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i].setHSV(h, s, v);
 }
+
+
 
 uint32_t freeRAM(){ // for Teensy 3.5
     uint32_t stackTop;
