@@ -4,7 +4,7 @@ then
 	echo "Please pass in the name of the file to compile"
 else
 	echo "Compiling...";
-	if g++ -std=c++11 $1 -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4 -gdwarf
+	if g++ -std=c++11 $1 -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -I/opt/X11/include -O4 -gdwarf
 	then
 		./run
 	else
