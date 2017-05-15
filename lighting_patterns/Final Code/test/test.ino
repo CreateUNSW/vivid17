@@ -119,15 +119,33 @@ void loop() {
 //--------------------------------
 //=================================================
 // PATTERN CODE GOES HERE
-  //===== wall patterns =====
-  randomDynamic();
 
-  //===== wing patterns =====
+  
+//  randomDynamic();
 
-//  if(digitalRead(sensorPins[i]) {
-  //}
-//  shimmerCenter(wing5, 259);1
+  bool *currWing = NULL;
+  bool wingOn = true;
 
+  // Note sensors are active low
+  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing5;
+  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing4;
+  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing3;
+  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+    currWing = wing2;
+  } else if(!digitalRead(sensorPins[0])) {
+    currWing = wing1;
+  } else {
+    currWing = NULL;
+    wingOn = false;
+  }
+
+  
+
+  shimmerCenter(currWing, 259);
+ 
 
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
@@ -182,7 +200,7 @@ void shimmerCenter(bool *wing, int centre) {
 
   // Constants
   double minSaturation = 0.8;
-  int maxDist = 14; // Acts as stretching factor to rainbow
+  int maxDist = 15; // Acts as stretching factor to rainbow
   double globalBrightness = 0.5;
 
   // Pattern algorithm
