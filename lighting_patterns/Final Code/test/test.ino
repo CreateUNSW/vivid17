@@ -115,9 +115,20 @@ void loop() {
 //--------------------------------
 //=================================================
 // PATTERN CODE GOES HERE
+  //===== wall patterns =====
+  randomDynamic();
 
-  shimmerCenter(wing5, 259);
-  //randomDynamic();
+  //===== wing patterns =====
+
+  if(digitalRead(sensorPins[i]) {
+    
+  }
+  shimmerCenter(wing5, 259);1
+
+  applyWing(wing1, *shimmerCenter);
+
+ 
+ 
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -154,46 +165,49 @@ void loop() {
   
 }
 
+applyWing(bool *wing, void *wingFunction, void *backgroundFunction) {
+  if(wing[i]) {
+    functionPointer;
+  } else {
+    backgroundPointer;
+  }
+}
+
 // Shimmer pattern
 // @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
 // @arg centre: crystal ID for gradient centre
-void shimmerCenter(bool *wing, int centre) {
+void shimmerCenter(int centre, int crystal) {
   // remove next line when sensors are implemented, timer is used to fading pattern
   // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
   int timer = 255;
 
-  bool recalcDist = false;
+  // recalculate distance array if center changes
   if(centre != oldCentre) {
-    recalcDist = true;
     oldCentre = centre;
+    delete[] dist;
+    dist = g->calcDist(centre);
   }
 
   // Constants
   double minSaturation = 0.8;
   int maxDist = 14; // Acts as stretching factor to rainbow
   double globalBrightness = 0.5;
-
+  
   // Pattern algorithm
-  if(recalcDist) dist = g->calcDist(centre);
-  for(int i = 0; i < NUM_CRYSTALS; i++) {
-    if(wing == NULL || wing[i]) {
-      double hue = ((float)dist[i]/50)*255 + t;
-      if(hue >= 255) hue = hue - 255;
-      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
-    } else {
-      // Turns off other crystals
-      crystalHSV(i, 0, 0, 0);
-    }
-  }
-  if(recalcDist) delete[] dist;
+  double hue = ((float)dist[crystal]/50)*255 + t;
+  if(hue >= 255) hue = hue - 255;
+  crystalHSV(crystal, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[crystal]/maxDist)*((float)timer))*globalBrightness);
 }
 
-//
 void randomDynamic() {
-  for(int i = 0; i < NUM_CRYSTALS; i++) {
-    //if(i % 10 == rand() % 10) {
-      crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 200);
-    //}
+
+  // select n crystals randomly, add to arraylist
+  
+  // for every crystal in the arraylist, select a random one to begin to change but only do 1 cycle, then reselect another randomly
+  
+    if(i % 10 == rand() % 10) {
+      crystalHSV(i, leds[],  rand() % 100 + 155, rand() % 50 + 200);
+    }
   }
 }
  
@@ -220,3 +234,42 @@ uint32_t freeRAM(){ // for Teensy 3.5
     // The difference is the free, available ram.
     return stackTop - heapTop;
 }
+
+
+
+//==================================================================================================================================================
+
+//// Shimmer pattern
+//// @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
+//// @arg centre: crystal ID for gradient centre
+//void shimmerCenter(bool *wing, int centre) {
+//  // remove next line when sensors are implemented, timer is used to fading pattern
+//  // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
+//  int timer = 255;
+//
+//  bool recalcDist = false;
+//  if(centre != oldCentre) {
+//    recalcDist = true;
+//    oldCentre = centre;
+//  }
+//
+//  // Constants
+//  double minSaturation = 0.8;
+//  int maxDist = 14; // Acts as stretching factor to rainbow
+//  double globalBrightness = 0.5;
+//
+//
+//   Pattern algorithm
+//  if(recalcDist) dist = g->calcDist(centre);
+//  for(int i = 0; i < NUM_CRYSTALS; i++) {
+//    if(wing == NULL || wing[i]) {
+//      double hue = ((float)dist[i]/50)*255 + t;
+//      if(hue >= 255) hue = hue - 255;
+//      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
+//    } else {
+//      // Turns off other crystals
+//      crystalHSV(i, 0, 0, 0);
+//    }
+//  }
+//  if(recalcDist) delete[] dist;
+//}
