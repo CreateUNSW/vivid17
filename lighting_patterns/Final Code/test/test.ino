@@ -101,7 +101,7 @@ void setup() {
   g = new Graph();
   
   for(int i = 0; i < NUM_CRYSTALS; i++) {
-    crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50); 
+    crystalHSV(i, rand() % 255,  rand() % 100 + 155, 255); 
   }
   FastLED.show();
 
@@ -127,26 +127,23 @@ void loop() {
   bool wingOn = true;
 
   // Note sensors are active low
-  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing5;
-  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing4;
-  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing3;
-  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing2;
-  } else if(!digitalRead(sensorPins[0])) {
-    currWing = wing1;
-  } else {
-    currWing = NULL;
-    wingOn = false;
+  if(!digitalRead(sensorPins[0])) {
+    if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing5;
+    } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing4;
+    } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing3;
+    } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing2;
+    } else if(!digitalRead(sensorPins[0])) {
+      currWing = wing1;
+    } else {
+      currWing = NULL;
+      wingOn = false;
+    }
+    shimmerCenter(currWing, 259);
   }
-
-  
-
-  shimmerCenter(currWing, 259);
- 
-
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -206,9 +203,9 @@ void shimmerCenter(bool *wing, int centre) {
   // Pattern algorithm
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing == NULL || wing[i]) {
-      double hue = ((float)dist[i]/50)*255 + t;
+      double hue = ((float)dist[i]/50)*255 + t*5;
       if(hue >= 255) hue = hue - 255;
-      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
+      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, 255);//255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
     } else {
       // Turns off other crystals
       crystalHSV(i, 0, 0, 0);
