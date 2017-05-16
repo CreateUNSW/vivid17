@@ -1,0 +1,126 @@
+diff --git a/Simulator/will_run b/Simulator/will_run
+index d73f32f..e1178db 100644
+Binary files a/Simulator/will_run and b/Simulator/will_run differ
+diff --git a/lighting_patterns/Final Code/test/test.ino b/lighting_patterns/Final Code/test/test.ino
+index 6e2c99f..1b7db5d 100644
+--- a/lighting_patterns/Final Code/test/test.ino	
++++ b/lighting_patterns/Final Code/test/test.ino	
+@@ -89,7 +89,7 @@ std::vector <int> dynRndArray;
+ int dynRndTime = 7;
+ 
+ bool *prevWing = NULL;
+-boolean isTransient = false;
++uint8_t variable = 255;
+ 
+ void setup() {
+   srand(0);
+@@ -103,10 +103,9 @@ void setup() {
+   FastLED.addLeds<LED_TYPE, LEFT_YELLOW, RGB> (leds, LY_INDEX, 179+2);
+   FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, LG_INDEX, 176);
+   g = new Graph();
+-  
+  
+-  randomWalL();
+-  FastLED.show();
++ // randomWall();
++ // FastLED.show();
+ 
+   for (int i = 0; i < NUM_SENSORS; i++) {
+     pinMode(sensorPins[i], INPUT);
+@@ -146,19 +145,18 @@ void loop() {
+   }
+ 
+   if(prevWing != currWing) {
+-    isTransient = true;
++    variable = 0;
+     prevWing = currWing;
+   }
+   
+   shimmerCenter(currWing, 259);
+ 
++  fadeTo(variable);
+   // Actually updates wall
+-  if(isTransient) {
+-    fadeTo();
++//  if(isTransient) {
++//  } else {
+ //    jumpTo();
+-  } else {
+-    jumpTo();
+-  }
++//  }
+ //=================================================
+   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
+   t++;
+@@ -197,25 +195,42 @@ void loop() {
+ 
+ //FADE TO FUNCTION
+ //takes in current state of led and target state and transitions to it
+-void fadeTo() {
+-  int red, green, blue;
++void fadeTo(int variable) {
++    int red;
++    int green;
++    int blue;
++    int change;
++//  for(int index = 0; index <= NUM_CRYSTALS; index++) {
++//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
++//      red = target[index].r;
++//      green = target[index].g;
++//      blue = target[index].b;
++//      leds[i] = CRGB(red, blue, green);
++//    }
++//  }
++
+   for(int index = 0; index <= NUM_CRYSTALS; index++) {
++      red = leds[firstLED[index] + 1].r;
++      green = leds[firstLED[index] + 1].g;
++      blue = leds[firstLED[index] + 1].b;
++      change = (variable < absolute(target[index].r - leds[firstLED[index] + 1].r)) ? variable : absolute(target[index].r - leds[firstLED[index] + 1].r);
++      if(target[index].r - leds[firstLED[index] + 1].r < 0) red -= change;
++      else red += change;
++      change = (variable < absolute(target[index].g - leds[firstLED[index] + 1].g)) ? variable : absolute(target[index].g - leds[firstLED[index] + 1].g);
++      if(target[index].g - leds[firstLED[index] + 1].g < 0) green -= change;
++      else green += change;
++      change = (variable < absolute(target[index].b - leds[firstLED[index] + 1].b)) ? variable : absolute(target[index].b - leds[firstLED[index] + 1].b);
++      if(target[index].b - leds[firstLED[index] + 1].b < 0) blue -= change;
++      else blue += change;
+     for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+-      red = leds[i].red + ((target[index].r - leds[i].red) / 2);
+-      green = leds[i].green + ((target[index].g - leds[i].green) / 2);
+-      blue = leds[i].blue + ((target[index].b - leds[i].blue) / 2);
+       leds[i] = CRGB(red, blue, green);
+     }
+-    
+-    if(target[index].r - leds[index].r <= 20 || target[index].r - leds[index].r >= 20) {
+-      if(target[index].g - leds[index].g <= 20 || target[index].g - leds[index].g >= 20) {
+-        if(target[index].b - leds[index].b <= 20 || target[index].b - leds[index].b >= 20) {
+-          isTransient = false;
+-        }
+-      }
+-    }
+-    
+   }
++  if(t % 5)
++    variable++;
++}
++int absolute(int a) {
++  return (a > 0) ? a : -a;
+ }
+ 
+ void jumpTo() {
+@@ -268,7 +283,7 @@ void shimmerCenter(bool *wing, int centre) {
+ }
+ 
+ //random color wall
+-void randomWalL() {
++void randomWall() {
+    for(int i = 0; i < NUM_CRYSTALS; i++) {
+     crystalHSV(i, rand() % 255,  rand() % 100 + 155, 255); 
+   }
+@@ -319,4 +334,4 @@ uint32_t freeRAM(){ // for Teensy 3.5
+ 
+     // The difference is the free, available ram.
+     return stackTop - heapTop;
+-}
++}
