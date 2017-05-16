@@ -12,8 +12,9 @@ int _fstat (){
 #endif
 #include "malloc.h"
 
-#include "FastLED.h"
+#include <FastLED.h>
 #include "Graph.hpp"
+#include "RGBtoHSV.hpp"
 
 
 // IO/Hardware config
@@ -67,7 +68,7 @@ bool wing4[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 bool wing5[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 Graph * g;
-int *dist;
+int *dist = NULL;
 
 // Time variables
 uint8_t t = 0;
@@ -82,6 +83,9 @@ uint8_t sensorPins[NUM_SENSORS] = {17, 18, 19, 22, 23};
 
 // Pattern global variables
 int oldCentre = -1;
+std::vector <int> dynRndArray;
+int dynRndTime = 7;
+
 
 void setup() {
   srand(0);
@@ -97,7 +101,7 @@ void setup() {
   g = new Graph();
   
   for(int i = 0; i < NUM_CRYSTALS; i++) {
-    crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 50);     
+    crystalHSV(i, rand() % 255,  rand() % 100 + 155, 255); 
   }
   FastLED.show();
 
@@ -116,8 +120,31 @@ void loop() {
 //=================================================
 // PATTERN CODE GOES HERE
 
-  shimmerCenter(wing5, 259);
+  
   //randomDynamic();
+
+  bool *currWing = NULL;
+  bool wingOn = true;
+
+  // Note sensors are active low
+ // if(!digitalRead(sensorPins[5])) {
+    if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing5;
+    } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing4;
+    } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing3;
+    } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+      currWing = wing2;
+    } else if(!digitalRead(sensorPins[0])) {
+      currWing = wing1;
+    } else {
+      currWing = NULL;
+      wingOn = false;
+    }
+    shimmerCenter(currWing, 259);
+  //}
+  
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -162,35 +189,47 @@ void shimmerCenter(bool *wing, int centre) {
   // if sensor detected, timer ++(cap at 255), else timer --(cap at 0)
   int timer = 255;
 
-  bool recalcDist = false;
-  if(centre != oldCentre) recalcDist = true;
+  // recalculate distance array if center changes
+  if(centre != oldCentre) {
+    oldCentre = centre;
+    if(dist != NULL) delete[] dist;
+    dist = g->calcDist(centre);
+  }
 
   // Constants
   double minSaturation = 0.8;
-  int maxDist = 14; // Acts as stretching factor to rainbow
+  int maxDist = 15; // Acts as stretching factor to rainbow
   double globalBrightness = 0.5;
 
   // Pattern algorithm
-  if(recalcDist) dist = g->calcDist(centre);
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing == NULL || wing[i]) {
-      double hue = ((float)dist[i]/50)*255 + t;
+      double hue = ((float)dist[i]/50)*255 + t*5;
       if(hue >= 255) hue = hue - 255;
-      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, (255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
+      crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, 255);//255-((float)dist[i]/maxDist)*((float)timer))*globalBrightness);
     } else {
       // Turns off other crystals
       crystalHSV(i, 0, 0, 0);
     }
   }
-  if(recalcDist) delete[] dist;
 }
 
-//
 void randomDynamic() {
-  for(int i = 0; i < NUM_CRYSTALS; i++) {
-    //if(i % 10 == rand() % 10) {
-      crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 50 + 200);
-    //}
+  //every random period of time between 3-10 seconds
+  //add a crystal to the array
+  if(t % 100 / 10 == dynRndTime) {
+    dynRndTime = rand() % 7 + 3;
+    for(int i = rand() % 10; i > 0; i--) {
+      dynRndArray.insert(dynRndArray.begin(), rand() % 291);
+    }
+    for(int i = dynRndArray.size()/3; i > 0; i--) {
+      dynRndArray.erase(dynRndArray.begin() + (rand() % dynRndArray.size()));
+    }
+  }
+  // all the crystal in the arryalist increment hue by random ammount between 1-20
+  for (unsigned i = 0; i < dynRndArray.size(); i++) {
+//    int hue = rgb2hsv(leds[firstLED[dynRndArray.at(i)]+1].red,leds[firstLED[dynRndArray.at(i)]+1].green,leds[firstLED[dynRndArray.at(i)]+1].blue) + 1;
+    crystalHSV(dynRndArray.at(i),  hue, 200, rand() % 50 + 200);
   }
 }
  
