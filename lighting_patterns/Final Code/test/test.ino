@@ -89,7 +89,11 @@ std::vector <int> dynRndArray;
 int dynRndTime = 7;
 
 bool *prevWing = NULL;
-boolean isTransient = false;
+
+double fadeSpeed = 1;
+
+#define FADE_DELTA 0.02
+#define FADE_AMOUNT 2
 
 void setup() {
   srand(0);
@@ -146,19 +150,17 @@ void loop() {
   }
 
   if(prevWing != currWing) {
-    isTransient = true;
     prevWing = currWing;
+    fadeSpeed = FADE_AMOUNT;
   }
   
   shimmerCenter(currWing, 259);
 
   // Actually updates wall
-  if(isTransient) {
-    fadeTo();
-//    jumpTo();
-  } else {
-    jumpTo();
-  }
+  fadeTo();
+
+  if(fadeSpeed > 1 + FADE_DELTA) fadeSpeed -= FADE_DELTA;
+  
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -198,23 +200,15 @@ void loop() {
 //FADE TO FUNCTION
 //takes in current state of led and target state and transitions to it
 void fadeTo() {
-  int red, green, blue;
-  for(int index = 0; index <= NUM_CRYSTALS; index++) {
+  int red, green, blue, led;
+  for(int index = 0; index < NUM_CRYSTALS; index++) {
+    led = firstLED[index]+1;
+    red = leds[led].red + ((target[index].r - leds[led].r) / fadeSpeed);
+    green = leds[led].green + ((target[index].g - leds[led].g) / fadeSpeed);
+    blue = leds[led].blue + ((target[index].b - leds[led].b) / fadeSpeed);
     for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-      red = leds[i].red + ((target[index].r - leds[i].red) / 2);
-      green = leds[i].green + ((target[index].g - leds[i].green) / 2);
-      blue = leds[i].blue + ((target[index].b - leds[i].blue) / 2);
       leds[i] = CRGB(red, blue, green);
     }
-    
-    if(target[index].r - leds[index].r <= 20 || target[index].r - leds[index].r >= 20) {
-      if(target[index].g - leds[index].g <= 20 || target[index].g - leds[index].g >= 20) {
-        if(target[index].b - leds[index].b <= 20 || target[index].b - leds[index].b >= 20) {
-          isTransient = false;
-        }
-      }
-    }
-    
   }
 }
 
@@ -302,7 +296,8 @@ void crystalRGB(int index, int r, int g, int b) {
 }
 
 void crystalHSV(int index, int h, int s, int v) {
-  target[index] = CHSV(h, s, v);
+//  target[index] = CHSV(h, s, v);
+  target[index] = CRGB(0, 0, 0).setHSV(h, s, v);
 }
 
 uint32_t freeRAM(){ // for Teensy 3.5
