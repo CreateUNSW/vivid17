@@ -87,7 +87,7 @@ std::vector <int> dynRndArray;
 int dynRndTime = 7;
 
 // The updated rgb value that the wall fades towards
-rgb target[MAX_LED_NUM];
+rgb target[NUM_CRYSTALS];
 
 void setup() {
   srand(0);
@@ -123,12 +123,12 @@ void loop() {
 
   //chrisWings();
   //randomDynamic();
-  randomWalL();
+  //randomWalL();
   bool *currWing = NULL;
   bool wingOn = true;
 
   // Note sensors are active low
-  if(!digitalRead(sensorPins[0])) {
+  //if(!digitalRead(sensorPins[0])) {
     if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
       currWing = wing5;
     } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
@@ -144,7 +144,7 @@ void loop() {
       wingOn = false;
     }
     shimmerCenter(currWing, 259);
-  }
+  //}
   fadeTo();
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
@@ -186,11 +186,13 @@ void loop() {
 //takes in current state of led and target state and transitions to it
 void fadeTo() {
   int red, green, blue;
-  for (int i = 0; i <= MAX_LED_NUM; i++) {
-    red = leds[i].red + (getR(target[i]) - leds[i].red) / 2;
-    green = leds[i].green + (getG(target[i]) - leds[i].green) / 2;
-    blue = leds[i].blue + (getB(target[i]) - leds[i].blue) / 2;
-    leds[i] = CRGB(red, blue, green);
+  for(int index = 0; index <= NUM_CRYSTALS; index++) {
+    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+      red = leds[i].red + ((getR(target[index]) - leds[i].red) / 2);
+      green = leds[i].green + ((getG(target[index]) - leds[i].green) / 2);
+      blue = leds[i].blue + ((getB(target[index]) - leds[i].blue) / 2);
+      leds[i] = CRGB(red, blue, green);
+    }
   }
 }
 
@@ -266,11 +268,13 @@ void randomDynamic() {
 }
 
 void crystalRGB(int index, int r, int g, int b) {
-  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = insertRGB(r, g, b);
+//  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = insertRGB(r, g, b);
+  target[index] = insertRGB(r, g, b);
 }
 
 void crystalHSV(int index, int h, int s, int v) {
-  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = hsv2rgb(h, s, v);
+//  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = hsv2rgb(h, s, v);
+  target[index] = hsv2rgb(h, s, v);
   //leds[i].setHSV(h, s, v);
 }
 

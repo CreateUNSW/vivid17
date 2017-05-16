@@ -5,9 +5,9 @@
 // RGB to HSV conversion code
 // --------------------------
 typedef struct {
-    double r;       // a fraction between 0 and 1
-    double g;       // a fraction between 0 and 1
-    double b;       // a fraction between 0 and 1
+    uint8_t r;       // a fraction between 0 and 1
+    uint8_t g;       // a fraction between 0 and 1
+    uint8_t b;       // a fraction between 0 and 1
 } rgb;
 
 typedef struct {
@@ -16,22 +16,22 @@ typedef struct {
     double v;       // a fraction between 0 and 1
 } hsv;
 
-static hsv   rgb2hsv(rgb in);
-static rgb   hsv2rgb(hsv in);
+static hsv   rgb2hsv(int r, int g, int b);
+static rgb   hsv2rgb(double h, double s, double v);
 
 rgb insertRGB(int r, int g, int b) {
   rgb in = {(double)r/255, (double)g/255, (double)b/255};
   return in;
 }
 
-int getR(rgb color) {
-  return (int)(color.r * 255);
+uint8_t getR(rgb color) {
+  return (uint8_t)(color.r * 255);
 }
-int getG(rgb color) {
-  return (int)(color.g * 255);
+uint8_t getG(rgb color) {
+  return (uint8_t)(color.g * 255);
 }
-int getB(rgb color) {
-  return (int)(color.b * 255);
+uint8_t getB(rgb color) {
+  return (uint8_t)(color.b * 255);
 }
 
 hsv rgb2hsv(int r, int g, int b)
