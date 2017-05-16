@@ -86,6 +86,8 @@ int oldCentre = -1;
 std::vector <int> dynRndArray;
 int dynRndTime = 7;
 
+// The updated rgb value that the wall fades towards
+rgb target[MAX_LED_NUM];
 
 void setup() {
   srand(0);
@@ -100,9 +102,8 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, LG_INDEX, 176);
   g = new Graph();
   
-  for(int i = 0; i < NUM_CRYSTALS; i++) {
-    crystalHSV(i, rand() % 255,  rand() % 100 + 155, 255); 
-  }
+ 
+  randomWalL();
   FastLED.show();
 
   for (int i = 0; i < NUM_SENSORS; i++) {
@@ -122,7 +123,7 @@ void loop() {
 
   //chrisWings();
   //randomDynamic();
-
+  randomWalL();
   bool *currWing = NULL;
   bool wingOn = true;
 
@@ -144,7 +145,7 @@ void loop() {
     }
     shimmerCenter(currWing, 259);
   }
-  
+  fadeTo();
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
@@ -183,9 +184,15 @@ void loop() {
 
 //FADE TO FUNCTION
 //takes in current state of led and target state and transitions to it
-//fadeTo() {
-  
-//}
+void fadeTo() {
+  int red, green, blue;
+  for (int i = 0; i <= MAX_LED_NUM; i++) {
+    red = leds[i].red + (getR(target[i]) - leds[i].red) / 2;
+    green = leds[i].green + (getG(target[i]) - leds[i].green) / 2;
+    blue = leds[i].blue + (getB(target[i]) - leds[i].blue) / 2;
+    leds[i] = CRGB(red, blue, green);
+  }
+}
 
 void chrisWings() {
   int chris[291*3] = {110,65,0,0,67,171,0,0,0,0,0,0,0,149,211,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,86,0,163,1,2,144,0,39,157,0,0,0,0,10,146,20,0,145,116,0,173,69,0,157,50,0,151,0,14,148,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,174,250,0,198,168,0,190,242,0,198,0,0,149,0,0,118,0,0,23,0,30,0,0,77,0,0,35,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,198,0,0,43,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,76,0,0,167,0,0,232,0,193,251,9,0,250,0,164,241,13,68,202,29,1,180,57,0,0,0,0,0,0,0,246,0,0,170,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,189,94,0,219,166,0,0,240,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,184,80,0,211,148,0,251,230,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,110,65,0,248,0,198,0,0,58,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,62,0,0,151,0,0,223,0,211,252,6,0,243,0,186,249,10,89,210,25,12,181,49,0,0,0,0,0,0,0,237,0,0,152,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,4,144,79,0,160,104,0,168,12,0,144,0,47,162,0,0,0,0,18,149,55,0,153,36,0,148,0,26,152,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,188,233,0,198,144,0,181,228,0,198,0,0,164,0,0,139,0,0,37,0,19,0,0,59,0,0,21,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,71,172,0,0,0,0,0,0,0,165,220,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -228,6 +235,13 @@ void shimmerCenter(bool *wing, int centre) {
   }
 }
 
+//random color wall
+void randomWalL() {
+   for(int i = 0; i < NUM_CRYSTALS; i++) {
+    crystalHSV(i, rand() % 255,  rand() % 100 + 155, 255); 
+  }
+}
+
 void randomDynamic() {
   //every random period of time between 3-10 seconds
   //add a crystal to the array
@@ -245,18 +259,19 @@ void randomDynamic() {
     int red = leds[firstLED[dynRndArray.at(i)]+1].red;
     int green = leds[firstLED[dynRndArray.at(i)]+1].green;
     int blue = leds[firstLED[dynRndArray.at(i)]+1].blue;
-    int hue = rgb2hsv(red, green, blue) + 1;
-    crystalHSV(dynRndArray.at(i),  hue, 255, 255);
-    Serial.println(hue);
+    hsv hue = rgb2hsv(red, green, blue);
+    //crystalHSV(dynRndArray.at(i),  hue, 255, 255);
+//    Serial.println(hue);
   }
 }
 
 void crystalRGB(int index, int r, int g, int b) {
-  for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, b, g);
+  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = insertRGB(r, g, b);
 }
 
 void crystalHSV(int index, int h, int s, int v) {
-  for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i].setHSV(h, s, v);
+  for (int i = firstLED[index]; i <= lastLED[index]; i++) target[i] = hsv2rgb(h, s, v);
+  //leds[i].setHSV(h, s, v);
 }
 
 uint32_t freeRAM(){ // for Teensy 3.5
