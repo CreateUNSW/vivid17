@@ -120,14 +120,14 @@ void loop() {
 //=================================================
 // PATTERN CODE GOES HERE
 
-  
-  randomDynamic();
+  //chrisWings();
+  //randomDynamic();
 
   bool *currWing = NULL;
   bool wingOn = true;
 
   // Note sensors are active low
-  if(!digitalRead(sensorPins[5])) {
+  if(!digitalRead(sensorPins[0])) {
     if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
       currWing = wing5;
     } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
@@ -181,6 +181,20 @@ void loop() {
   
 }
 
+//FADE TO FUNCTION
+//takes in current state of led and target state and transitions to it
+//fadeTo() {
+  
+//}
+
+void chrisWings() {
+  int chris[291*3] = {110,65,0,0,67,171,0,0,0,0,0,0,0,149,211,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,86,0,163,1,2,144,0,39,157,0,0,0,0,10,146,20,0,145,116,0,173,69,0,157,50,0,151,0,14,148,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,174,250,0,198,168,0,190,242,0,198,0,0,149,0,0,118,0,0,23,0,30,0,0,77,0,0,35,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,198,0,0,43,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,76,0,0,167,0,0,232,0,193,251,9,0,250,0,164,241,13,68,202,29,1,180,57,0,0,0,0,0,0,0,246,0,0,170,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,189,94,0,219,166,0,0,240,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,184,80,0,211,148,0,251,230,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,110,65,0,248,0,198,0,0,58,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,62,0,0,151,0,0,223,0,211,252,6,0,243,0,186,249,10,89,210,25,12,181,49,0,0,0,0,0,0,0,237,0,0,152,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,4,144,79,0,160,104,0,168,12,0,144,0,47,162,0,0,0,0,18,149,55,0,153,36,0,148,0,26,152,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,188,233,0,198,144,0,181,228,0,198,0,0,164,0,0,139,0,0,37,0,19,0,0,59,0,0,21,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,71,172,0,0,0,0,0,0,0,165,220,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  for(int i = 0; i < 291*3; i++) {
+      crystalRGB(i/3, chris[i++], chris[i++], chris[i]);
+  }
+}
+
+
 // Shimmer pattern
 // @arg wing: pass in wing array to light up that wing, or pass in NULL to light up whole wall
 // @arg centre: crystal ID for gradient centre
@@ -228,13 +242,17 @@ void randomDynamic() {
   }
   // all the crystal in the arryalist increment hue by random ammount between 1-20
   for (unsigned i = 0; i < dynRndArray.size(); i++) {
-    int hue = rgb2hsv(leds[firstLED[dynRndArray.at(i)]+1].red,leds[firstLED[dynRndArray.at(i)]+1].green,leds[firstLED[dynRndArray.at(i)]+1].blue) + 1;
-    crystalHSV(dynRndArray.at(i),  hue, 200, rand() % 50 + 200);
+    int red = leds[firstLED[dynRndArray.at(i)]+1].red;
+    int green = leds[firstLED[dynRndArray.at(i)]+1].green;
+    int blue = leds[firstLED[dynRndArray.at(i)]+1].blue;
+    int hue = rgb2hsv(red, green, blue) + 1;
+    crystalHSV(dynRndArray.at(i),  hue, 255, 255);
+    Serial.println(hue);
   }
 }
- 
+
 void crystalRGB(int index, int r, int g, int b) {
-  for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, g, b);
+  for (int i = firstLED[index]; i <= lastLED[index]; i++) leds[i] = CRGB(r, b, g);
 }
 
 void crystalHSV(int index, int h, int s, int v) {

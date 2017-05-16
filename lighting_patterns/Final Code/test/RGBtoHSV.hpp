@@ -24,8 +24,8 @@ int rgb2hsv(int r, int g, int b)
 {
 	rgb in = {(double)r/255, (double)g/255, (double)b/255};
 
-    int out;
-    double      min, max, delta;
+    double out;
+    double min, max, delta;
 
     min = in.r < in.g ? in.r : in.g;
     min = min  < in.b ? min  : in.b;
@@ -35,7 +35,7 @@ int rgb2hsv(int r, int g, int b)
 
     delta = max - min;
 
-    if( in.r >= max )                           // > is bogus, just keeps compilor happy
+    if( in.r >= max )                         // > is bogus, just keeps compilor happy
         out = ( in.g - in.b ) / delta;        // between yellow & magenta
     else
     if( in.g >= max )
@@ -43,14 +43,15 @@ int rgb2hsv(int r, int g, int b)
     else
         out = 4.0 + ( in.r - in.g ) / delta;  // between magenta & cyan
 
-    out *= 60.0;                              // degrees
-
+    out = out * 60.0;                              // degrees
+    
     if( out < 0.0 )
         out += 360.0;
+        
 
-    out = (int)(((double)out / (double)360) * (double)255);
+    out = (((double)out / (double)360) * (double)255);
     
-    return out;
+    return (int)out;
 }
 
 
