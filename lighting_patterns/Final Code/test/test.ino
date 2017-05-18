@@ -488,7 +488,7 @@ void shimmerCenter(bool *wing, int centre) {
 }
 
 // ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============
-// Random color wall every second
+// Random color wall synced with radialTO();
 void randomWall() {
   if(t % maxDistance == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
