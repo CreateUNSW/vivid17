@@ -57,8 +57,8 @@ public:
         return ret;
     };
     
-    int maxDist (int* dist) {
-        int Max = 0;
+    double maxDist (int* dist) {
+        double Max = 0;
         for(int i=0;i<_nV;i++) {
             if(dist[i] > Max) {
               Max = dist[i];
