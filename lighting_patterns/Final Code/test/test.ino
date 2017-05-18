@@ -121,7 +121,7 @@ double fadeSpeed = 1;
 uint8_t radialIndex = 0;
 #define MAX_DISTANCE = 15;
 
-// ====================
+// ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============
 void setup() {
   srand(0);
   Serial.begin(9600);
@@ -147,25 +147,37 @@ void loop() {
   unsigned long duration = micros();
   float total = 0;
 //--------------------------------
-//=================================================
-// PATTERN CODE GOES HERE
+//================================================= PATTERN CODE GOES HERE ================================================= 
 
   // Note sensors are active low
-  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing5;
-  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing4;
-  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing3;
-  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing2;
-  } else if(!digitalRead(sensorPins[0])) {
-    currWing = wing1;
-  } else {
-    currWing = NULL;
-    // wingOn = false; currently not used
-  }
+//  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing5;
+//  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing4;
+//  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing3;
+//  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing2;
+//  } else if(!digitalRead(sensorPins[0])) {
+//    currWing = wing1;
+//  } else {
+//    currWing = NULL;
+//    // wingOn = false; currently not used
+//  }
 
+  if(serialInput() == 0) {
+    currWing = NULL;
+  } else if(serialInput() == 1) {
+    currWing = wing1;
+  } else if(serialInput() == 2) {
+    currWing = wing2;
+  } else if(serialInput() == 3) {
+    currWing = wing3;
+  } else if(serialInput() == 4) {
+    currWing = wing4;
+  } else if(serialInput() == 5) {
+    currWing = wing5;
+  }
   int temp = 0;
   // Changes the pattern after 25 seconds when the scene changes
   if(t == 0)
@@ -222,9 +234,12 @@ void loop() {
     case 1:
       radialTo(259);
       break;
+    case 2:
+      jumpTo();
+      break;
   }
   
-//=================================================
+//=================================================//=================================================//=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
   FastLED.show();
@@ -257,9 +272,9 @@ void loop() {
   }
   Serial.println();
 //--------------------------------
-  
 }
 
+// ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============
 // Transitions the current wall to target using a radiation;
 void radialTo(int centre) {
   
@@ -277,7 +292,7 @@ void radialTo(int centre) {
     blue = leds[led].blue + ((target[index].b - leds[led].b) / radialDistance);
     
     for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-      leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
+      leds[i] = CRGB(red, blue, green);
     }
   }
   radialIndex++;
@@ -305,6 +320,8 @@ void jumpTo() {
     }
   }
 }
+
+// ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============
 
 // Chris's wing pattern
 void chrisWings() {
@@ -370,6 +387,7 @@ void shimmerCenter(bool *wing, int centre) {
   }
 }
 
+// ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============
 // Random color wall every second
 void randomWall() {
   if(t % 10) {
@@ -404,6 +422,8 @@ void randomDynamic() {
   }
 }
 
+// ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============
+
 void crystalRGB(int index, int r, int g, int b) {
   target[index] = CRGB(r, b, g);
 }
@@ -421,6 +441,21 @@ void changeCentre(int centre) {
     dist = g->calcDist(centre);
   }
 }
+
+int serialInput(){
+  int input = 0;
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read();
+    if (inChar == '\n') {
+      return input;
+    } else {
+      int digit = inChar - '0';
+      input = input*10 + digit;
+    }
+  }
+}
+
 uint32_t freeRAM(){ // for Teensy 3.5
     uint32_t stackTop;
     uint32_t heapTop;
