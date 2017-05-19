@@ -299,7 +299,7 @@ void colorToWhite(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if( t % 122 == 1 ||change) {
+  if( t % 64 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -320,7 +320,7 @@ void complementary(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if( t % 122 == 1 ||change) {
+  if( t % 64 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -339,7 +339,7 @@ void complementary(bool *wing, int centre, bool change) {
 
 void solid(bool *wing, bool change) {
   int hue;
-  if( t % 122 == 1 || change) {
+  if( t % 64 == 1 || change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -420,7 +420,7 @@ void clayPattern() {
 // ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============
 // Random color wall synced with radialTO();
 void randomWall() {
-  if( t % 122 == 1) {
+  if( t % 127 == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       crystalHSV(i, rand() % 255,  255, 255); 
     }
