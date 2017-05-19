@@ -167,7 +167,6 @@ void loop() {
 //        randomDynamic(); // doesn't work
 //        break;
       default:
-        Serial.println("default backgrond");
         shimmerCenter(currWing, 259);
     }
   } else {

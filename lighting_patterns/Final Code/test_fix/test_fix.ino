@@ -14,7 +14,6 @@ int _fstat (){
 
 #include <FastLED.h>
 #include "Graph.hpp"
-#include "rgb2hsv.hpp"
 
 // IO/Hardware config
 //--------------------------------------------------
@@ -220,6 +219,9 @@ void loop() {
     input = false;
   }
 
+  // Updating the fade speed with each loop
+  if(fadeSpeed > 1 + FADE_DELTA) fadeSpeed -= FADE_DELTA;
+  
   // Changes the pattern after 25 seconds when the scene changes
   if(t == 0) {
     patternTemp = rand();
@@ -237,11 +239,8 @@ void loop() {
     chooseTransition = transitionTemp;
     change = true;
   }
-  
-  // Updating the fade speed with each loop
-  if(fadeSpeed > 1 + FADE_DELTA) fadeSpeed -= FADE_DELTA;
-  
-  // Choosing pattern
+
+    // Choosing pattern
   if(currWing == NULL) {
     switch (choosePattern % 4) {
       case 0 :
@@ -262,16 +261,12 @@ void loop() {
         Serial.println("crystal gadient backgrond");
         crystalGradient(currWing);
         break;
-      case 4 :
-        Serial.println("dynamic Random backgrond");
-        randomDynamic(); // doesn't work
-        break;
       default:
         Serial.println("default backgrond");
         shimmerCenter(currWing, centre);
     }
   } else {
-    switch (2) {//choosePattern % 7) {
+    switch (choosePattern % 7) {
       case 0 :
         Serial.println("funky wings");
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
@@ -287,7 +282,7 @@ void loop() {
         colorToWhite(currWing, centre, change);
         break;
       case 3 :
-        Serial.println("to black wings");
+        Serial.println("to complementary");
         complementary(currWing, centre, change);
         break;  
       case 4 :
@@ -306,8 +301,13 @@ void loop() {
         Serial.println("shimmer wings");
         shimmerCenter(currWing, centre);
     }
+    // Ambient background lighting
+//    for(int i = 0; i < NUM_CRYSTALS; i++) {
+//      if(!currWing[i])
+//        crystalHSV(i, 1,  0, 10); 
+//    }
   }
-
+    
   // Actually updates wall
   // Updating method
   if(transition) {
@@ -320,10 +320,10 @@ void loop() {
         Serial.println("radial to");
         radialTo(259);
         break;
-      case 2 :
-        Serial.println("swipe to");
-        swipeTo();
-        break;
+//      case 2 :
+//        Serial.println("swipe to");
+//        swipeTo();
+//        break;
       default:
         jumpTo();
     }
@@ -332,11 +332,8 @@ void loop() {
       jumpTo();
     transition = true;
   }
-  
-  //clayPattern();
-
 //=================================================//=================================================//=================================================
-  // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
+// t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
   FastLED.show();
 // Measures execution time
@@ -372,38 +369,7 @@ void loop() {
 
 // ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============
 // Transitions the current wall to target using a radiation;
-//void radialTo(int centre) {
-//  
-//  if(radialIndex % maxDistance == 0)
-//    centre = rand() % 291;
-//    
-//  changeCentre(centre);
-//  
-//  double radialDistance = 1;
-//  int red, green, blue, led;
-//  int temp = 0;
-//  
-//  for(int index = 0; index < NUM_CRYSTALS; index++) {
-//    radialDistance = 1;
-//    temp = dist[index] - (radialIndex % maxDistance);
-//    if(temp < 0) temp = 0;
-//    while(temp > 0) {
-//      radialDistance += radialDistance;
-//      temp--;
-//    }
-//    led = firstLED[index]+1;
-//    red = leds[led].red + ((target[index].r - leds[led].r) / radialDistance);
-//    green = leds[led].green + ((target[index].g - leds[led].g) / radialDistance);
-//    blue = leds[led].blue + ((target[index].b - leds[led].b) / radialDistance);
-//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-//      leds[i] = CRGB(red, blue, green);
-//    }
-//  }
-//  if(t % 3 == 1)
-//    radialIndex++;
-//}
-
-void radialTo(int centre) {//  
+void radialTo(int centre) {
   if(radialIndex % maxDistance == 0)
     centre = rand() % 291;
     
@@ -420,55 +386,6 @@ void radialTo(int centre) {//
     radialIndex++;
 }
 
-// Transitions the current wall to target using a swipe;
-void swipeTo() {
-  int red, green, blue, led;
-  
-  for(int index = 0; index < NUM_CRYSTALS; index++) {
-    if(horz[index] <= swipeIndex) {
-      for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-        leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
-      }
-    }
-  }
-  
-  swipeIndex += 1/(swipeIndex);
-  if(swipeIndex == 30) {
-    transition = false;
-    chooseTransition = 3;
-  }
-}
-
-//void fadeTo() {
-//  int led;
-//  uint8_t red;
-//  uint8_t green;
-//  uint8_t blue;
-//  uint8_t h,s,v;
-//  uint8_t th,ts,tv;
-//  for(int index = 0; index < NUM_CRYSTALS; index++) {
-//    led = firstLED[index]+1;
-//    red = leds[led].r;
-//    green = leds[led].g;
-//    blue = leds[led].b;
-//    rgb2hsv(red, green, blue,h,s,v);
-//    red = target[index].r;
-//    green = target[index].g;
-//    blue = target[index].b;
-//    rgb2hsv(red, green, blue,th,ts,tv);
-//
-//    if(th - h < 122 || h - th > 122) {
-//      h++;
-//    } else {
-//      h--;
-//    }
-//    s = s +((ts - s) / fadeSpeed);
-//    v = v +((tv - v) / fadeSpeed);       
-//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-//      leds[i].setHSV(h, s, v);
-//    }
-//  }
-//}
 
 //  Transitions the current wall to the target wall slowly
 void fadeTo() {
@@ -493,14 +410,12 @@ void jumpTo() {
   }
 }
 
+
 // ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============
 
 // Chris's wing pattern
 void chrisWings() {
   int chris[291*3] = {110,65,0,0,67,171,0,0,0,0,0,0,0,149,211,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,86,0,163,1,2,144,0,39,157,0,0,0,0,10,146,20,0,145,116,0,173,69,0,157,50,0,151,0,14,148,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,174,250,0,198,168,0,190,242,0,198,0,0,149,0,0,118,0,0,23,0,30,0,0,77,0,0,35,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,198,0,0,43,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,76,0,0,167,0,0,232,0,193,251,9,0,250,0,164,241,13,68,202,29,1,180,57,0,0,0,0,0,0,0,246,0,0,170,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,189,94,0,219,166,0,0,240,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,0,0,110,65,0,110,65,0,0,184,80,0,211,148,0,251,230,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,110,65,0,110,65,0,248,0,198,0,0,58,110,65,0,0,0,0,0,0,0,110,65,0,110,65,0,0,62,0,0,151,0,0,223,0,211,252,6,0,243,0,186,249,10,89,210,25,12,181,49,0,0,0,0,0,0,0,237,0,0,152,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,4,144,79,0,160,104,0,168,12,0,144,0,47,162,0,0,0,0,18,149,55,0,153,36,0,148,0,26,152,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,188,233,0,198,144,0,181,228,0,198,0,0,164,0,0,139,0,0,37,0,19,0,0,59,0,0,21,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110,65,0,0,71,172,0,0,0,0,0,0,0,165,220,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-//  for(int i = 0; i < 291*3; i++) {
-//      crystalRGB(i/3, chris[i++], chris[i++], chris[i]);
-//  }
   uint8_t red, green, blue;
   for(int index = 0; index < NUM_CRYSTALS; index++) {
       red = chris[index*3];
@@ -531,12 +446,13 @@ void clayPattern() {
   transition = false;
 }
 
+
 // Picks randome color gradient to white
 void colorToWhite(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if(t % 30 == 1 ||change) {
+  if(t % 50 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -548,15 +464,15 @@ void colorToWhite(bool *wing, int centre, bool change) {
         crystalHSV(i, 0, 0, 0);
       }
     }
-    patternChange();
   }
 }
+
 
 void complementary(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if(t % 30 == 1 ||change) {
+  if(t % 50 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -568,13 +484,12 @@ void complementary(bool *wing, int centre, bool change) {
         crystalHSV(i, 0, 0, 0);
       }
     }
-    patternChange();
   }
 }
 
 void solid(bool *wing, bool change) {
   int hue;
-  if(t % 30 == 1 ||change) {
+  if(t % 50 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -586,7 +501,6 @@ void solid(bool *wing, bool change) {
         crystalHSV(i, 0, 0, 0);
       }
     }
-    patternChange();
   }
 }
 
@@ -607,7 +521,7 @@ void shimmerCenter(bool *wing, int centre) {
   // Pattern algorithm
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing == NULL || wing[i]) {
-      double hue = ((float)dist[i]/50)*255 + t * 2;
+      double hue = ((float)dist[i]/50)*255 + t*5;
       if(hue >= 255) hue = hue - 255;
       crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, 255);//255-((float)dist[i]/maxDistance)*((float)timer)*Brightness);
     } else {
@@ -620,41 +534,14 @@ void shimmerCenter(bool *wing, int centre) {
 // ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============
 // Random color wall synced with radialTO();
 void randomWall() {
-  if(t % 30 == 1) {
+  if(t % 50 == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       crystalHSV(i, rand() % 255,  rand() % 100 + 155, rand() % 100 + 155); 
-    }
+    }    
+    fadeSpeed = FADE_AMOUNT;
   }
 }
 
-// Randomly changes the colors of random cells
-void randomDynamic() {
-  //every random period of time between 3-10 seconds
-  //add a crystal to the array
-  if((t % 70) / 10 == dynRndTime) {
-    dynRndTime = rand() % 4 + 3;
-    for(int i = rand() % 10; i > 0; i--) {
-      dynRndArray.insert(dynRndArray.begin(), rand() % 291);
-    }
-    for(int i = dynRndArray.size()/3; i > 0; i--) {
-      dynRndArray.erase(dynRndArray.begin() + (rand() % dynRndArray.size()));
-    }
-  }
-  
-  // all the crystal in the arryalist increment hue by random ammount between 1-20
-  for (unsigned i = 0; i < dynRndArray.size(); i++) {
-    uint8_t red = leds[firstLED[dynRndArray.at(i)]+1].red;
-    uint8_t green = leds[firstLED[dynRndArray.at(i)]+1].green;
-    uint8_t blue = leds[firstLED[dynRndArray.at(i)]+1].blue;
-    uint8_t h,s,v;
-    rgb2hsv(red, green, blue,h,s,v);
-    crystalHSV(dynRndArray.at(i),  h++, s, v);
-//    dummy = CHSV(0,0,0).setRGB(1,2,3);
-//    dummy.h
-//    dummy.s
-//    dummy.v
-  }
-}
 
 // Saturation gradient in individual crystals
 void crystalGradient(bool *wing) {
@@ -672,6 +559,7 @@ void crystalGradient(bool *wing) {
         leds[i] = CRGB(0, 0, 0);
   }
 }
+
 // ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============
 
 void crystalRGB(int index, int r, int g, int b) {
@@ -691,33 +579,6 @@ void changeCentre(int centre) {
     dist = g->calcDist(centre);
     maxDistance = g->maxDist(dist);
   }
-}
-
-int binarySearch(uint16_t* items, int size, int item) {
-  int mid = 0;
-  int lo = 0;
-  int hi = size-1;
-  int dist = hi - lo;
-
-  while(dist > 1) {
-    mid = lo;
-    mid += dist/2;
-
-    if(item >= items[mid]) {
-      // Searches right
-      lo = mid;
-    } else {
-      // Searches left
-      hi = mid;
-    }
-    // Recalcs new dist
-    dist = hi - lo;
-  }
-
-  return lo;
-}
-
-void patternChange() {
 }
 
 uint32_t freeRAM(){ // for Teensy 3.5
