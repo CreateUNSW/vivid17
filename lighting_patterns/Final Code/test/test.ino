@@ -80,6 +80,8 @@ bool wing5[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // Graph variables
 Graph * g;
 int *dist = NULL;
+int *horz = NULL;
+int *vert = NULL;
 
 // ====================
 // Time variables
@@ -123,6 +125,8 @@ double fadeSpeed = 1;
 // Radial variables
 uint8_t radialIndex = 0;
 
+// Swipe variables
+uint8_t swipeIndex = 0;
 // ====================
 // Serial input
 bool input = false;
@@ -142,6 +146,14 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LEFT_GREEN, RGB> (leds, LG_INDEX, 176);
   FastLED.setBrightness(BRIGHTNESS);
   g = new Graph();
+  int *temp = g->calcDist(182); 
+  dist = g->calcDist(290);
+  for(int i = 0; i < NUM_CRYSTALS; i++) {
+    horz = dist[i] + temp[i];
+  }
+  delete[] dist;
+  delete[] temp;
+  
   dist = g->calcDist(259);
   maxDistance = g->maxDist(dist);
   for (int i = 0; i < NUM_SENSORS; i++) {
@@ -221,6 +233,7 @@ void loop() {
     prevWing = currWing;
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
+    swipeIndex = 0;
     choosePattern = patternTemp;
     chooseTransition = transitionTemp;
     change = true;
@@ -231,7 +244,7 @@ void loop() {
   
   // Choosing pattern
   if(currWing == NULL) {
-    switch (0){//choosePattern % 4) {
+    switch (choosePattern % 4) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -254,7 +267,7 @@ void loop() {
         shimmerCenter(currWing, centre);
     }
   } else {
-    switch (6) {//choosePattern % 7) {
+    switch (choosePattern % 7) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -270,7 +283,7 @@ void loop() {
         colorToBlack(currWing, centre, change);
         break;  
       case 4 :
-        solid(currWing, centre, change);
+        solid(currWing, change);
         break;
       case 5 :
         chrisWings();
@@ -360,7 +373,8 @@ void radialTo(int centre) {
   
   for(int index = 0; index < NUM_CRYSTALS; index++) {
     radialDistance = dist[index] - (radialIndex % maxDistance);
-    if(radialDistance < 1) radialDistance = 1;
+    if(radialDistance < 0.5) radialDistance = 0.5;
+    radialDistance += radialDistance;
     led = firstLED[index]+1;
     red = leds[led].red + ((target[index].r - leds[led].r) / radialDistance);
     green = leds[led].green + ((target[index].g - leds[led].g) / radialDistance);
@@ -370,7 +384,26 @@ void radialTo(int centre) {
       leds[i] = CRGB(red, blue, green);
     }
   }
-  radialIndex++;
+  if(t % 3 == 1)
+    radialIndex++;
+}
+
+// Transitions the current wall to target using a swipe;
+
+void swipeTo() {
+  int red, green, blue, led;
+  for(int index = 0; index < NUM_CRYSTALS; index++) {
+    if(horz[i] <= swipeIndex) {
+      for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+        leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
+      }
+    }
+  }
+  swipeIndex++;
+  if(swipeIndex == 30) {
+    transition = false;
+    chooseTransition = 3;
+  }
 }
 
 //  Transitions the current wall to the target wall slowly
@@ -404,7 +437,7 @@ void chrisWings() {
   for(int i = 0; i < 291*3; i++) {
       crystalRGB(i/3, chris[i++], chris[i++], chris[i]);
   }
-  temp = rand();
+  patternTemp = rand();
 }
 
 // Chris's wing pattern
@@ -470,8 +503,7 @@ void colorToBlack(bool *wing, int centre, bool change) {
   }
 }
 
-void solid(bool *wing, int centre, bool change) {
-  changeCentre(centre);
+void solid(bool *wing, bool change) {
   int hue;
   if(t % 30 == 1 ||change) {
     hue = rand() % 255;

@@ -128,7 +128,7 @@ void setup() {
 }
 // ============ // ============  // ============  // ============  // ============  // ============ 
 void loop() {
-  
+
 //================================================= PATTERN CODE GOES HERE ================================================= 
   // Note sensors are active low
   if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1])) {
