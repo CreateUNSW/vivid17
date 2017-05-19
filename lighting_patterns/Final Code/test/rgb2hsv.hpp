@@ -40,8 +40,7 @@ void rgb2hsv(const unsigned char &src_r, const unsigned char &src_g, const unsig
     }
 
     if (h < 0) h += 360.0f;
-
-    dst_h = (unsigned char)(h / 2);   // dst_h : 0-180
+    dst_h = (unsigned char) (dst_h / 360.0f * 255.0f); // dst_h : 0-255
     dst_s = (unsigned char)(s * 255); // dst_s : 0-255
     dst_v = (unsigned char)(v * 255); // dst_v : 0-255
 }

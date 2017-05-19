@@ -372,31 +372,48 @@ void loop() {
 
 // ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============ TRANSITION PATTERNS ============
 // Transitions the current wall to target using a radiation;
-void radialTo(int centre) {
-  
+//void radialTo(int centre) {
+//  
+//  if(radialIndex % maxDistance == 0)
+//    centre = rand() % 291;
+//    
+//  changeCentre(centre);
+//  
+//  double radialDistance = 1;
+//  int red, green, blue, led;
+//  int temp = 0;
+//  
+//  for(int index = 0; index < NUM_CRYSTALS; index++) {
+//    radialDistance = 1;
+//    temp = dist[index] - (radialIndex % maxDistance);
+//    if(temp < 0) temp = 0;
+//    while(temp > 0) {
+//      radialDistance += radialDistance;
+//      temp--;
+//    }
+//    led = firstLED[index]+1;
+//    red = leds[led].red + ((target[index].r - leds[led].r) / radialDistance);
+//    green = leds[led].green + ((target[index].g - leds[led].g) / radialDistance);
+//    blue = leds[led].blue + ((target[index].b - leds[led].b) / radialDistance);
+//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+//      leds[i] = CRGB(red, blue, green);
+//    }
+//  }
+//  if(t % 3 == 1)
+//    radialIndex++;
+//}
+
+void radialTo(int centre) {//  
   if(radialIndex % maxDistance == 0)
     centre = rand() % 291;
     
   changeCentre(centre);
   
-  double radialDistance = 1;
-  int red, green, blue, led;
-  int temp = 0;
-  
   for(int index = 0; index < NUM_CRYSTALS; index++) {
-    radialDistance = 1;
-    temp = dist[index] - (radialIndex % maxDistance);
-    if(temp < 0) temp = 0;
-    while(temp > 0) {
-      radialDistance += radialDistance;
-      temp--;
-    }
-    led = firstLED[index]+1;
-    red = leds[led].red + ((target[index].r - leds[led].r) / radialDistance);
-    green = leds[led].green + ((target[index].g - leds[led].g) / radialDistance);
-    blue = leds[led].blue + ((target[index].b - leds[led].b) / radialDistance);
-    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-      leds[i] = CRGB(red, blue, green);
+    if(radialIndex >= dist[index]) {
+      for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+        leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
+      }
     }
   }
   if(t % 3 == 1)
@@ -423,24 +440,54 @@ void swipeTo() {
   }
 }
 
-//  Transitions the current wall to the target wall slowly
 void fadeTo() {
-  
-//  CHSV dummy = CHSV(0,0,0).setRGB(1,2,3);
-//  dummy.h
-//  dummy.s
-//  dummy.v
-  int red, green, blue, led;
+  int led;
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+  uint8_t h,s,v;
+  uint8_t th,ts,tv;
   for(int index = 0; index < NUM_CRYSTALS; index++) {
     led = firstLED[index]+1;
-//    red = leds[led].red + ((target[index].r - leds[led].r) / fadeSpeed);
-//    green = leds[led].green + ((target[index].g - leds[led].g) / fadeSpeed);
-//    blue = leds[led].blue + ((target[index].b - leds[led].b) / fadeSpeed);
+    red = leds[led].r;
+    green = leds[led].g;
+    blue = leds[led].b;
+    rgb2hsv(red, green, blue,h,s,v);
+    red = target[index].r;
+    green = target[index].g;
+    blue = target[index].b;
+    rgb2hsv(red, green, blue,th,ts,tv);
+
+    if(th - h < 122 || h - th > 122) {
+      h++;
+    } else {
+      h--;
+    }
+    s = s +((ts - s) / fadeSpeed);
+    v = v +((tv - v) / fadeSpeed);       
     for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-      leds[i] = CRGB(red, blue, green);
+      leds[i].setHSV(h, s, v);
     }
   }
 }
+//  Transitions the current wall to the target wall slowly
+//void fadeTo() {
+//  
+////  CHSV dummy = CHSV(0,0,0).setRGB(1,2,3);
+////  dummy.h
+////  dummy.s
+////  dummy.v
+//  int red, green, blue, led;
+//  for(int index = 0; index < NUM_CRYSTALS; index++) {
+//    led = firstLED[index]+1;
+//    red = leds[led].red + ((target[index].r - leds[led].r) / fadeSpeed);
+//    green = leds[led].green + ((target[index].g - leds[led].g) / fadeSpeed);
+//    blue = leds[led].blue + ((target[index].b - leds[led].b) / fadeSpeed);
+//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
+//      leds[i] = CRGB(red, blue, green);
+//    }
+//  }
+//}
 
 // Instantly changes the wall to target 
 void jumpTo() {
@@ -565,7 +612,7 @@ void shimmerCenter(bool *wing, int centre) {
   // Pattern algorithm
   for(int i = 0; i < NUM_CRYSTALS; i++) {
     if(wing == NULL || wing[i]) {
-      double hue = ((float)dist[i]/50)*255 + t*5;
+      double hue = ((float)dist[i]/50)*255 + t * 2;
       if(hue >= 255) hue = hue - 255;
       crystalHSV(i, hue, ((float)(rand()%21)/100+minSaturation)*255, 255);//255-((float)dist[i]/maxDistance)*((float)timer)*Brightness);
     } else {
