@@ -273,7 +273,7 @@ void fadeTo() {
 
 // Instantly changes the wall to target 
 void jumpTo() {
-  for(int index = 0; index <= NUM_CRYSTALS; index++) {
+  for(int index = 0; index < NUM_CRYSTALS; index++) {
     for(int i = firstLED[index]; i <= lastLED[index]; i++) {
       leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
     }
