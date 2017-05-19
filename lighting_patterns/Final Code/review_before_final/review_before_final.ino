@@ -245,20 +245,6 @@ void radialTo(int centre) {
   radialIndex++;
 }
 
-////  Transitions the current wall to the target wall slowly
-//void fadeTo() {
-//  int red, green, blue, led;
-//  for(int index = 0; index < NUM_CRYSTALS; index++) {
-//    led = firstLED[index]+1;
-//    red = leds[led].red + ((target[index].r - leds[led].r) / fadeSpeed);
-//    green = leds[led].green + ((target[index].g - leds[led].g) / fadeSpeed);
-//    blue = leds[led].blue + ((target[index].b - leds[led].b) / fadeSpeed);
-//    for(int i = firstLED[index]; i <= lastLED[index]; i++) {
-//      leds[i] = CRGB(red, blue, green);
-//    }
-//  }
-//}
-
 //  Transitions the current wall to the target wall slowly
 void fadeTo() {
   int red, green, blue, led;
