@@ -56,16 +56,7 @@ public:
         *lenPath = j;
         return ret;
     };
-    
-    uint8_t maxDist (int* dist) {
-        uint8_t Max = 0;
-        for(int i=0;i<_nV;i++) {
-            if(dist[i] > Max) {
-              Max = dist[i];
-            }
-        }
-        return Max;
-    };
+
 
     bool hasEdge(int i, int j) {
         for(int k = 0; k < 6 && _edges[i][k] != -1; k++) {
@@ -124,6 +115,7 @@ private:
             }
         }
     };
+
 };
 
 #endif

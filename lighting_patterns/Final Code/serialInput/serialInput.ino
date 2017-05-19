@@ -69,6 +69,9 @@ bool wing3[291] = {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 bool wing4[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,0,0,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 bool wing5[291] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+bool *currWing = NULL;
+bool wingOn = true;
+
 Graph * g;
 int *dist = NULL;
 
@@ -95,6 +98,8 @@ double fadeSpeed = 1;
 #define FADE_DELTA 0.02
 #define FADE_AMOUNT 2
 
+bool input = false;
+int Command = 0;
 void setup() {
   srand(0);
   Serial.begin(9600);
@@ -130,23 +135,38 @@ void loop() {
   //chrisWings();
   //randomDynamic();
   //randomWalL();
-  bool *currWing = NULL;
-  bool wingOn = true;
 
   // Note sensors are active low
-  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing5;
-  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing4;
-  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing3;
-  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing2;
-  } else if(!digitalRead(sensorPins[0])) {
-    currWing = wing1;
-  } else {
-    currWing = NULL;
-    wingOn = false;
+//  if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing5;
+//  } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing4;
+//  } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing3;
+//  } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
+//    currWing = wing2;
+//  } else if(!digitalRead(sensorPins[0])) {
+//    currWing = wing1;
+//  } else {
+//    currWing = NULL;
+//    wingOn = false;
+//  }
+  
+  if(input == true) {
+    if(Command == 0) {
+      currWing = NULL;
+    } else if(Command == 1) {
+      currWing = wing1;
+    } else if(Command == 2) {
+      currWing = wing2;
+    } else if(Command == 3) {
+      currWing = wing3;
+    } else if(Command == 4) {
+      currWing = wing4;
+    } else if(Command == 5) {
+      currWing = wing5;
+    }
+    input = false;
   }
 
   if(prevWing != currWing) {
@@ -299,6 +319,19 @@ void crystalHSV(int index, int h, int s, int v) {
 //  target[index] = CHSV(h, s, v);
   target[index] = CRGB(0, 0, 0).setHSV(h, s, v);
 }
+
+//void serialEvent(){
+//  while (Serial.available()) {
+//    // get the new byte:
+//    char inChar = (char)Serial.read();
+//    if (inChar == '\n') {
+//      input = true;
+//    } else {
+//      int digit = inChar - '0';
+//      Command = Command*10 + digit;
+//    }
+//  }
+//}
 
 uint32_t freeRAM(){ // for Teensy 3.5
     uint32_t stackTop;
