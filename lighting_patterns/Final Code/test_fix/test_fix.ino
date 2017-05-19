@@ -186,11 +186,9 @@ void loop() {
   } else if(!digitalRead(sensorPins[0])) {
     currWing = wing1;
     centre = 7;
-  }// else {
-   // currWing = NULL;
-    // wingOn = false; currently not used
- // }
-
+  } else {
+    currWing = NULL;
+  }
 
   while (Serial.available()) {
     // get the new byte:
@@ -242,7 +240,7 @@ void loop() {
 
     // Choosing pattern
   if(currWing == NULL) {
-    switch (choosePattern % 4) {
+    switch (4) {//choosePattern % 4) {
       case 0 :
         Serial.println("funky backgrond");
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
@@ -260,6 +258,10 @@ void loop() {
       case 3 :
         Serial.println("crystal gadient backgrond");
         crystalGradient(currWing);
+        break;
+      case 4:
+        Serial.println("muzzLight background");
+        muzzLight();
         break;
       default:
         Serial.println("default backgrond");
@@ -560,6 +562,37 @@ void crystalGradient(bool *wing) {
   }
 }
 
+void muzzLight(){
+         // Sample muzz light program, with image retention effect
+         int lenPath = 0;
+         int *l = g->calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
+         int tempR = rand()%256;            
+         int tempG = rand()%256;
+         int tempB = rand()%256;
+         int darkR = 0;
+         int darkG = 0;
+         int darkB = 0;
+         for(int i = 0; i < NUM_CRYSTALS; i++) {
+             
+        darkR = leds[firstLED[i] + 1].red;
+        darkG = leds[firstLED[i] + 1].green;
+        darkB = leds[firstLED[i] + 1].blue;
+             crystalRGB(i, darkR/1.1,
+                                   darkG/1.1, 
+                                   darkB/1.1);   
+         }
+         if(t % 5 == 0) {
+             for(int i = 0; i < lenPath; i++) {
+                 crystalRGB(l[i], tempR,
+                                          tempG, 
+                                          tempB);
+             }
+         }
+         t++;
+         delete[] l;
+         transition = false;
+         chooseTransition = 4;
+}
 // ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============
 
 void crystalRGB(int index, int r, int g, int b) {

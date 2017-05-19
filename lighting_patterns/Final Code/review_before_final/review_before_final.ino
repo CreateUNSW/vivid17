@@ -81,6 +81,7 @@ uint8_t maxDistance = 1;
 
 // ====================
 // Main loop global variables
+uint8_t forceChange = 0;
 boolean transition = true;
 int patternTemp = 0;
 int transitionTemp = 0;
@@ -147,8 +148,14 @@ void loop() {
   
   // Changes the pattern after 25 seconds when the scene changes
   if(t == 0) {
+    forceChange++;
     patternTemp = rand();
     transitionTemp = rand();
+    if(forceChange == 10) {
+      forceChange = 0;
+      choosePattern = patternTemp;
+      chooseTransition = transitionTemp;
+    }
   }
   
   bool change = false;
@@ -164,9 +171,9 @@ void loop() {
   
   // Choosing pattern
   if(currWing == NULL) {
-    switch (choosePattern % 4) {
+    switch (choosePattern % 6) {
       case 0 :
-        shimmerCenter(currWing, 259);
+        shimmerCenter(currWing, centre);
         break;
       case 1 :
         randomWall();
@@ -178,11 +185,17 @@ void loop() {
       case 3 :
         crystalGradient(currWing);
         break;
+      case 4 :
+        muzzLight();
+        break;
+      case 5 :
+        shimmerCenter(currWing, t);
+        break;
       default:
         shimmerCenter(currWing, 259);
     }
   } else {
-    switch (choosePattern % 7) {
+    switch (choosePattern % 8) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -205,6 +218,9 @@ void loop() {
         break;
       case 6 :
         crystalGradient(currWing);
+        break;
+      case 7 :
+        shimmerCenter(currWing, t);
         break;
       default:
         shimmerCenter(currWing, centre);
@@ -283,7 +299,7 @@ void colorToWhite(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if(t % 100 == 1 ||change) {
+  if( t % 122 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -304,7 +320,7 @@ void complementary(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
   int hue;
-  if(t % 100 == 1 ||change) {
+  if( t % 122 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -323,7 +339,7 @@ void complementary(bool *wing, int centre, bool change) {
 
 void solid(bool *wing, bool change) {
   int hue;
-  if(t % 100 == 1 || change) {
+  if( t % 122 == 1 || change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       if(wing == NULL || wing[i]) {
@@ -404,7 +420,7 @@ void clayPattern() {
 // ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============ WALL PATTERNS ============
 // Random color wall synced with radialTO();
 void randomWall() {
-  if(t % 100 == 1) {
+  if( t % 122 == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       crystalHSV(i, rand() % 255,  255, 255); 
     }
@@ -428,6 +444,37 @@ void crystalGradient(bool *wing) {
   }
 }
 
+// Streaks of lines randomly appearing and fading away
+void muzzLight(){
+  // Sample muzz light program, with image retention effect
+  int lenPath = 0;
+  int *l = g->calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
+  int tempR = rand()%256;            
+  int tempG = rand()%256;
+  int tempB = rand()%256;
+  int darkR = 0;
+  int darkG = 0;
+  int darkB = 0;
+  for(int i = 0; i < NUM_CRYSTALS; i++) {
+    darkR = leds[firstLED[i] + 1].red;
+    darkG = leds[firstLED[i] + 1].green;
+    darkB = leds[firstLED[i] + 1].blue;
+    crystalRGB(i, darkR/1.1,
+                  darkG/1.1, 
+                  darkB/1.1);   
+  }
+  if(t % 5 == 0) {
+  for(int i = 0; i < lenPath; i++) {
+    crystalRGB(l[i], tempR,
+                     tempG, 
+                     tempB);
+    }
+  }
+  t++;
+  delete[] l;
+  transition = false;
+  chooseTransition = 4;
+}
 // ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============
 
 void crystalRGB(int index, int r, int g, int b) {
