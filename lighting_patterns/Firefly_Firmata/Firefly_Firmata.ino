@@ -43,7 +43,7 @@
 #include <pins_arduino.h>     // attach arduino pins header file to determine which board type is being used
 
 #define BAUDRATE 115200       // Set the Baud Rate to an appropriate speed
-#define BUFFSIZE 512          // buffer one command at a time
+#define BUFFSIZE (4*2*1550)          // buffer one command at a time
 
 /*==============================================================================
  * GLOBAL VARIABLES
@@ -110,7 +110,7 @@ void loop()
   if(Serial){
     ReadSerial();                       // read and parse string from serial port and write to pins
     if (counter >= numcycles){          // Wait every nth loop 
-      ReadInputs();                     // get input data and print data to the serial port
+//      ReadInputs();                     // get input data and print data to the serial port
       counter = 0;                      // reset the counter
     }
     counter ++;                         // increment the writecounter
@@ -131,83 +131,32 @@ void Init(){
   }
 }
 
-/* 
-* Reads the incoming ADC or digital values from the corresponding analog and digital input  
-* pins and prints the value to the serial port as a formatted commma separated string
-*/
-void ReadInputs(){ 
-  int len = sizeof(READ_APIN_CONFIG)/sizeof(READ_APIN_CONFIG[0]); //get the size of the array
-  for(int i = 0; i < len; i++){
-    int val = analogRead(READ_APIN_CONFIG[i]);  //read value from analog pins
-    Serial.print(val); Serial.print(",");   
-  }
-  len = sizeof(READ_DPIN_CONFIG)/sizeof(READ_DPIN_CONFIG[0]); //get the size of the array
-  for(int i = 0; i < len; i++){
-    int val = digitalRead(READ_DPIN_CONFIG[i]); //read value from digital pins
-    Serial.print(val); Serial.print(",");   
-  }
-  Serial.println("eol");  //end of line marker
-}
-
 /*
 * Retrieve the latest incoming serial value and split the string at the comma delimeter.
 * When a comma is found, the value is offloaded to a temporary variable and written
 * to the corresponding digital pin.
 */
-void ReadSerial(){
+uint8_t *ReadSerial(){
   char c;    // holds one character from the serial port
+  uint8_t ret[1550*2];
+  
   if (Serial.available()) {
     c = Serial.read();         // read one character
     buffer[bufferidx] = c;     // add to buffer
     if (c == '\n') {  
       buffer[bufferidx+1] = 0; // terminate it
       parseptr = buffer;       // offload the buffer into temp variable
-      int len = sizeof(WRITE_PIN_CONFIG)/sizeof(WRITE_PIN_CONFIG[0]); //get the size of the array
+      int len = 1550*2; //get the size of the array
       for(int i = 0; i < len; i++){
         //parse all incoming values and assign them to the appropriate variable
-        int val = parsedecimal(parseptr);       // parse the incoming number
+        ret[i] = parsedecimal(parseptr);       // parse the incoming number
         if(i != len - 1) parseptr = strchr(parseptr, ',')+1;   // move past the ","
-        WriteToPin(WRITE_PIN_CONFIG[i], val, SERVO_CONFIG[i]);         //send value out to pin on arduino board
-      }    
+      }
       bufferidx = 0;                             // reset the buffer for the next read
-      return;                                    // return so that we don't trigger the index increment below
+      return ret;                                    // return so that we don't trigger the index increment below
     }                                            // didn't get newline, need to read more from the buffer
     bufferidx++;                                 // increment the index for the next character
     if (bufferidx == BUFFSIZE-1) bufferidx = 0;  // if we get to the end of the buffer reset for safety
-  }
-}
-
-/*
-* Send the incoming value to the appropriate pin using pre-defined logic (ie. digital, analog, or servo)
-*/
-void WriteToPin(int _pin, int _value, Servo _servo){
-  if (_value >= 10000 && _value < 20000)            // check if value should be used for Digital Write (HIGH/LOW)
-  {      
-    if (_servo.attached()) _servo.detach();         // detach servo is one is attached to pin
-    pinMode(_pin, OUTPUT);                       
-    _value -= 10000;                                // subtract 10,000 from the value sent from Grasshopper 
-    if (_value == 1) digitalWrite(_pin, HIGH);     
-    else digitalWrite(_pin, LOW);   
-  }   
-  else if (_value >= 20000 && _value < 30000)       // check if value should be used for Analog Write (0-255)
-  {
-    if (_servo.attached()) _servo.detach();         // detach servo is one is attached to pin
-    pinMode(_pin, OUTPUT);               
-    _value -= 20000;                                // subtract 20,000 from the value sent from Grasshopper
-    analogWrite(_pin, _value);                     
-  }
-  else if (_value >= 30000 && _value < 40000)       // check if value should be used for Servo Write (0-180)
-  {
-    _value -= 30000;                                // subtract 30,000 from the value sent from Grasshopper
-    if (!_servo.attached())_servo.attach(_pin);     // attaches a Servo to the PWM pin (180 degree standard servos)                                    
-    _servo.write(_value);                          
-  }
-  else if (_value >= 40000 && _value < 50000)       // check if value should be used for Analog Write (0-4096) for DACs
-  {
-    if (_servo.attached()) _servo.detach();         // detach servo is one is attached to pin
-    pinMode(_pin, OUTPUT);               
-    _value -= 40000;                                // subtract 40,000 from the value sent from Grasshopper
-    //WriteToDAC(_pin, _value);                     
   }
 }
 
@@ -225,20 +174,3 @@ uint32_t parsedecimal(char *str){
   }
   return d;
 }
-
-/*
-* Send the incoming value to the appropriate DAC for DUE boards. 
-* Note: analogWrite resolution (default is 12 bits) is defined in the Setup function.
-*/
- #if defined(__SAM3X8E__) 
-  void WriteToDAC(int _pin, int _value){
-    if(_pin == 0) analogWrite(DAC0, _value);
-    else if (_pin == 1) analogWrite(DAC1, _value);
-  }
-#endif
-
-
-
-
-
-
