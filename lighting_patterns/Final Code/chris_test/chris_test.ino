@@ -47,7 +47,7 @@ uint8_t sensorPins[NUM_SENSORS] = {17, 18, 19, 22, 23};
 
 // ====================
 // Wing variables
-bool *prevWing = NULL;
+bool *prevCentre = NULL;
 bool *currWing = NULL;
 
 #define WING_1_SIZE 108
@@ -142,22 +142,17 @@ void setup() {
 void loop() {
 
 //================================================= PATTERN CODE GOES HERE ================================================= 
-  int centre = 259;
+  int centre = 0;
   // Note sensors are active low
   if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1])) {
-    currWing = wing5;
     centre = 99;
   } else if(!digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1])) {
-    currWing = wing4;
     centre = 191;
   } else if(!digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing3;
     centre = 259;
   } else if(!digitalRead(sensorPins[1]) && !digitalRead(sensorPins[0])) {
-    currWing = wing2;
     centre = 3;
   } else if(!digitalRead(sensorPins[0])) {
-    currWing = wing1;
     centre = 7;
   } else {
     currWing = NULL;
@@ -180,42 +175,48 @@ void loop() {
   
   bool change = false;
   // Catches when there is a change in scene
-  if(prevWing != currWing) {
-    wingTemp = rand();
-    if(wingTemp<5){
-      if(wingTemp==1){
-        switch(centre){
-          case 7:
-            currWing = wingB1;
-            break;
-          case 3:
-            currWing = wingB2;
-            break;
-          default:
-            //don't change wing as there is no other option
-            break;
+  if(prevCentre != centre) {
+    switch(centre) {
+      case 7:   currWing = wing1;
+                break;
+      case 3:   currWing = wing2;
+                break;
+      case 259: currWing = wing3;
+                break;
+      case 191: currWing = wing4;
+                break;
+      case 99: currWing = wing5;
+                break;
+      default:  currWing = NULL;
+    }
+    altWingDice = rand()%100;
+    if(currWing != NULL && altWingDice < 5) {
+      if(altWingDice == 1) {
+        switch(centre) {
+          case 7:  currWing = wingB1;
+                   break;
+          case 3:  currWing = wingB2;
+                   break;
+                   //don't change wing as there is no other option
+          default: break;
         }
-      }else{
-        switch(centre){
-          case 7:
-            currWing = wingS1;
-            break;
-          case 3:
-            currWing = wingS2;
-            break;
-          case 259:
-            currWing = wingS3;
-            break;
-          case 191:
-            currWing = wingS4;
-            break;
-          default:
-            //don't change wing as there is no other option
-            break;
+      } else {
+        switch(centre) {
+          case 7:   currWing = wingS1;
+                    break;
+          case 3:   currWing = wingS2;
+                    break;
+          case 259: currWing = wingS3;
+                    break;
+          case 191: currWing = wingS4;
+                    break;
+                    //don't change wing as there is no other option
+          default:  break;
         }
       }
     }
-    prevWing = currWing;
+    
+    prevCentre = centre;
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
     choosePattern = patternTemp;
