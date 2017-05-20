@@ -182,8 +182,8 @@ void loop() {
   // Catches when there is a change in scene
   if(prevWing != currWing) {
     wingTemp = rand();
-    if(rand()<5){
-      if(rand()==1){
+    if(wingTemp<5){
+      if(wingTemp==1){
         switch(centre){
           case 7:
             currWing = wingB1;
