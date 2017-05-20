@@ -27,7 +27,7 @@ sudo ln -s /opt/X11/include/X11 /usr/local/include/X11 (I'm not entirely sure if
 4. In Bash Shell, go to your correct directory and run these lines of code:
 
 export DISPLAY=:0
-g++ -std=c++11 $1 -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4
+g++ -std=c++11 main.cpp -o run -lX11 -lpthread -L/usr/X11/lib -L/usr/X11R6/lib -O4
 
 5. Enter ./a.out and there you have it!
 
