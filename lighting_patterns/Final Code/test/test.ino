@@ -237,7 +237,6 @@ void loop() {
     currWing = NULL;
   }
 
-
   while (Serial.available()) {
     // get the new byte:
     char inChar = (char)Serial.read();
