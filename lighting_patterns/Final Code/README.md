@@ -11,13 +11,8 @@ Latest running/compilable feature rich, minimally tested code.
 
 
 ## C
-### (new intermediary between "test_fix" and "review_before_final")
-Latest stable, somewhat tested code.
-
-
-## D
 ### (previously "review_before_final")
-Latest stable, tested code.
+Latest stable, somewhat tested code.
 
 
 ## Z
