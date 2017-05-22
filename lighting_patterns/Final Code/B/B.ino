@@ -128,6 +128,8 @@ uint8_t radialIndex = 0;
 // ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============
 void setup() {
   
+  Serial.begin(9600);  // Initialize serial communications with PC
+
   setupRFID();
   
   srand(0);
@@ -461,8 +463,8 @@ void randyPattern() {
     red = joDark[i][0];
     green = joDark[i][1];
     blue = joDark[i][2];
-    for(int j = firstLED[i]; j < lastLED[i]; j++) {
-      leds[i] = CRGB(red, blue, green);
+    for(int j = firstLED[i]; j <= lastLED[i]; j++) {
+      leds[j] = CRGB(red, blue, green);
     }
   } 
 //  transition = false;
@@ -562,7 +564,6 @@ void setupRFID() {
   digitalWrite(relay, HIGH);    // Make sure door is locked
 
   //Protocol Configuration
-  Serial.begin(9600);  // Initialize serial communications with PC
   SPI.begin();           // MFRC522 Hardware uses SPI protocol
   mfrc522.PCD_Init();    // Initialize MFRC522 Hardware
 
