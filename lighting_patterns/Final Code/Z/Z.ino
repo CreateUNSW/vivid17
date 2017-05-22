@@ -83,9 +83,11 @@ uint8_t maxDistance = 1;
 // Main loop global variables
 uint8_t forceChange = 0;
 boolean transition = true;
-int patternTemp = 0;
+int wallTemp = 0;
+int wingTemp = 0;
 int transitionTemp = 0;
-int choosePattern = 1;
+int chooseWall = 1;
+int chooseWing = 1;
 int chooseTransition = 1;
 
 // ====================
@@ -149,11 +151,13 @@ void loop() {
   // Changes the pattern after 25 seconds when the scene changes
   if(t == 0) {
     forceChange++;
-    patternTemp = rand();
+    wallTemp = rand();
+    wingTemp = rand();
     transitionTemp = rand();
     if(forceChange == 10) {
       forceChange = 0;
-      choosePattern = patternTemp;
+      chooseWall = wallTemp;
+      chooseWing = wingTemp;
       chooseTransition = transitionTemp;
     }
   }
@@ -164,14 +168,15 @@ void loop() {
     prevWing = currWing;
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
-    choosePattern = patternTemp;
+    chooseWall = wallTemp;
+    chooseWing = wingTemp;
     chooseTransition = transitionTemp;
     change = true;
   }
   
   // Choosing pattern
   if(currWing == NULL) {
-    switch (choosePattern % 6) {
+    switch (chooseWall % 6) {
       case 0 :
         shimmerCenter(currWing, centre);
         break;
@@ -181,6 +186,7 @@ void loop() {
       case 2 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, 259);
+        chooseTransition = 0;
         break;
       case 3 :
         crystalGradient(currWing);
@@ -195,7 +201,7 @@ void loop() {
         shimmerCenter(currWing, 259);
     }
   } else {
-    switch (choosePattern % 8) {
+    switch (chooseWing % 8) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -394,7 +400,7 @@ void chrisWings() {
       blue = chris[index*3+2];
       crystalRGB(index, red, green, blue);
   }
-  patternTemp = rand();
+  chooseWing = rand();
 }
 
 // Clay marriage pattern
