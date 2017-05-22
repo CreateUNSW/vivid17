@@ -129,6 +129,11 @@ uint8_t radialIndex = 0;
 
 // ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============
 void setup() {
+  
+  Serial.begin(9600);  // Initialize serial communications with PC
+
+  setupRFID();
+  
   srand(0);
   FastLED.addLeds<LED_TYPE, RIGHT_GREEN, RGB>(leds, RG_INDEX, 172);
   FastLED.addLeds<LED_TYPE, RIGHT_YELLOW, RGB>(leds, RY_INDEX, 180);
