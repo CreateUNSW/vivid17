@@ -1,20 +1,20 @@
 # Production stack:
 
-## A
+## Alpha
 ### (previously "test")
 Latest most feature rich, minimally tested code.
 
 
-## B
+## Beta
 ### (previously "test_fix")
 Latest running/compilable feature rich, minimally tested code.
 
 
-## C
+## Gamma
 ### (previously "review_before_final")
 Latest stable, somewhat tested code.
 
 
-## Z
+## Production
 ### (previously "final")
 Essentially production code.
