@@ -149,6 +149,11 @@ void setup() {
 void loop() {
 
 //================================================= PATTERN CODE GOES HERE ================================================= 
+    // Calls a function that checks for Clay's card and tries to enter his proposal loop,
+  // during which the card is continually checked for again. If detected again, it will exit 
+  // internal loop, and out of the function call, resuming vivid code
+  doProposal();
+  
   int centre = 259;
   // Note sensors are active low
   if(!digitalRead(sensorPins[4]) && !digitalRead(sensorPins[3]) && !digitalRead(sensorPins[2]) && !digitalRead(sensorPins[1])) {
