@@ -698,7 +698,6 @@ void doProposal() {
           successRead = getID();
           if(successRead && (isMaster(readCard) || isSlave(readCard))) {
             saidYes = true;
-            timer = 0;
 
             // Runs second pattern
             elapsedMillis yesTimer;
