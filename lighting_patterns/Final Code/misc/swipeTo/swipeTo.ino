@@ -1,28 +1,3 @@
-// ================= START OF RFID =================
-#include <EEPROM.h>     // We are going to read and write PICC's UIDs from/to EEPROM
-#include <SPI.h>        // RC522 Module uses SPI protocol
-#include <MFRC522.h>  // Library for Mifare RC522 Devices
-
-#define relay 4     // Set Relay Pin
-#define wipeB 3     // Button pin for WipeMode
-
-boolean match = false;          // initialize card match to false
-boolean proposeMode = false;  // initialize programming mode to false
-boolean replaceMaster = false;
-
-uint8_t successRead;    // Variable integer to keep if we have Successful Read from Reader
-
-byte storedCard[4];   // Stores an ID read from EEPROM
-byte readCard[4];   // Stores scanned ID read from RFID Module
-byte masterCard[4];   // Stores master card's ID read from EEPROM
-byte slaveCard[4];   // Stores slave card's ID read from EEPROM
-
-// Create MFRC522 instance.
-#define SS_PIN 10
-#define RST_PIN 9
-MFRC522 mfrc522(SS_PIN, RST_PIN);
-// ================= END OF RFID =================
-
 #include "malloc.h"
 
 #include <FastLED.h>
@@ -127,13 +102,13 @@ double fadeSpeed = 1;
 // Radial variables
 uint8_t radialIndex = 0;
 
+// ====================
+// Swipe variables
+uint16_t horz[22][40] = {{180,182,183,184,187,188,189,190,215,216,217,218,222,223,255,257,258,285,286,287,288,289,290,-1},{179,180,181,184,185,186,187,188,212,214,215,218,219,221,222,254,255,256,277,278,284,285,288,-1},{169,171,172,177,178,179,181,185,186,212,213,214,219,220,221,250,251,254,256,276,277,278,282,283,284,-1},{168,169,170,171,172,173,176,177,178,210,211,213,220,249,250,251,252,253,275,276,279,280,281,282,283,-1},{165,166,167,168,170,173,175,176,207,208,209,210,211,238,241,242,247,248,249,252,253,274,275,279,280,281,-1},{162,164,165,166,167,174,175,203,204,206,207,208,209,237,238,239,240,241,242,243,246,247,248,273,274,-1},{154,155,161,162,163,164,174,201,203,204,205,206,234,236,237,239,240,243,244,245,246,271,273,-1},{153,154,155,156,157,160,161,163,195,196,197,200,201,202,205,228,232,233,234,235,236,244,245,269,270,271,272,-1},{150,151,152,153,156,157,158,159,160,192,194,195,196,197,198,199,200,202,227,228,229,230,231,232,233,235,264,268,269,270,272,-1},{144,145,148,149,150,151,152,158,159,192,193,194,198,199,225,226,227,229,230,231,260,262,263,264,265,266,267,268,-1},{2,32,67,99,101,144,145,148,149,191,193,224,225,226,259,260,261,262,263,265,266,267,-1},{0,1,2,3,4,6,7,8,32,35,67,70,99,100,101,102,146,147,191,224,259,261,-1},{0,1,3,4,5,6,7,8,9,33,34,35,36,37,39,68,69,70,71,100,102,103,104,105,111,112,146,147,-1},{5,9,10,11,13,33,34,36,37,38,39,40,41,43,68,69,71,72,73,74,75,77,103,104,105,106,109,110,111,112,113,-1},{10,11,12,13,38,40,41,42,43,44,52,53,72,73,74,75,76,77,80,106,107,108,109,110,113,114,116,-1},{12,14,42,44,45,47,48,51,52,53,54,76,78,79,80,81,107,108,114,115,116,117,127,-1},{14,15,45,46,47,48,49,50,51,54,55,56,78,79,81,82,83,84,115,117,118,119,120,127,128,-1},{15,16,20,21,22,46,49,50,55,56,57,60,61,82,83,84,85,86,118,119,120,121,123,126,128,129,-1},{16,17,20,21,22,23,24,57,58,59,60,61,85,86,88,95,121,122,123,124,125,126,129,130,131,-1},{17,18,19,23,24,25,58,59,62,64,87,88,89,94,95,96,122,124,125,130,131,132,134,138,139,-1},{18,19,25,26,29,62,63,64,87,89,90,93,94,96,97,132,133,134,137,138,139,140,141,-1},{26,27,28,29,30,31,63,65,66,90,91,92,93,97,98,133,135,136,137,140,141,142,143,-1}};
+uint8_t swipeIndex = 0;
+
 // ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============
 void setup() {
-  
-  Serial.begin(9600);  // Initialize serial communications with PC
-
-  setupRFID();
-  
   srand(0);
   FastLED.addLeds<LED_TYPE, RIGHT_GREEN, RGB>(leds, RG_INDEX, 172);
   FastLED.addLeds<LED_TYPE, RIGHT_YELLOW, RGB>(leds, RY_INDEX, 180);
@@ -152,11 +127,7 @@ void setup() {
 }
 // ============ // ============  // ============  // ============  // ============  // ============ 
 void loop() {
-//================================================= PATTERN CODE GOES HERE ================================================= 
-  // Calls a function that checks for Clay's card and tries to enter his proposal loop,
-  // during which the card is continually checked for again. If detected again, it will exit 
-  // internal loop, and out of the function call, resuming vivid code
-  doProposal();
+//================================================= PATTERN CODE GOES HERE =================================================
   
   int centre = 259;
   // Note sensors are active low
@@ -202,6 +173,7 @@ void loop() {
     prevWing = currWing;
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
+    swipeIndex = 0;
     chooseWall = wallTemp;
     chooseWing = wingTemp;
     chooseTransition = transitionTemp;
@@ -210,7 +182,7 @@ void loop() {
   
   // Choosing pattern
   if(currWing == NULL) {
-    switch (8) {//chooseWall % 6) {
+    switch (chooseWall % 6) {
       case 0 :
         shimmerCenter(currWing, centre);
         break;
@@ -229,25 +201,13 @@ void loop() {
         muzzLight();
         break;
       case 5 :
-        mondrianColours();
-        break;
-      case 6 :
         shimmerCenter(currWing, t);
         break;
-      case 7 :
-        solidHue(currWing, change);
-        break;
-      case 8 :
-        colorToWhiteHue(currWing, t, change);
-        break;
-      case 9 :
-        complementaryHue(currWing, centre, change);
-        break;  
       default:
         shimmerCenter(currWing, 259);
     }
   } else {
-    switch (10) {//chooseWing % 8) {
+    switch (chooseWing % 8) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -274,15 +234,6 @@ void loop() {
       case 7 :
         shimmerCenter(currWing, t);
         break;
-      case 8 :
-        solidHue(currWing, change);
-        break;
-      case 9 :
-        colorToWhiteHue(currWing, centre, change);
-        break;
-      case 10 :
-        complementaryHue(currWing, centre, change);
-        break;
       default:
         shimmerCenter(currWing, centre);
     }
@@ -296,6 +247,9 @@ void loop() {
         break;
       case 1 :
         radialTo(259);
+        break;
+      case 2:
+        swipeTo();
         break;
       default:
         jumpTo();
@@ -353,13 +307,22 @@ void jumpTo() {
   }
 }
 
+void swipeTo() {
+  for(int i = 0; horz[swipeIndex][i] != -1; i++) {
+    for(int i = firstLED[horz[swipeIndex][i]]; i <= lastLED[horz[swipeIndex][i]]; i++) {
+      leds[i] = CRGB(target[index].r, target[index].b, target[index].g);
+    }
+  }
+  swipeIndex++;
+}
+
 // ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============ WING PATTERNS ============
 
 // Picks randome color gradient to white
 void colorToWhite(bool *wing, int centre, bool change) {
   
   changeCentre(centre);
-  int hue = t*5;
+  int hue;
   if( t % 64 == 1 ||change) {
     hue = rand() % 255;
     for(int i = 0; i < NUM_CRYSTALS; i++) {
@@ -414,54 +377,6 @@ void solid(bool *wing, bool change) {
     }
     changeColor();
   }
-}
-// Picks randome color gradient to white
-void colorToWhiteHue(bool *wing, int centre, bool change) {
-  
-  changeCentre(centre);
-  int hue = t*5;
-    for(int i = 0; i < NUM_CRYSTALS; i++) {
-      if(wing == NULL || wing[i]) {
-        crystalHSV(i, hue,
-                  (1 - (dist[i] / (double)maxDistance)) * 255, // Saturation
-                  255);//150); // Brightness
-      } else {
-        // Turns off other crystals
-        crystalHSV(i, 0, 0, 0);
-      }
-    }
-}
-
-
-void complementaryHue(bool *wing, int centre, bool change) {
-  
-  changeCentre(centre);
-  int hue = t*5;
-    for(int i = 0; i < NUM_CRYSTALS; i++) {
-      if(wing == NULL || wing[i]) {
-        crystalHSV(i, hue + (1 - (dist[i] / (double)maxDistance)) * 125,
-                  255, // Saturation
-                  255); // Brightness
-      } else {
-        // Turns off other crystals
-        crystalHSV(i, 0, 0, 0);
-      }
-    }
-}
-
-
-void solidHue(bool *wing, bool change) {
-  int hue = t*5;
-    for(int i = 0; i < NUM_CRYSTALS; i++) {
-      if(wing == NULL || wing[i]) {
-        crystalHSV(i, hue,
-                  255, // Saturation
-                  255); // Brightness
-      } else {
-        // Turns off other crystals
-        crystalHSV(i, 0, 0, 0);
-      }
-    }
 }
 
 // Shimmer pattern
@@ -571,23 +486,6 @@ void randomWall() {
   }
 }
 
-// Random wall with Mondrian colours (red, yellow, blue, white)
-void mondrianColours() {
-  CRGB red = CRGB(255, 0, 0);
-  CRGB yellow = CRGB(255, 0, 255);
-  CRGB blue = CRGB(0, 255, 0);
-  CRGB white = CRGB(255, 255, 255);
-  int rollDice = 0;
-  if(t % 30 == 1) {
-    for(int i = 0; i < NUM_CRYSTALS; i++) {
-      rollDice = rand()%4;
-      if(rollDice == 0) crystalRGB(i, red.r,  red.g, red.b); 
-      if(rollDice == 1) crystalRGB(i, yellow.r,  yellow.g, yellow.b); 
-      if(rollDice == 2) crystalRGB(i, blue.r,  blue.g, blue.b);
-      if(rollDice == 3) crystalRGB(i, white.r,  white.g, white.b);       
-    }
-  }
-}  
 
 // Saturation gradient in individual crystals
 void crystalGradient(bool *wing) {
@@ -659,256 +557,5 @@ void changeCentre(int centre) {
 void changeColor() {
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
-}
-
-// ====================== RFID HELPER FUNCTIONS ======================
-
-void setupRFID() {
-  //Arduino Pin Configuration
-  pinMode(wipeB, INPUT_PULLUP);   // Enable pin's pull up resistor
-  pinMode(relay, OUTPUT);
-  //Be careful how relay circuit behave on while resetting or power-cycling your Arduino
-  digitalWrite(relay, HIGH);    // Make sure door is locked
-
-  //Protocol Configuration
-  SPI.begin();           // MFRC522 Hardware uses SPI protocol
-  mfrc522.PCD_Init();    // Initialize MFRC522 Hardware
-
-  //If you set Antenna Gain to Max it will increase reading distance
-  mfrc522.PCD_SetAntennaGain(mfrc522.RxGain_max);
-
-  Serial.println(F("Access Control Example v0.1"));   // For debugging purposes
-  ShowReaderDetails();  // Show details of PCD - MFRC522 Card Reader details
-
-  //Wipe Code - If the Button (wipeB) Pressed while setup run (powered on) it wipes EEPROM
-  if (digitalRead(wipeB) == LOW) {  // when button pressed pin should get low, button connected to ground
-    Serial.println(F("Wipe Button Pressed"));
-    Serial.println(F("You have 10 seconds to Cancel"));
-    Serial.println(F("This will be remove all records and cannot be undone"));
-    bool buttonState = monitorWipeButton(10000); // Give user enough time to cancel operation
-    if (buttonState == true && digitalRead(wipeB) == LOW) {    // If button still be pressed, wipe EEPROM
-      Serial.println(F("Starting Wiping EEPROM"));
-      for (uint16_t x = 0; x < EEPROM.length(); x = x + 1) {    //Loop end of EEPROM address
-        if (EEPROM.read(x) == 0) {              //If EEPROM address 0
-          // do nothing, already clear, go to the next address in order to save time and reduce writes to EEPROM
-        }
-        else {
-          EEPROM.write(x, 0);       // if not write 0 to clear, it takes 3.3mS
-        }
-      }
-      Serial.println(F("EEPROM Successfully Wiped"));
-    }
-    else {
-      Serial.println(F("Wiping Cancelled")); // Show some feedback that the wipe button did not pressed for 15 seconds
-    }
-  }
-  // Check if master card defined, if not let user choose a master card
-  // This also useful to just redefine the Master Card
-  // You can keep other EEPROM records just write other than 143 to EEPROM address 1
-  // EEPROM address 1 should hold magical number which is '143'
-  if (EEPROM.read(1) != 143) {
-    
-    // Clay's master card
-    Serial.println(F("No Master Card Defined"));
-    Serial.println(F("Scan A PICC to Define as Master Card"));
-    do {
-      successRead = getID();            // sets successRead to 1 when we get read from reader otherwise 0
-    }
-    while (!successRead);                  // Program will not go further while you not get a successful read
-    for ( uint8_t j = 0; j < 4; j++ ) {        // Loop 4 times
-      EEPROM.write(2 + j, readCard[j] );  // Write scanned PICC's UID to EEPROM, start from address 3
-    }
-    Serial.println(F("Master Card Defined"));
-
-    // Randy's slave card
-    Serial.println(F("No Slave Card Defined"));
-    Serial.println(F("Scan A PICC to Define as Slave Card"));
-    do {
-      successRead = getID();            // sets successRead to 1 when we get read from reader otherwise 0
-    }
-    while (!successRead);                  // Program will not go further while you not get a successful read
-    for ( uint8_t j = 0; j < 4; j++ ) {        // Loop 4 times
-      EEPROM.write(6 + j, readCard[j] );  // Write scanned PICC's UID to EEPROM, start from address 3
-    }
-    Serial.println(F("Slave Card Defined"));
-
-    EEPROM.write(1, 143);                  // Write to EEPROM we defined Master Card.
-  }
-  Serial.println(F("-------------------"));
-  Serial.println(F("Master Card's UID"));
-  for ( uint8_t i = 0; i < 4; i++ ) {          // Read Master Card's UID from EEPROM
-    masterCard[i] = EEPROM.read(2 + i);    // Write it to masterCard
-    Serial.print(masterCard[i], HEX);
-  }
-  // Reads slave card into volatile memory
-  Serial.println(F("Slave Card's UID"));
-  for ( uint8_t i = 0; i < 4; i++ ) {          // Read Master Card's UID from EEPROM
-    slaveCard[i] = EEPROM.read(6 + i);    // Write it to masterCard
-    Serial.print(slaveCard[i], HEX);
-  }
-  
-  Serial.println("");
-  Serial.println(F("-------------------"));
-  Serial.println(F("Everything is ready"));
-  Serial.println(F("Waiting PICCs to be scanned"));
-}
-
-
-void doProposal() {
-  
-  successRead = getID();
-  // Runs vivid code if isn't detecting a card
-  if(!successRead) return;
-
-  // If a card is detected, and isMaster, begins proposal loop
-  else if(isMaster(readCard) || isSlave(readCard)) {
-    proposeMode = true;
-
-    bool master = isMaster(readCard);
-    bool slave = isSlave(readCard);
-    bool saidYes = false;
-    // Timer to make sure card doesn't instantly turn mode off before removal
-    elapsedMillis timer;
-    
-    // Keeps proposal pattern running until master card is swiped again
-    while(proposeMode) {
-
-      // Ensures Clay's pattern takes priority in race condition
-      if(master) {
-        // Runs Clay's pattern
-        clayPattern();
-        FastLED.show();
-
-        // Checks if card is read again after 1s
-        if(timer > 1000) {
-          successRead = getID();
-          if(successRead && (isMaster(readCard) || isSlave(readCard))) {
-            saidYes = true;
-
-            // Runs second pattern
-            elapsedMillis yesTimer;
-            while(saidYes) {
-              sheSaidYES();
-              FastLED.show();
-
-              // Checks if card is read again to exit
-              if(yesTimer > 1000) {
-                successRead = getID();
-                if(successRead && (isMaster(readCard) || isSlave(readCard))) {
-                  saidYes = false;
-                  proposeMode = false;
-                }
-              }
-            }
-          }
-        }
-        
-      } else if(slave) {
-        // Runs Randy's pattern
-        randyPattern();
-        FastLED.show();
-
-        // Keeps checking for another successful read / correct card if minTime (1 second) elapsed
-        if(timer > 1000) {
-          successRead = getID();
-          if(successRead && (isMaster(readCard) || isSlave(readCard))) {
-            proposeMode = false;
-          }
-        }   
-      }
-    }
-    // Goes back to normal vivid code
-    return;
-  }
-
-  // Just keeps running vivid code if incorrect card is detected
-  else return;
-}
-
-///////////////////////////////////////// Get PICC's UID ///////////////////////////////////
-uint8_t getID() {
-  // Getting ready for Reading PICCs
-  if ( ! mfrc522.PICC_IsNewCardPresent()) { //If a new PICC placed to RFID reader continue
-    return 0;
-  }
-  if ( ! mfrc522.PICC_ReadCardSerial()) {   //Since a PICC placed get Serial and continue
-    return 0;
-  }
-  // There are Mifare PICCs which have 4 byte or 7 byte UID care if you use 7 byte PICC
-  // I think we should assume every PICC as they have 4 byte UID
-  // Until we support 7 byte PICCs
-  Serial.println(F("Scanned PICC's UID:"));
-  for ( uint8_t i = 0; i < 4; i++) {  //
-    readCard[i] = mfrc522.uid.uidByte[i];
-    Serial.print(readCard[i], HEX);
-  }
-  Serial.println("");
-  mfrc522.PICC_HaltA(); // Stop reading
-  return 1;
-}
-
-void ShowReaderDetails() {
-  // Get the MFRC522 software version
-  byte v = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
-  Serial.print(F("MFRC522 Software Version: 0x"));
-  Serial.print(v, HEX);
-  if (v == 0x91)
-    Serial.print(F(" = v1.0"));
-  else if (v == 0x92)
-    Serial.print(F(" = v2.0"));
-  else
-    Serial.print(F(" (unknown),probably a chinese clone?"));
-  Serial.println("");
-  // When 0x00 or 0xFF is returned, communication probably failed
-  if ((v == 0x00) || (v == 0xFF)) {
-    Serial.println(F("WARNING: Communication failure, is the MFRC522 properly connected?"));
-    Serial.println(F("SYSTEM HALTED: Check connections."));
-    while (true); // do not go further
-  }
-}
-
-///////////////////////////////////////// Check Bytes   ///////////////////////////////////
-boolean checkTwo ( byte a[], byte b[] ) {
-  if ( a[0] != 0 )      // Make sure there is something in the array first
-    match = true;       // Assume they match at first
-  for ( uint8_t k = 0; k < 4; k++ ) {   // Loop 4 times
-    if ( a[k] != b[k] )     // IF a != b then set match = false, one fails, all fail
-      match = false;
-  }
-  if ( match ) {      // Check to see if if match is still true
-    return true;      // Return true
-  }
-  else  {
-    return false;       // Return false
-  }
-}
-
-
-////////////////////// Check readCard IF is masterCard   ///////////////////////////////////
-// Check to see if the ID passed is the master programing card
-boolean isMaster( byte test[] ) {
-  if ( checkTwo( test, masterCard ) )
-    return true;
-  else
-    return false;
-}
-
-// Check to see if the ID passed is the slave programing card
-boolean isSlave( byte test[] ) {
-  if ( checkTwo( test, slaveCard ) )
-    return true;
-  else
-    return false;
-}
-
-bool monitorWipeButton(uint32_t interval) {
-  uint32_t now = (uint32_t)millis();
-  while ((uint32_t)millis() - now < interval)  {
-    // check on every half a second
-    if (((uint32_t)millis() % 500) == 0) {
-      if (digitalRead(wipeB) != LOW)
-        return false;
-    }
-  }
-  return true;
+    swipeIndex = 0;
 }
