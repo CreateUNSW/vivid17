@@ -3,7 +3,7 @@
 #include <SPI.h>        // RC522 Module uses SPI protocol
 #include <MFRC522.h>  // Library for Mifare RC522 Devices
 
-#define relay 4     // Set Relay Pin
+#define relay 4     // S et Relay Pin
 #define wipeB 3     // Button pin for WipeMode
 
 boolean match = false;          // initialize card match to false

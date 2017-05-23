@@ -748,10 +748,10 @@ void mondrianColours() {
   if(t % 30 == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       rollDice = rand()%4;
-      if(rollDIce == 0) crystalRGB(i, red.r,  red.g, red.b); 
-      if(rollDIce == 1) crystalHSV(i, yellow.r,  yellow.g, yellow.b); 
-      if(rollDIce == 2) crystalHSV(i, blue.r,  blue.g, blue.b);
-      if(rollDIce == 3) crystalHSV(i, white.r,  white.g, white.b);       
+      if(rollDice == 0) crystalRGB(i, red.r,  red.g, red.b); 
+      if(rollDice == 1) crystalHSV(i, yellow.r,  yellow.g, yellow.b); 
+      if(rollDice == 2) crystalHSV(i, blue.r,  blue.g, blue.b);
+      if(rollDice == 3) crystalHSV(i, white.r,  white.g, white.b);       
     }
   }
 }  

@@ -184,6 +184,25 @@ void loop() {
 //=================================================
   // t is global timer of range 0-255, don't change at all only use, create your own timer if needed
   t++;
+  
+// Random wall with Mondrian colours (red, yellow, blue, white)
+//void mondrianColours() {
+  CRGB red = CRGB(255, 0, 0);
+  CRGB yellow = CRGB(255, 255, 0);
+  CRGB blue = CRGB(0, 0, 255);
+  CRGB white = CRGB(255, 255, 255);
+  int rollDice = 0;
+  if(t % 30 == 1) {
+    for(int i = 0; i < NUM_CRYSTALS; i++) {
+      rollDice = rand()%4;
+      if(rollDice == 0) crystalRGB(i, red.r,  red.g, red.b); 
+      if(rollDice == 1) crystalHSV(i, yellow.r,  yellow.g, yellow.b); 
+      if(rollDice == 2) crystalHSV(i, blue.r,  blue.g, blue.b);
+      if(rollDice == 3) crystalHSV(i, white.r,  white.g, white.b);       
+    }
+  }
+//}  
+
   FastLED.show();
 // Measures execution time
 //--------------------------------
