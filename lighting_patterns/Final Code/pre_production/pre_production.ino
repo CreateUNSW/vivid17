@@ -130,7 +130,7 @@ uint8_t radialIndex = 0;
 // ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============ SETUP ============
 void setup() {
 
-  delay(3000);
+  delay(10000);
   
   Serial.begin(9600);  // Initialize serial communications with PC
 
