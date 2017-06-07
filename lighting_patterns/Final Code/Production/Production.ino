@@ -134,7 +134,7 @@ void setup() {
   
   Serial.begin(9600);  // Initialize serial communications with PC
 
-  setupRFID();
+//  setupRFID();
   
   srand(0);
   FastLED.addLeds<LED_TYPE, RIGHT_GREEN, RGB>(leds, RG_INDEX, 172);
@@ -158,7 +158,7 @@ void loop() {
   // Calls a function that checks for Clay's card and tries to enter his proposal loop,
   // during which the card is continually checked for again. If detected again, it will exit 
   // internal loop, and out of the function call, resuming vivid code
-  personalLoop();
+//  personalLoop();
   
   int centre = 259;
   // Note sensors are active low
