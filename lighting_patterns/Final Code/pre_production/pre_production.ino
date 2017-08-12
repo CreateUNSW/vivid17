@@ -184,6 +184,7 @@ void loop() {
   // Updating the fade speed with each loop
   if(fadeSpeed > 1 + FADE_DELTA) fadeSpeed -= FADE_DELTA;
   
+  bool change = false;
   // Changes the pattern after 25 seconds when the scene changes
   if(t == 0) {
     forceChange++;
@@ -194,13 +195,16 @@ void loop() {
       forceChange = 0;
       chooseWall = wallTemp;
       chooseWing = wingTemp;
+      fadeSpeed = FADE_AMOUNT;
+      radialIndex = 0;
       chooseTransition = transitionTemp;
+      change = true;
     }
   }
   
-  bool change = false;
   // Catches when there is a change in scene
   if(prevWing != currWing) {
+    forceChange = 0;
     prevWing = currWing;
     fadeSpeed = FADE_AMOUNT;
     radialIndex = 0;
@@ -249,7 +253,7 @@ void loop() {
         shimmerCenter(currWing, 259);
     }
   } else {
-    switch (chooseWing % 11) {
+    switch (chooseWing % 10) {
       case 0 :
         if(fadeSpeed < 1 + 0.1) fadeSpeed = 0.98;
         shimmerCenter(currWing, centre);
@@ -267,24 +271,27 @@ void loop() {
       case 4 :
         solid(currWing, change);
         break;
+//      case 5 :
+//        chrisWings();
+//        break;
       case 5 :
-        chrisWings();
-        break;
-      case 6 :
         crystalGradient(currWing);
         break;
-      case 7 :
+      case 6 :
         shimmerCenter(currWing, t);
         break;
-      case 8 :
+      case 7 :
         solidHue(currWing, change);
         break;
-      case 9 :
+      case 8 :
         colorToWhiteHue(currWing, centre, change);
         break;
-      case 10 :
+      case 9 :
         complementaryHue(currWing, centre, change);
         break;
+//      case 11 :
+//        mondrianColours(currWing);
+//        break;
       default:
         shimmerCenter(currWing, centre);
     }
@@ -558,7 +565,7 @@ void muzzLight(){
   // Sample muzz light program, with image retention effect
   int lenPath = 0;
   int *l = g->calcLine(rand()%NUM_CRYSTALS, rand()%NUM_CRYSTALS, &lenPath);
-  int tempR = rand()%256;            
+  int tempR = rand()%256;
   int tempG = rand()%256;
   int tempB = rand()%256;
   int darkR = 0;
@@ -592,7 +599,7 @@ void mondrianColours() {
   CRGB blue = CRGB(0, 255, 0);
   CRGB white = CRGB(255, 255, 255);
   int rollDice = 0;
-  if(t % 30 == 1) {
+  if(t % 64 == 1) {
     for(int i = 0; i < NUM_CRYSTALS; i++) {
       rollDice = rand()%4;
       if(rollDice == 0) crystalRGB(i, red.r,  red.g, red.b); 
@@ -600,6 +607,7 @@ void mondrianColours() {
       if(rollDice == 2) crystalRGB(i, blue.r,  blue.g, blue.b);
       if(rollDice == 3) crystalRGB(i, white.r,  white.g, white.b);       
     }
+    changeColor();
   }
 }  
 // ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============ HELPER FUNCTIONS ============
