@@ -51,13 +51,20 @@ void setup() {
 }
 
 void loop() { 
-  
+  for(int i = 0; i < 16; i++) {
+    CrystalColour(i, 16*i, 16*i, 16*i);
+//    crystalHSV(i, 16*i, 16*i, 16*i);
+  }
+  FastLED.show();
 }
 
 void CrystalColour(int index, int r, int g, int b) {
   for (int k = 0; k < NumLeds[index]; k++) Crystals[index][k] = CRGB(r, g, b);
 }
 
+void crystalHSV(int index, int h, int s, int v) {
+  for (int k = 0; k < NumLeds[index]; k++) Crystals[index][k] = CRGB(0, 0, 0).setHSV(h, s, v);
+}
 void WingColour(int index, int r, int g, int b) {
   for (int h= 0; h < NumCrystals[index]; h++) CrystalColour(WingCrystals[index][h], r, g, b);
 }

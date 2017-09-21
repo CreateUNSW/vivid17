@@ -8,13 +8,13 @@
 #define DATA_PIN1 8
 #define CLOCK_PIN 13
 #define LED_TYPE WS2812
-
+#define LED_TYPE1 UCS1903
 // pattern variables
 #define BRIGHTNESS 255
 #define GRADIENT_SPEED 50
 
 #define MAX_CRYST_PER_PIN 10 // Total crystal designs
-#define LEDS_PER_PIN 27 // Maximum number of leds in a crystal
+#define LEDS_PER_PIN 24 // Maximum number of leds in a crystal
 
 CRGB C[LEDS_PER_PIN * NUM_PINS];
 int NumLeds[NUM_PINS * MAX_CRYST_PER_PIN] =
@@ -34,8 +34,8 @@ int *dist;
 double x = 0;
 
 void setup() {
-  FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, 0, LEDS_PER_PIN); // sets up strip one
-  FastLED.addLeds<LED_TYPE, DATA_PIN1, RGB> (C, LEDS_PER_PIN, 40); // sets up strip 2
+  FastLED.addLeds<LED_TYPE1, DATA_PIN1, RGB> (C, 0, LEDS_PER_PIN); // sets up strip one
+  FastLED.addLeds<LED_TYPE, DATA_PIN0, RGB> (C, LEDS_PER_PIN, 40); // sets up strip 2
   // FastLED.addLeds<LED_TYPE, DATA_PIN2, RGB> (C, 2*LEDS_PER_PIN, LEDS_PER_PIN);
   FastLED.setBrightness(BRIGHTNESS); // brightness
   // hardcode for setting up graph
